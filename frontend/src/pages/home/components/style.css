@@ -1,0 +1,22 @@
+section.homeSection{
+    
+}
+section.homeSection > img{
+    position: absolute;
+    z-index: 0;
+}
+
+section.homeSection > div.homeDescript{
+    position: relative;
+    z-index: 1000;
+    display: flex;
+}
+
+section.homeSection > div.homeDescript > div.homeText > h2{
+    color: white;
+}
+
+section.homeSection > div.homeDescript > div.homeText{
+    display: grid;
+    place-items: center;
+}
