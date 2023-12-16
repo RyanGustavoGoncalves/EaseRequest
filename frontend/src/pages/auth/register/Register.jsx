@@ -1,7 +1,15 @@
+import React from "react";
 const Register = () => {
     return(
         <main className="registerMain">
-            <h1>register</h1>
+            <fieldset>
+                <form action="">
+                    <fieldset>
+                        <legend>name</legend>
+                        <input type="text" />
+                    </fieldset>
+                </form>
+            </fieldset>
         </main>
     );
 };
