@@ -1,5 +1,7 @@
 package com.goncalves.API.DTO;
 
+import com.goncalves.API.entities.UserRole;
+
 import java.time.LocalDateTime;
 
 public record AutenticarDados(String username,
@@ -8,5 +10,6 @@ public record AutenticarDados(String username,
                               String email,
                               String password,
                               String birth,
-                              LocalDateTime creationAccount) {
+                              LocalDateTime creationAccount,
+                              UserRole role) {
 }

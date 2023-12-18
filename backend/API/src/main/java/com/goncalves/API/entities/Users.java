@@ -2,6 +2,7 @@ package com.goncalves.API.entities;
 
 import com.goncalves.API.DTO.DadosAtualizarUser;
 import com.goncalves.API.DTO.DadosListagemUser;
+import jakarta.validation.constraints.Max;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,9 +35,10 @@ public class Users implements UserDetails {
     private String password;
     private String birth;
     private LocalDateTime creationAccount;
+    private UserRole role;
 
 
-    public Users(String username,String firstName, String lastName, String email,String password, String birth, LocalDateTime creationAccount) {
+    public Users(String username,String firstName, String lastName, String email,String password, String birth, LocalDateTime creationAccount, UserRole role) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -44,6 +46,7 @@ public class Users implements UserDetails {
         this.password = password;
         this.birth = birth;
         this.creationAccount = creationAccount;
+        this.role = role;
     }
     public void atualizarUser(DadosAtualizarUser dados){
         if(dados.username() != null){
@@ -59,7 +62,8 @@ public class Users implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        if(this.role == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+        else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
