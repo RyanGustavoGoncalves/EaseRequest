@@ -2,16 +2,16 @@ package com.goncalves.API.DTO;
 
 import com.goncalves.API.entities.Users;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
-public record DadosNewUser(String firstName,
+public record DadosNewUser(String username,
+                           String firstName,
                            String lastName,
                            String email,
+                           String password,
                            String birth,
                            LocalDateTime createAccount) {
     public DadosNewUser (Users users){
-        this(users.getFirstName(),users.getLastName(),users.getEmail(), users.getBirth(),users.getCreationAccount());
+        this(users.getUsername(), users.getFirstName(),users.getLastName(),users.getEmail(), users.getPassword(),users.getBirth(),users.getCreationAccount());
     }
 }

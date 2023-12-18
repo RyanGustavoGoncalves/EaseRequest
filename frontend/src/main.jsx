@@ -9,6 +9,7 @@ import ErrorPage from './pages/errors/ErrorPage.jsx';
 import Home from './pages/home/Home.jsx';
 import Navbar from './pages/components/Navbar.jsx';
 import Register from './pages/auth/register/Register.jsx';
+import Welcome from './pages/welcomePage/welcome.jsx';
 
 const router = createBrowserRouter([
   {
