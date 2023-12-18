@@ -1,12 +1,10 @@
 package com.goncalves.API.controller;
 
-import com.goncalves.API.DTO.AutenticarDados;
 import com.goncalves.API.DTO.DadosAtualizarUser;
 import com.goncalves.API.DTO.DadosListagemUser;
 import com.goncalves.API.entities.UserRepository;
 import com.goncalves.API.infra.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -18,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping()
+@RequestMapping
 public class UserController {
 
     @Autowired
