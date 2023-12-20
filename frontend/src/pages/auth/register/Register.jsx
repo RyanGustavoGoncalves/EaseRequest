@@ -1,6 +1,11 @@
 import React, { useState } from "react";
+import '../components/style.css'
+import img from '../assets/imgFront2.png';
+import logo from '../../welcomePage/assets/iconList.png';
+import wave from '../assets/wave (2).svg';
 
 const Register = () => {
+    const [username, setUsername] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
@@ -15,14 +20,13 @@ const Register = () => {
 
     const cadastrar = async () => {
         const data = {
+            username: username,
             firstName: firstName,
             lastName: lastName,
             email: email,
             password: password,
             birth: birth,
         };
-
-        console.log(data);
 
         try {
             const response = await fetch("http://localhost:8080/auth/register", {
@@ -71,6 +75,7 @@ const Register = () => {
     };
 
     const limpar = () => {
+        setUsername("");
         setFirstName("");
         setLastName("");
         setEmail("");
@@ -78,53 +83,107 @@ const Register = () => {
         setBirth("");
     };
 
+    const handleInputFocus = (labelId) => {
+        const label = document.getElementById(labelId);
+        label.classList.add('active');
+    };
+
+    const handleInputBlur = (labelId) => {
+        const label = document.getElementById(labelId);
+        const input = document.getElementById(labelId.replace('Label', '')); // Obtém o input associado ao label
+
+        if (input && input.value.trim() !== '') {
+            label.classList.add('active');
+            return;
+        }
+
+        label.classList.remove('active');
+    };
+
     return (
-        <main className="registerMain">
-            <fieldset>
-                <form onSubmit={handleSubmit}>
-                    <fieldset>
-                        <legend>firstName</legend>
+        <main className="authMain">
+            <div className="logo"><img src={logo} alt="logo" /></div>
+            <fieldset className="authFieldset">
+                <img src={img} alt="authentication" />
+                <form onSubmit={handleSubmit} className="authForm">
+                    <div className="authField">
+                        <label id="usernameLabel" className={username ? 'active' : ''} htmlFor="username">
+                            Username
+                        </label>
                         <input
+                            id="username"
+                            type="text"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            onMouseEnter={() => handleInputFocus('usernameLabel')}
+                            onMouseLeave={() => handleInputBlur('usernameLabel')}
+
+                        />
+                    </div>
+                    <div className="authField">
+                        <label id="firstNameLabel" className={firstName ? 'active' : ''} htmlFor="firstName">
+                            firstName
+                        </label>
+                        <input
+                            id="firstName"
                             type="text"
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
+                            onMouseEnter={() => handleInputFocus('firstNameLabel')}
+                            onMouseLeave={() => handleInputBlur('firstNameLabel')}
                         />
-                    </fieldset>
-                    <fieldset>
-                        <legend>lastName</legend>
+                    </div>
+                    <div className="authField">
+                        <label id="lastNameLabel" className={lastName ? 'active' : ''} htmlFor="lastName">
+                            lastName
+                        </label>
                         <input
+                            id="lastName"
                             type="text"
                             value={lastName}
                             onChange={(e) => setLastName(e.target.value)}
+                            onMouseEnter={() => handleInputFocus('lastNameLabel')}
+                            onMouseLeave={() => handleInputBlur('lastNameLabel')}
                         />
-                    </fieldset>
-                    <fieldset>
-                        <legend>email</legend>
+                    </div>
+                    <div className="authField">
+                        <label id="emailLabel" className={email ? 'active' : ''} htmlFor="email">
+                            email
+                        </label>
                         <input
+                            id="email"
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            onMouseEnter={() => handleInputFocus('emailLabel')}
+                            onMouseLeave={() => handleInputBlur('emailLabel')}
                         />
-                    </fieldset>
-                    <fieldset>
-                        <legend>password</legend>
+                    </div>
+                    <div className="authField">
+                        <label id="passwordLabel" className={password ? 'active' : ''} htmlFor="password">password</label>
                         <input
+                        id="password"
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            onMouseEnter={() => handleInputFocus('passwordLabel')}
+                            onMouseLeave={() => handleInputBlur('passwordLabel')}
                         />
-                    </fieldset>
-                    <fieldset>
+                    </div>
+                    <div className="authField">
                         <legend>birth</legend>
                         <input
                             type="date"
                             value={birth}
                             onChange={(e) => setBirth(e.target.value)}
                         />
-                    </fieldset>
+                    </div>
                     <button type="submit">Register</button>
                 </form>
             </fieldset>
+            <div className="WelcomeDescWave">
+                <img src={wave} alt="" />
+            </div>
         </main>
     );
 };

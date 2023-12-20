@@ -14,7 +14,7 @@ div.logoWelcomeTxt{
     position: absolute;
 }
 div.logoWelcomeTxt > img{
-    width: 30px;
+    width: 50px;
 }
 div.logoWelcomeTxt h1{
     font-size: 20px;
@@ -52,7 +52,11 @@ div.btnTxt{
     justify-content: space-evenly;
 }
 
-div.btnTxt > button{
+div.btnTxt > a{
+    display: contents;
+}
+
+div.btnTxt > a > button{
     cursor: pointer;
     background-color: #5EC57E;
     color: white;

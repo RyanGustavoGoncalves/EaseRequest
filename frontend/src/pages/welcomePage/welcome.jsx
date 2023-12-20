@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ScrollReveal from 'scrollreveal';
 import './components/style.css';
-import logo from './assets/icons8-telefone-40.png';
+import logo from './assets/iconList.png';
 import WelcomeIntro from "../welcomeIntro/WelcomeIntro";
 import WelcomeDescri from "../welcomeDescri/WelcomeDescri";
 import WelcomeService from "../welcomeService/WelcomeService";
