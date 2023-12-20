@@ -11,11 +11,8 @@ const WelcomeIntro = () => {
                 <div className="welcomeTxt">
                     <span>Rest easy knowing your calls are in good hands.</span>
                     <div className="btnTxt">
-                        <Link to={"/auth/register"}>
-                            <button>Register</button>
-                        </Link>
-                        <Link to={"/"}>
-                            <button>Login</button>
+                        <Link to={"/auth"}>
+                            <button>Start</button>
                         </Link>
                     </div>
                 </div>

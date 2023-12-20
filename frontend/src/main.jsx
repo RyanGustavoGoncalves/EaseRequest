@@ -3,40 +3,43 @@ import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
 import './index.css';
 
-import { createBrowserRouter, RouterProvider  } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import ErrorPage from './pages/errors/ErrorPage.jsx';
 import Home from './pages/home/Home.jsx';
 import Navbar from './pages/components/Navbar.jsx';
 import Register from './pages/auth/register/Register.jsx';
+import Login from './pages/auth/login/Login.jsx';
+import Auth from './pages/auth/Auth.jsx';
 import Welcome from './pages/welcomePage/welcome.jsx';
 import WelcomeIntro from './pages/welcomeIntro/WelcomeIntro.jsx';
 import WelcomeDescri from './pages/welcomeDescri/WelcomeDescri.jsx';
 import WelcomeService from './pages/welcomeService/WelcomeService.jsx';
 import WelcomeTecno from './pages/welcomeTecno/WelcomeTecno.jsx';
+import SplashScreen from './pages/components/SplashScreen.jsx';
 
 const router = createBrowserRouter([
-  // {
-  //   path: "/",
-  //   element: <App />,
-  //   errorElement: <ErrorPage />,
-  //   children: [
-  //     {
-  //     path: "/",
-  //     element: <Home />,
-  //     },
-  //     {
-  //       path:"/",
-  //       element: <Navbar/>,
-  //     },
-  //   ]
-  // },
   {
-    path:"/",
-    element: <Welcome />,
-    children:[
+    path: "/",
+    element: <App />,
+    errorElement: <ErrorPage />,
+    children: [
       {
-        path:"intro",
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/",
+        element: <Navbar />,
+      },
+    ]
+  },
+  {
+    path: "/welcome",
+    element: <Welcome />,
+    children: [
+      {
+        path: "intro",
         element: <WelcomeIntro />
       },
       {
@@ -54,13 +57,26 @@ const router = createBrowserRouter([
     ]
   },
   {
-    path:"auth/register",
-    element: <Register />
-  },
+    path: "/auth",
+    element: <Auth />,
+    children:
+      [
+        {
+
+          path: "/auth/register",
+          element: <Register />
+        },
+        {
+          path: "login",
+          element: <Login />
+        }
+      ]
+    }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router}/>
+      <SplashScreen/>
+      <RouterProvider router={router} />
   </React.StrictMode>,
 )

@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import '../components/style.css'
+import imgError from '../assets/icons8-erro-48 (1).png';
 import img from '../assets/imgFront2.png';
-import logo from '../../welcomePage/assets/iconList.png';
-import wave from '../assets/wave (2).svg';
 
-const Register = () => {
+const Register = ({ toggleForm }) => {
     const [username, setUsername] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -12,11 +11,31 @@ const Register = () => {
     const [password, setPassword] = useState("");
     const [birth, setBirth] = useState("");
 
+    const [errors, setErrors] = useState([]);
+
+    const [modal, setModal] = useState({ display: 'none' });
+    const [modalOpacity, setModalOpacity] = useState({ display: 'none' });
+
     const handleSubmit = async (event) => {
         event.preventDefault();
-        await cadastrar();
-        limpar();
-    };
+        if (validateInputs()) {
+          await cadastrar();
+          limpar();
+        } else {
+          // Exibe um erro indicando que há campos obrigatórios vazios
+          setErrors([{ campo: "Campos obrigatórios", mensagem: "Preencha todos os campos obrigatórios." }]);
+          setModalOpacity({ display: "block" });
+          setModal({ display: "block" });
+        }
+      };
+    
+      const validateInputs = () => {
+        // Adicione verificações personalizadas para cada campo, se necessário
+        if (!username.trim() || !firstName.trim() || !lastName.trim() || !email.trim() || !password.trim() || !birth.trim()) {
+          return false;
+        }
+        return true;
+      };
 
     const cadastrar = async () => {
         const data = {
@@ -40,6 +59,7 @@ const Register = () => {
 
             if (response.status === 201) {
                 console.log("Cadastro bem-sucedido!");
+                window.location.href = `http://localhost:5173/auth/login`;
             } else if (response.status === 400) {
                 const errorData = await response.json();
                 const errorArray = [];
@@ -48,17 +68,6 @@ const Register = () => {
                 for (const fieldName in errorData) {
                     const errorMessage = errorData[fieldName];
                     errorArray.push({ fieldName, errorMessage });
-                }
-
-                // Adiciona erro caso as senhas não sejam iguais
-                // Certifique-se de ter os estados corretos para as senhas (password e inpConfSenha)
-                // e substitua os valores corretos nos seguintes trechos
-                if (password !== inpConfSenha) {
-                    const passwordError = {
-                        fieldName: "password",
-                        errorMessage: "Senhas não são iguais!",
-                    };
-                    errorArray.push(passwordError);
                 }
 
                 // Exibe o modal de erro
@@ -72,6 +81,11 @@ const Register = () => {
             console.log("Erro ao enviar a solicitação:", error);
             // Tratamento adicional de erro aqui, se necessário
         }
+    };
+
+    const closeModalOpacity = () => {
+        setModalOpacity({ display: 'none' });
+        setModal({ display: 'none' });
     };
 
     const limpar = () => {
@@ -101,10 +115,9 @@ const Register = () => {
     };
 
     return (
-        <main className="authMain">
-            <div className="logo"><img src={logo} alt="logo" /></div>
+        <section className="sectionRegister">
             <fieldset className="authFieldset">
-                <img src={img} alt="authentication" />
+                <div className="imgFront"><img src={img} alt="authentication" /></div>
                 <form onSubmit={handleSubmit} className="authForm">
                     <div className="authField">
                         <label id="usernameLabel" className={username ? 'active' : ''} htmlFor="username">
@@ -162,7 +175,7 @@ const Register = () => {
                     <div className="authField">
                         <label id="passwordLabel" className={password ? 'active' : ''} htmlFor="password">password</label>
                         <input
-                        id="password"
+                            id="password"
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -178,13 +191,32 @@ const Register = () => {
                             onChange={(e) => setBirth(e.target.value)}
                         />
                     </div>
-                    <button type="submit">Register</button>
+                    <div className="btn">
+                        <button type="submit">Register</button>
+                        <a onClick={toggleForm}><span>Already registered? log in!</span></a>
+                    </div>
                 </form>
+                <div className="modal" style={{ display: modal.display }}>
+                    <div className="errorModal">
+                        <div className="errorIcon">
+                            <img src={imgError} alt="Error" />
+                            <h2>Erro!</h2>
+                        </div>
+                        <hr />
+                        <div className="errorMessages">
+                            {/* Mapeia e exibe os erros */}
+                            {errors.map((error, index) => (
+                                <div key={index}>
+                                    <strong>{error.campo}</strong> {error.mensagem}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+                {/* Modal de fundo */}
+                <div className="modalOpacity" onClick={closeModalOpacity} style={{ display: modalOpacity.display }}></div>
             </fieldset>
-            <div className="WelcomeDescWave">
-                <img src={wave} alt="" />
-            </div>
-        </main>
+        </section >
     );
 };
 

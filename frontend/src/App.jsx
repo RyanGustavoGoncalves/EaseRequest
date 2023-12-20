@@ -8,10 +8,10 @@ function App() {
   return (
     <>
       <main>
-      {/* <AuthGuard>
+      <AuthGuard>
         <Navbar />
         <Outlet/>
-      </AuthGuard> */}
+      </AuthGuard>
       <Welcome/>
       </main>
     </>

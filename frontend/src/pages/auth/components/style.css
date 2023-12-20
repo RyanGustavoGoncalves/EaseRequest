@@ -1,81 +1,156 @@
 main.authMain {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-  }
-  
-  div.logo > img {
-    width: 50px;
-  }
-  
-  fieldset.authFieldset {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    border: none;
-  }
-  
-  fieldset.authFieldset > img {
-    width: 500px;
-    height: 500px;
-  }
-  
-  div.authField {
-    position: relative; 
-    padding: 1rem;
-  }
-  div.authField > legend{
-    color: #5EC57E;
-    font-weight: bold;
-  }
-  div.authField > label {
-    font-size: 15px;
-    color: #5EC57E;
-    font-weight: bold;
-    position: absolute;
-    pointer-events: none; 
-    transform-origin: 0 0;
-    transition: transform 0.3s ease-out, font-size 0.3s ease-out;
-  }
-  
-  div.authField > input {
-    border: none;
-    border-bottom: solid 2px #347571;
-    font-size: 15px;
-    font-weight: bold;
-    outline: none;
-  }
-  
-  /* Adicione esta classe para rótulos ativos */
-  div.authField > label.active,
-  div.authField > input:focus + label,
-  div.authField > input:not(:placeholder-shown) + label {
-    transform: translateY(-100%) scale(0.9); /* Adicionado escala para ajustar o tamanho do rótulo */
-    font-size: 12px;
-    color: #5EC57E;
-  }
-  
-  /* Adicione esta regra para estilizar rótulos quando o mouse passa sobre o input */
-  div.authField > input:hover + label {
-    transform: translateY(-100%) scale(0.9);
-    font-size: 12px;
-    color: #5EC57E;
-  }
-  
-  /* Adicione esta regra para reestilizar rótulos quando o input não estiver vazio e não estiver em foco */
-  div.authField > input:not(:focus):not(:placeholder-shown) + label {
-    transform: translateY(-100%) scale(0.9);
-    font-size: 12px;
-    color: #5EC57E;
-  }
-  
-  form.authForm > button {
-    color: white;
-    margin: 10px;
-    padding: 10px;
-    border-radius: 50px;
-    border: none;
-    inline-size: 200px;
-    background-color: #5EC57E;
-  }
-  
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+div.logo>a>img {
+  width: 50px;
+}
+
+fieldset.authFieldset {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  border: none;
+}
+
+form.authForm {
+  display: grid;
+  place-items: center;
+}
+
+div.authImgFront {
+  display: grid;
+}
+
+fieldset.authFieldset>div.imgFront>img {
+  width: 500px;
+  height: 500px;
+}
+
+div.authField {
+  position: relative;
+  padding: 1rem;
+}
+
+div.authFieldLogin{
+  padding: 3rem;
+}
+
+div.authField>legend {
+  color: #5EC57E;
+  font-weight: bold;
+}
+
+.authField>label, .authFieldLogin>label {
+  font-size: 15px;
+  color: #5EC57E;
+  font-weight: bold;
+  position: absolute;
+  pointer-events: none;
+  transform-origin: 0 0;
+  transition: transform 0.3s ease-out, font-size 0.3s ease-out;
+}
+
+div.authField>input, .authFieldLogin>input {
+  inline-size: 12rem;
+  border: none;
+  border-bottom: solid 2px #347571;
+  font-size: 15px;
+  font-weight: bold;
+  outline: none;
+}
+
+div.authField>label.active,
+div.authField>input:focus+label,
+div.authField>input:not(:placeholder-shown)+label,
+div.authFieldLogin>label.active, /* Adicione a vírgula aqui */
+div.authFieldLogin>input:focus+label, /* Adicione a vírgula aqui */
+div.authFieldLogin>input:not(:placeholder-shown)+label {
+  transform: translateY(-100%) scale(0.9);
+  /* Adicionado escala para ajustar o tamanho do rótulo */
+  font-size: 12px;
+  color: #5EC57E;
+}
+
+/* Adicione esta regra para estilizar rótulos quando o mouse passa sobre o input */
+div.authField>input:hover+label,
+div.authFieldLogin>input:hover+label { /* Adicione a vírgula aqui */
+  transform: translateY(-100%) scale(0.9);
+  font-size: 12px;
+  color: #5EC57E;
+}
+
+/* Adicione esta regra para reestilizar rótulos quando o input não estiver vazio e não estiver em foco */
+div.authField>input:not(:focus):not(:placeholder-shown)+label,
+div.authFieldLogin>input:not(:focus):not(:placeholder-shown)+label { /* Adicione a vírgula aqui */
+  transform: translateY(-100%) scale(0.9);
+  font-size: 12px;
+  color: #5EC57E;
+}
+
+
+form.authForm>div.btn {
+  display: grid;
+  place-items: center;
+}
+
+form.authForm>div.btn>button {
+  cursor: pointer;
+  color: white;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 50px;
+  border: none;
+  inline-size: 200px;
+  background-color: #5EC57E;
+}
+
+form.authForm>div.btn>a>span {
+  font-size: 10px;
+  color: blue;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+div.modal {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+div.errorModal {
+  background-color: #6DBF63;
+  width: 70vh;
+  height: auto;
+  border-radius: 5px;
+  box-shadow: 3px 5px 5px black;
+}
+
+div.errorIcon {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+}
+
+div.errorMessages {
+  padding: 15px;
+  font-size: 18px;
+  text-align: justify;
+}
+
+div.modalOpacity {
+  position: absolute;
+  display: none;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(2px);
+  z-index: 999;
+}
+
+strong::after {
+  content: ":";
+}
