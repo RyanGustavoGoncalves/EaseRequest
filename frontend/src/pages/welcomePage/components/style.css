@@ -6,26 +6,208 @@ main.welcomeMain{
     position: absolute;
 }
 
-section.welcomeSection{
-    display: flex;  
-    align-items: center;
-    justify-content: space-around;
-    padding: 5rem;
-}
-section.welcomeSection>img{
-    width: 450px;
-    height: 350px;
-}
 div.logoWelcomeTxt{
     display: flex;
     align-items: center;
     gap: 20px;
+    margin: 5px;
+    position: absolute;
+}
+div.logoWelcomeTxt > img{
+    width: 30px;
 }
 div.logoWelcomeTxt h1{
     font-size: 20px;
-}  
+}
+
+
+/* === CSS Page welcomeIntro ===*/
+section.welcomeIntroSection{
+    height: 100%;
+    display: grid;
+    place-items: center;
+}
+
+section.welcomeIntroSection > article.welcomeIntroArticle{
+    display: flex;  
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+}
+
+section.welcomeIntroSection> article >img{
+    width: 500px;
+    height: 500px;
+}
+
 div.welcomeTxt{
-    font-size: 30px;
+    font-size: 40px;
     font-weight: bold;
     width: 20rem;
+}
+
+div.btnTxt{
+    display: flex;
+    padding: 20px;
+    justify-content: space-evenly;
+}
+
+div.btnTxt > button{
+    cursor: pointer;
+    background-color: #5EC57E;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 50px;
+    padding: 10px;
+    inline-size: 120px;
+}
+
+div.setaWelcomeIntro{
+    cursor: pointer;
+    transition: 0.5s ease-in-out;
+}
+div.setaWelcomeIntro:hover{
+    transform: scale(1.1);
+    filter: drop-shadow(0px 0px 20px green);
+}
+
+div.setaWelcomeIntro img{
+    width: 40px;
+}
+
+/* === CSS page WelcomeDescri ===*/
+
+article.WelcomeDescArticle{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+    z-index: 1000;
+}
+article.WelcomeDescArticle > img{
+    width: 500px;
+    height: 500px;
+}
+div.TxtWelcomeDesc{
+    width: 25rem;
+}
+
+div.TxtWelcomeDesc > h2{
+    font-size: 30px;
+    color: #5EC57E;
+}
+
+div.TxtWelcomeDesc > span{
+    font-size: 25px;
+    font-weight: bold;
+}
+
+div.WelcomeDescWave{
+    position: absolute;
+    width: 100%;
+    z-index: 0;
+}
+
+div.centerBalance{
+    display: grid;
+    place-items: center;
+    padding: 20px;
+}
+
+div.WelcomeDescBalance{
+    display: grid;
+    place-items: center;
+    font-size: 25px;
+    width: 25rem;
+    font-weight: bolder;
+    text-align: center;
+}
+
+/* === CSS page WelcomeService === */
+
+
+article.WelcomeServiceArticle{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 1000;
+}
+
+
+div.tittleService{
+    color: #5EC57E;
+    text-align: center;
+    padding: 20px;
+}
+
+div.TxtWelcomeServices{
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 30rem;
+}
+
+
+div.TxtWelcomeServices > h2{
+    font-size: 30px;
+    color: #5EC57E;
+    text-shadow: 0px 0px 0px black;
+}
+
+div.TxtWelcomeServices > span{
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* === CSS Page WelcomeTecno === */
+
+article.WelcomeTecnoArticle{
+    display: grid;
+    place-items: center;
+}
+
+article.WelcomeTecnoArticle > div.tecnoImg{
+    padding: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+article.WelcomeTecnoArticle > div.tecnoImg > img{
+    width: 150px;
+    height: 150px;
+}
+
+div.perfilGitHub{
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    gap: 30px;
+}
+
+div.perfilGitHub img{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+
+
+
+/* === Responsividade === */
+
+@media (max-width: 765px) {
+    article.welcomeIntroArticle{
+        flex-direction: column-reverse;
+    }
+    article.WelcomeDescArticle{
+        flex-direction: column;
+    }
+    div.centerBalance{
+        padding: 0;
+    }
+    article.WelcomeServiceArticle{
+        flex-direction: column;
+    }
 }

@@ -8,8 +8,11 @@ function App() {
   return (
     <>
       <main>
-      <Navbar />
-      <Outlet/>
+      {/* <AuthGuard>
+        <Navbar />
+        <Outlet/>
+      </AuthGuard> */}
+      <Welcome/>
       </main>
     </>
   )

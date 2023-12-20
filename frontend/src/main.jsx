@@ -10,26 +10,48 @@ import Home from './pages/home/Home.jsx';
 import Navbar from './pages/components/Navbar.jsx';
 import Register from './pages/auth/register/Register.jsx';
 import Welcome from './pages/welcomePage/welcome.jsx';
+import WelcomeIntro from './pages/welcomeIntro/WelcomeIntro.jsx';
+import WelcomeDescri from './pages/welcomeDescri/WelcomeDescri.jsx';
+import WelcomeService from './pages/welcomeService/WelcomeService.jsx';
+import WelcomeTecno from './pages/welcomeTecno/WelcomeTecno.jsx';
 
 const router = createBrowserRouter([
+  // {
+  //   path: "/",
+  //   element: <App />,
+  //   errorElement: <ErrorPage />,
+  //   children: [
+  //     {
+  //     path: "/",
+  //     element: <Home />,
+  //     },
+  //     {
+  //       path:"/",
+  //       element: <Navbar/>,
+  //     },
+  //   ]
+  // },
   {
-    path: "/",
-    element: <App />,
-    errorElement: <ErrorPage />,
-    children: [
+    path:"/",
+    element: <Welcome />,
+    children:[
       {
-      path: "/",
-      element: <Home />,
+        path:"intro",
+        element: <WelcomeIntro />
       },
       {
-        path:"/",
-        element: <Navbar/>,
+        path: "description",
+        element: <WelcomeDescri />
+      },
+      {
+        path: "service",
+        element: <WelcomeService />
+      },
+      {
+        path: "technologies",
+        element: <WelcomeTecno />
       },
     ]
-  },
-  {
-    path:"welcome",
-    element: <Welcome />
   },
   {
     path:"auth/register",
