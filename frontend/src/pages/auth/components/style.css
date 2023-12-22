@@ -34,7 +34,7 @@ div.authField {
   padding: 1rem;
 }
 
-div.authFieldLogin{
+div.authFieldLogin {
   padding: 3rem;
 }
 
@@ -43,7 +43,8 @@ div.authField>legend {
   font-weight: bold;
 }
 
-.authField>label, .authFieldLogin>label {
+.authField>label,
+.authFieldLogin>label {
   font-size: 15px;
   color: #5EC57E;
   font-weight: bold;
@@ -53,7 +54,8 @@ div.authField>legend {
   transition: transform 0.3s ease-out, font-size 0.3s ease-out;
 }
 
-div.authField>input, .authFieldLogin>input {
+div.authField>input,
+.authFieldLogin>input {
   inline-size: 12rem;
   border: none;
   border-bottom: solid 2px #347571;
@@ -65,8 +67,10 @@ div.authField>input, .authFieldLogin>input {
 div.authField>label.active,
 div.authField>input:focus+label,
 div.authField>input:not(:placeholder-shown)+label,
-div.authFieldLogin>label.active, /* Adicione a vírgula aqui */
-div.authFieldLogin>input:focus+label, /* Adicione a vírgula aqui */
+div.authFieldLogin>label.active,
+/* Adicione a vírgula aqui */
+div.authFieldLogin>input:focus+label,
+/* Adicione a vírgula aqui */
 div.authFieldLogin>input:not(:placeholder-shown)+label {
   transform: translateY(-100%) scale(0.9);
   /* Adicionado escala para ajustar o tamanho do rótulo */
@@ -76,7 +80,8 @@ div.authFieldLogin>input:not(:placeholder-shown)+label {
 
 /* Adicione esta regra para estilizar rótulos quando o mouse passa sobre o input */
 div.authField>input:hover+label,
-div.authFieldLogin>input:hover+label { /* Adicione a vírgula aqui */
+div.authFieldLogin>input:hover+label {
+  /* Adicione a vírgula aqui */
   transform: translateY(-100%) scale(0.9);
   font-size: 12px;
   color: #5EC57E;
@@ -84,7 +89,8 @@ div.authFieldLogin>input:hover+label { /* Adicione a vírgula aqui */
 
 /* Adicione esta regra para reestilizar rótulos quando o input não estiver vazio e não estiver em foco */
 div.authField>input:not(:focus):not(:placeholder-shown)+label,
-div.authFieldLogin>input:not(:focus):not(:placeholder-shown)+label { /* Adicione a vírgula aqui */
+div.authFieldLogin>input:not(:focus):not(:placeholder-shown)+label {
+  /* Adicione a vírgula aqui */
   transform: translateY(-100%) scale(0.9);
   font-size: 12px;
   color: #5EC57E;
@@ -153,4 +159,38 @@ div.modalOpacity {
 
 strong::after {
   content: ":";
+}
+
+@media (max-width: 765px) {
+  fieldset.authFieldset>div.imgFront>img {
+    width: 400px;
+    height: 400px;
+  }
+
+  main.authMain>div.WelcomeDescWave {
+    display: none;
+  }
+
+  div.logo {
+    position: absolute;
+  }
+
+  section.sectionRegister {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+  }
+}
+
+@media (max-width: 620px) {
+  fieldset.authFieldset>div.imgFront>img {
+    width: 350px;
+    height: 350px;
+  }
+}
+
+@media (max-width: 620px) {
+  fieldset.authFieldset>div.imgFront>img {
+    display: none;
+  }
 }

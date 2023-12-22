@@ -87,7 +87,7 @@ const Login = ({ toggleForm, login }) => {
     };
 
     return (
-        <section>
+        <section className="sectionRegister">
             <fieldset className="authFieldset">
                 <form onSubmit={handleSubmit} className="authForm">
                     <div className="authFieldLogin">
