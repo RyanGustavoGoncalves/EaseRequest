@@ -1,18 +1,15 @@
 import { useState } from 'react'
 import './App.css'
-import { Outlet } from 'react-router-dom'
 import Navbar from './pages/components/Navbar'
+import Home from './pages/home/Home'
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
       <main>
-      <AuthGuard>
         <Navbar />
-        <Outlet/>
-      </AuthGuard>
-      <Welcome/>
+        <Home />
       </main>
     </>
   )

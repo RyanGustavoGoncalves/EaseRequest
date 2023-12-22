@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
 import './index.css';
 
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 
 import ErrorPage from './pages/errors/ErrorPage.jsx';
 import Home from './pages/home/Home.jsx';
@@ -17,25 +17,27 @@ import WelcomeDescri from './pages/welcomeDescri/WelcomeDescri.jsx';
 import WelcomeService from './pages/welcomeService/WelcomeService.jsx';
 import WelcomeTecno from './pages/welcomeTecno/WelcomeTecno.jsx';
 import SplashScreen from './pages/components/SplashScreen.jsx';
+import ProtectedRoute from './pages/auth/protectedRoute/ProtectedRoute.jsx';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <ProtectedRoute element={App} />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "/",
+        path: "Home",
         element: <Home />,
       },
+
       {
-        path: "/",
+        path: "Navbar",
         element: <Navbar />,
       },
     ]
   },
   {
-    path: "/welcome",
+    path: "/Welcome",
     element: <Welcome />,
     children: [
       {
@@ -71,12 +73,12 @@ const router = createBrowserRouter([
           element: <Login />
         }
       ]
-    }
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-      <SplashScreen/>
-      <RouterProvider router={router} />
+    <SplashScreen />
+    <RouterProvider router={router} />
   </React.StrictMode>,
 )

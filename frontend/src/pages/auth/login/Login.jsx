@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import '../components/style.css'
 import img from '../assets/imgFront2.png';
 import imgError from '../assets/icons8-erro-48 (1).png';
+import { useNavigate } from "react-router-dom";
 
-const Login = ({ toggleForm }) => {
+const Login = ({ toggleForm, login }) => {
+    const navigate = useNavigate();
+
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
@@ -48,9 +51,10 @@ const Login = ({ toggleForm }) => {
                 const responseJson = await response.json();
                 const token = responseJson.token;
                 console.log(token);
-                console.log("Login bem sucedido!");
                 localStorage.setItem('token', token);
-                window.location.href = `http://localhost:5173/welcome`;
+                alert("Login bem sucedido!");
+                navigate('/Home');
+
             } else if (response.status === 401) {
                 const error = await response.json(Error);
                 console.log(error);
