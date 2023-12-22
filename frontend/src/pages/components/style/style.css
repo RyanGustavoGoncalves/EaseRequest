@@ -1,4 +1,4 @@
-header{
+header {
     padding: 15px;
     display: flex;
     align-items: center;
@@ -6,24 +6,27 @@ header{
     background-color: rgb(6, 6, 86);
     color: #ffa500;
 }
-header > div.headerLogoName{
+
+header>div.headerLogoName {
     display: flex;
     align-items: center;
 }
 
-header > div.headerLogoName > img{
+header>div.headerLogoName>img {
     filter: invert();
 }
 
-header > nav > ul{
+header>nav>ul {
     width: 15rem;
     display: flex;
     justify-content: space-around;
 }
-header > nav > ul > a{
+
+header>nav>ul>a {
     text-decoration: none;
     color: white;
 }
+
 /* === CSS Modal === */
 
 /* Modal.css */
