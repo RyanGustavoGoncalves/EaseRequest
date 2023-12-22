@@ -59,7 +59,6 @@ const Register = ({ toggleForm }) => {
 
             if (response.status === 201) {
                 alert("Cadastro bem-sucedido!");
-                // window.location.href = `http://localhost:5173/auth/login`;
             } else if (response.status === 400) {
                 const errorData = await response.json();
                 const errorArray = [];
