@@ -1,18 +1,31 @@
 import React from "react";
-import imgMaintence from './assets/Analysis-amico.png';
-import wave from './assets/wave.svg'
+import wave from './assets/wave(1).svg'
 import './components/style.css';
-const Home = () =>{
-    return(
+import mais from './assets/mais.png'
+import { Link } from "react-router-dom";
+const Home = () => {
+    return (
         <section className="homeSection">
             <img src={wave} alt="" />
             <div className="homeDescript">
-                <div className="homeText">
-                    <h2>Nosso projeto</h2>
-                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Modi, sit qui excepturi odio quam aspernatur exercitationem corporis quibusdam maxime voluptatum dolor autem assumenda itaque iste nulla voluptates, dolores non tenetur.</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores sunt aliquid, soluta suscipit laborum, facilis omnis explicabo natus, molestias saepe deleniti impedit excepturi veritatis ea quaerat similique illum atque perspiciatis!</p>
+
+                <div className="subNav">
+                    <div className="searchRequest">
+                        <h2>Overview</h2>
+                        <input type="text" placeholder="Search.." />
+                    </div>
+                    <div className="more">
+                        <img src={mais} alt="more" />
+                    </div>
                 </div>
-                <img src={imgMaintence} alt="" width={500}/>
+
+                <div className="boxTools">
+                    <Link>
+                        <div className="tool">
+                            <h2>Name Collection</h2>
+                        </div>
+                    </Link>
+                </div>
             </div>
         </section>
     )

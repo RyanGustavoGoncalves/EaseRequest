@@ -1,26 +1,28 @@
 import React from "react";
 import './style/style.css';
-import imgLogo from './assets/icons8-organização-24.png'
+import Logo from '../welcomePage/assets/iconList.png'
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
     return(
         <header>
             <div className="headerLogoName">
-                <img src={imgLogo} width={30}/>
-                <h1>MainteXcel</h1>
+                <Link to={"/"}>
+                    <img src={Logo} width={30}/>
+                    <h1>RequestEase</h1>
+                </Link>
             </div>
             <nav>
                 <ul>
-                    <Link to={"/"}>
-                        teste    
-                    </Link>       
-                    <Link to={"/"}>
-                        teste    
-                    </Link>       
-                    <Link to={"/"}>
-                        teste    
-                    </Link>       
+                    <Link to={"/Welcome"}>
+                        Welcome    
+                    </Link>             
+                    <Link to={"/Welcome"}>
+                        Welcome    
+                    </Link>             
+                    <Link to={"/Welcome"}>
+                        Welcome    
+                    </Link>             
                 </ul>
             </nav>
         </header>

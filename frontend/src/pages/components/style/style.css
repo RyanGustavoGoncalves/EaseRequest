@@ -1,19 +1,27 @@
 header {
-    padding: 15px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: rgb(6, 6, 86);
-    color: #ffa500;
+    background-color: #ECF8E5;
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
 }
 
-header>div.headerLogoName {
+header>div.headerLogoName>a {
     display: flex;
     align-items: center;
+    gap: 20px;
+    text-decoration: none;
+    color: #347571;
 }
 
-header>div.headerLogoName>img {
-    filter: invert();
+header>div.headerLogoName>a>h1{
+    font-size: 20px;
+}
+
+header>div.headerLogoName>a>img {
+    width: 50px;
 }
 
 header>nav>ul {
@@ -24,7 +32,8 @@ header>nav>ul {
 
 header>nav>ul>a {
     text-decoration: none;
-    color: white;
+    color: #347571;
+    font-weight: bold;
 }
 
 /* === CSS Modal === */
