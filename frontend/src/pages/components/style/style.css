@@ -16,7 +16,7 @@ header>div.headerLogoName>a {
     color: #347571;
 }
 
-header>div.headerLogoName>a>h1{
+header>div.headerLogoName>a>h1 {
     font-size: 20px;
 }
 
@@ -38,9 +38,9 @@ header>nav>ul>a {
 
 /* === CSS Modal === */
 
-/* Modal.css */
-/* .modal-overlay {
+.modal-overlay {
     position: fixed;
+    z-index: 9999;
     top: 0;
     left: 0;
     width: 100%;
@@ -51,23 +51,23 @@ header>nav>ul>a {
     align-items: center;
   }
   
-  .modal {
+  .modalComp {
     background: white;
     padding: 20px;
     border-radius: 8px;
     max-width: 80%;
     max-height: 80%;
     overflow: auto;
+    display: grid;
+    justify-items: end;
   }
   
   .modal-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
     background: none;
     border: none;
     cursor: pointer;
     font-size: 16px;
     color: #333;
+    font-weight: bold;
   }
-   */
+  

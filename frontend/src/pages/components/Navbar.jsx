@@ -4,30 +4,30 @@ import Logo from '../welcomePage/assets/iconList.png'
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
-    return(
+    return (
         <header>
             <div className="headerLogoName">
                 <Link to={"/"}>
-                    <img src={Logo} width={30}/>
+                    <img src={Logo} width={30} />
                     <h1>RequestEase</h1>
                 </Link>
             </div>
             <nav>
                 <ul>
                     <Link to={"/Welcome"}>
-                        Welcome    
-                    </Link>             
+                        Overview
+                    </Link>
                     <Link to={"/Welcome"}>
-                        Welcome    
-                    </Link>             
+                        Welcome
+                    </Link>
                     <Link to={"/Welcome"}>
-                        Welcome    
-                    </Link>             
+                        Welcome
+                    </Link>
                 </ul>
             </nav>
         </header>
     )
 
-    
+
 }
 export default Navbar;
