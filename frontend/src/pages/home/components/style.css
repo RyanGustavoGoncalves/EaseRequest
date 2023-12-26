@@ -5,7 +5,7 @@ section.homeSection {
     display: grid;
 }
 
-section.homeSection>img {
+section.homeSection>div.wave>img {
     position: absolute;
     z-index: 0;
 }
@@ -19,7 +19,6 @@ div.subNav {
     display: grid;
     position: relative;
     z-index: 990;
-    align-items: end;
     padding: 2rem;
 }
 
@@ -35,7 +34,7 @@ div.searchRequest>div.lupaSearch>input {
     border: solid 1px grey;
     inline-size: 30rem;
     outline: none;
-    padding-left: 30px;
+    text-indent: 20px;
 }
 
 div.searchRequest>div.lupaSearch>img {
@@ -63,9 +62,13 @@ div.subNav>div.more>img {
 
 div.boxTools {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-evenly;
     padding: 3rem;
+    max-height: 20rem;
+    /* Defina a altura máxima que você deseja para o scroll */
+    overflow-y: auto;
 }
 
 div.tool {
@@ -99,11 +102,13 @@ div.boxTools>a {
     color: black;
     display: contents;
 }
-div.toolConfig>div.btnSave{
+
+div.toolConfig>div.btnSave {
     display: grid;
     place-items: center;
 }
-div.toolConfig>div.btnSave>button{
+
+div.toolConfig>div.btnSave>button {
     padding: 10px;
     border-radius: 5px;
     inline-size: 5rem;
@@ -112,6 +117,61 @@ div.toolConfig>div.btnSave>button{
     transition: all 0.5s ease-in-out;
 }
 
-div.toolConfig>div.btnSave>button:hover{
+div.toolConfig>div.btnSave>button:hover {
     transform: scale(1.1)
+}
+
+@media (max-width: 620px) {
+    div.searchRequest {
+        display: grid;
+        place-items: center;
+    }
+
+    div.searchRequest>div.lupaSearch>input {
+        inline-size: 20rem;
+    }
+}
+
+@media (max-width: 420px) {
+    section.homeSection {
+        height: 90%;
+    }
+
+    div.tool {
+        width: 10rem;
+        height: 8rem;
+        text-align: center;
+    }
+
+    div.tool:hover {
+        transform: none;
+        filter: brightness(0.5);
+    }
+
+    div.tool>h2 {
+        font-size: 20px;
+    }
+
+    div.searchRequest>div.lupaSearch>input {
+        inline-size: 15rem;
+    }
+
+    div.subNav {
+        padding: 0;
+    }
+
+    div.boxTools {
+        padding: 0;
+    }
+}
+
+@media (max-width: 420px){
+    div.searchRequest>div.lupaSearch>input{
+        inline-size: 10rem;
+    }
+}
+@media (max-width: 220px){
+    div.searchRequest>div.lupaSearch>input{
+        inline-size: 5rem;
+    }
 }

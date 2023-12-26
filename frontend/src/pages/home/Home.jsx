@@ -71,7 +71,9 @@ const Home = () => {
 
     return (
         <section className="homeSection">
-            <img src={wave} alt="" />
+            <div className="wave">
+                <img src={wave} alt="" />
+            </div>
 
             <div className="subNav">
                 <div className="searchRequest">

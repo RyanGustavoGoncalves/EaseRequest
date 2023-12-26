@@ -24,16 +24,24 @@ header>div.headerLogoName>a>img {
     width: 50px;
 }
 
-header>nav>ul {
+nav>ul {
     width: 15rem;
     display: flex;
     justify-content: space-around;
 }
 
-header>nav>ul>a {
+nav>ul>a {
     text-decoration: none;
     color: #347571;
     font-weight: bold;
+}
+
+div.responsiveMenu {
+    width: 5rem;
+}
+
+.menu-icon {
+    display: none;
 }
 
 /* === CSS Modal === */
@@ -49,9 +57,9 @@ header>nav>ul>a {
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-  
-  .modalComp {
+}
+
+.modalComp {
     background: white;
     padding: 20px;
     border-radius: 8px;
@@ -60,14 +68,59 @@ header>nav>ul>a {
     overflow: auto;
     display: grid;
     justify-items: end;
-  }
-  
-  .modal-close {
+}
+
+.modal-close {
     background: none;
     border: none;
     cursor: pointer;
     font-size: 16px;
     color: #333;
     font-weight: bold;
-  }
-  
+}
+
+@media (max-width: 420px) {
+    header {
+        position: relative;
+    }
+
+    header>div.headerLogoName>a {
+        gap: 0;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    header {
+        text-align: center;
+    }
+
+    div.headerLogoName>a>h1 {
+        display: none;
+    }
+
+    nav {
+        display: none;
+    }
+
+    nav.show {
+        display: flex;
+        /* Mostrar o menu quando o botão é clicado */
+    }
+
+    nav ul {
+        flex-direction: column;
+        width: 0;
+    }
+
+    nav ul li {
+        margin: 0.5rem 0;
+    }
+
+    .menu-icon {
+        display: block;
+        cursor: pointer;
+        color: #347571;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+}
