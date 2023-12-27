@@ -2,7 +2,7 @@ package com.goncalves.API.controller;
 
 import com.goncalves.API.DTO.DadosAtualizarUser;
 import com.goncalves.API.DTO.DadosListagemUser;
-import com.goncalves.API.entities.UserRepository;
+import com.goncalves.API.entities.user.UserRepository;
 import com.goncalves.API.infra.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

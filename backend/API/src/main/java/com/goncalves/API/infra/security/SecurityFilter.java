@@ -1,6 +1,6 @@
 package com.goncalves.API.infra.security;
 
-import com.goncalves.API.entities.UserRepository;
+import com.goncalves.API.entities.user.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,8 +1,6 @@
-package com.goncalves.API.entities;
+package com.goncalves.API.entities.user;
 
 import com.goncalves.API.DTO.DadosAtualizarUser;
-import com.goncalves.API.DTO.DadosListagemUser;
-import jakarta.validation.constraints.Max;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +11,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.goncalves.API.service;
 
-import com.goncalves.API.entities.UserRepository;
+import com.goncalves.API.entities.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

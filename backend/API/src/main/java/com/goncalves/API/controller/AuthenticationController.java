@@ -1,8 +1,8 @@
 package com.goncalves.API.controller;
 
 import com.goncalves.API.DTO.AutenticarDados;
-import com.goncalves.API.entities.UserRepository;
-import com.goncalves.API.entities.Users;
+import com.goncalves.API.entities.user.UserRepository;
+import com.goncalves.API.entities.user.Users;
 import com.goncalves.API.infra.security.*;
 import io.micrometer.common.util.StringUtils;
 import jakarta.validation.Valid;

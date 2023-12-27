@@ -1,6 +1,6 @@
 package com.goncalves.API.DTO;
 
-import com.goncalves.API.entities.Users;
+import com.goncalves.API.entities.user.Users;
 
 import java.time.LocalDateTime;
 

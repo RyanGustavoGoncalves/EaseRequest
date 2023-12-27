@@ -1,4 +1,4 @@
-package com.goncalves.API.entities;
+package com.goncalves.API.entities.user;
 
 public enum UserRole {
     ADMIN("admin"),
