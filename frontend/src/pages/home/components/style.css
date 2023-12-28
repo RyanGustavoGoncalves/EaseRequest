@@ -103,12 +103,14 @@ div.boxTools>a {
     display: contents;
 }
 
-div.toolConfig>div.btnSave {
+div.btnSave {
     display: grid;
     place-items: center;
 }
 
-div.toolConfig>div.btnSave>button {
+div.btnSave>button {
+    font-weight: bold;
+    font-size: 15px;
     padding: 10px;
     border-radius: 5px;
     inline-size: 5rem;
@@ -119,6 +121,26 @@ div.toolConfig>div.btnSave>button {
 
 div.toolConfig>div.btnSave>button:hover {
     transform: scale(1.1)
+}
+
+select.selectHome {
+    color: #5EC57E;
+    font-weight: bold;
+    font-size: 15px;
+    inline-size: 12rem;
+    border: none;
+    border-bottom: solid 2px #347571;
+    outline: none;
+
+}
+
+div.singleRequest {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+div.singleRequest>p>span {
+    color: red;
 }
 
 @media (max-width: 620px) {
@@ -165,13 +187,14 @@ div.toolConfig>div.btnSave>button:hover {
     }
 }
 
-@media (max-width: 420px){
-    div.searchRequest>div.lupaSearch>input{
+@media (max-width: 420px) {
+    div.searchRequest>div.lupaSearch>input {
         inline-size: 10rem;
     }
 }
-@media (max-width: 220px){
-    div.searchRequest>div.lupaSearch>input{
+
+@media (max-width: 220px) {
+    div.searchRequest>div.lupaSearch>input {
         inline-size: 5rem;
     }
 }
