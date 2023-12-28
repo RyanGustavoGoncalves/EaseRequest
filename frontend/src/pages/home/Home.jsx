@@ -10,8 +10,8 @@ import InputField from "./components/InputField";
 
 const Home = () => {
     const token = localStorage.getItem('token');
-    console.log(token)
     const [toolBoxes, setToolBoxes] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         id: "",
         problem: "",
@@ -22,6 +22,7 @@ const Home = () => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalConfirmIsOpen, setModalConfirmIsOpen] = useState(false);
     const [modalUpdateIsOpen, setModalUpdateIsOpen] = useState(false);
+    const [modalDeleteIsOpen, setModalDeleteIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [requestsLoaded, setRequestsLoaded] = useState(false);
     const [singleRequest, setSingleRequest] = useState({});
@@ -33,15 +34,25 @@ const Home = () => {
     });
 
 
-
     useEffect(() => {
         if (!requestsLoaded) {
             fetchRequests();
         }
     }, [requestsLoaded]);
 
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            fetchRequests();
+        }, 5000); // Consulta a cada 5 segundos (ajuste conforme necessário)
+
+        return () => clearInterval(intervalId); // Limpa o intervalo quando o componente é desmontado
+
+    }, []);
+
+    //Request get para mostrar requisições guardadas no banco de dados
     const fetchRequests = async () => {
         try {
+            setLoading(true);
             const response = await fetch("http://localhost:8080/request/user", {
                 headers: {
                     Accept: "application/json",
@@ -53,10 +64,6 @@ const Home = () => {
             if (response.status === 200) {
                 const responseData = await response.json();
 
-                // Log da resposta para análise
-                console.log("Resposta da API:", responseData);
-
-                // Certifica-se de que 'content' é uma matriz antes de definir 'toolBoxes'
                 if (Array.isArray(responseData)) {
                     setToolBoxes(responseData);
                     setRequestsLoaded(true);
@@ -68,10 +75,12 @@ const Home = () => {
             }
         } catch (error) {
             console.log("Erro ao buscar as solicitações:", error);
+        } finally {
+            setLoading(false);
         }
     };
 
-
+    //Modal Functions
     const openModal = () => {
         document.body.style.overflow = "hidden";
         setModalIsOpen(true);
@@ -106,6 +115,18 @@ const Home = () => {
         setModalUpdateIsOpen(false);
     };
 
+    const openModalDelete = (id) => {
+        document.body.style.overflow = "hidden";
+        fetchRequestById(id)
+        setModalDeleteIsOpen(true);
+    };
+
+    const closeModalDelete = () => {
+        document.body.style.overflow = "auto";
+        setModalDeleteIsOpen(false);
+        closeModalConfirm(false);
+    };
+
     const handleAddBox = () => {
         setToolBoxes([...toolBoxes, formData]);
         setFormData({
@@ -118,6 +139,7 @@ const Home = () => {
         closeModal();
     };
 
+    //Function para animação do input do modal
     const handleInputFocus = (labelId) => {
         const label = document.getElementById(labelId);
         label.classList.add('active');
@@ -150,6 +172,7 @@ const Home = () => {
         setSearchTerm(e.target.value);
     };
 
+    //Request para salvar um nova requisição
     const newRequest = async () => {
         const data = {
             problem: formData.problem,
@@ -212,6 +235,33 @@ const Home = () => {
         } catch (error) {
             // Lidar com erros de rede ou outros erros
             console.error('Erro ao fazer a solicitação de atualização:', error);
+        }
+    };
+
+    const deleteRequest = async (editedRequest) => {
+        console.log(editedRequest);
+        try {
+            const response = await fetch(`http://localhost:8080/request/${editedRequest.id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+            if (response.ok) {
+
+                console.log('Request deletada com sucesso!');
+                closeModalUpdate();
+            } else {
+
+                console.error('Erro ao deletar a request:', response.status);
+            }
+        } catch (error) {
+            // Lidar com erros de rede ou outros erros
+            console.error('Erro ao fazer a solicitação delete:', error);
+        } finally {
+            closeModalDelete();
         }
     };
 
@@ -290,13 +340,20 @@ const Home = () => {
                     </div>
                     {filteredToolBoxes.map((box, index) => (
                         <div key={index} className="tool" onClick={() => openModalConfirm(box.id)}>
-                            <p>ID: {box.id}</p>
-                            <h2>{box.problem}</h2>
-                            <p>{box.priority}</p>
-                            <p>{box.status}</p>
-                            <p>{box.creationRequest}</p>
+                            {loading ? (
+                                <div className="loading-overlay">Carregando...</div>
+                            ) : (
+                                <>
+                                    <p>ID: {box.id}</p>
+                                    <h2>{box.problem}</h2>
+                                    <p>{box.priority}</p>
+                                    <p>{box.status}</p>
+                                    <p>{box.creationRequest}</p>
+                                </>
+                            )}
                         </div>
                     ))}
+
                 </div>
             </div>
 
@@ -337,42 +394,19 @@ const Home = () => {
                     <p>
                         <span>ID:</span> {singleRequest.id}
                     </p>
+                    <p>
+                        <span>Problem:</span> {singleRequest.problem}
+                    </p>
+                    <p>
+                        <span>Priority:</span> {singleRequest.priority}
+                    </p>
+                    <p>
+                        <span>Status:</span> {singleRequest.status}
+                    </p>
+                    <p>
+                        <span>Date request:</span> {singleRequest.creationRequest}
+                    </p>
                 </div>
-                <InputField
-                    id="problem"
-                    label="Problem"
-                    value={singleRequest.problem}
-                    onChange={(e) => setSingleRequest((prev) => ({ ...prev, problem: e.target.value }))}
-                    onMouseEnter={() => handleInputFocus('problemLabel')}
-                    onMouseLeave={() => handleInputBlur('problemLabel')}
-                />
-                <InputField
-                    id="priority"
-                    label="Priority"
-                    value={singleRequest.priority}
-                    onChange={(e) => setSingleRequest((prev) => ({ ...prev, priority: e.target.value }))}
-                    type="select"
-                    options={[
-                        { label: 'Priority', value: '' },
-                        { label: 'HIGH', value: 'HIGH' },
-                        { label: 'MEDIUM', value: 'MEDIUM' },
-                        { label: 'LOW', value: 'LOW' },
-                    ]}
-                    required
-                />
-                <InputField
-                    id="status"
-                    label="Status"
-                    value={singleRequest.status}
-                    onChange={(e) => setSingleRequest((prev) => ({ ...prev, status: e.target.value }))}
-                    type="select"
-                    options={[
-                        { label: 'Status', value: '' },
-                        { label: 'OK', value: 'OK' },
-                        { label: 'N/OK', value: 'N/OK' },
-                    ]}
-                    required
-                />
                 <div className="btnSave">
                     <button onClick={() => openModalUpdate(singleRequest.id)}>Update!</button>
                 </div>
@@ -383,47 +417,60 @@ const Home = () => {
                     <p>
                         <span>ID:</span> {singleRequest.id}
                     </p>
+                </div>
 
-                    <InputField
-                        id="problem"
-                        label="Updated Problem"
-                        value={editedRequest.problem}
-                        onChange={(e) => setEditedRequest((prev) => ({ ...prev, problem: e.target.value }))}
-                        onMouseEnter={() => handleInputFocus('updatedProblemLabel')}
-                        onMouseLeave={() => handleInputBlur('updatedProblemLabel')}
-                    />
+                <InputField
+                    id="problem"
+                    label="Updated Problem"
+                    value={editedRequest.problem}
+                    onChange={(e) => setEditedRequest((prev) => ({ ...prev, problem: e.target.value }))}
+                    onMouseEnter={() => handleInputFocus('updatedProblemLabel')}
+                    onMouseLeave={() => handleInputBlur('updatedProblemLabel')}
+                />
 
-                    <InputField
-                        id="priority"
-                        value={editedRequest.priority}
-                        onChange={(e) => setEditedRequest((prev) => ({ ...prev, priority: e.target.value }))}
-                        type="select"
-                        options={[
-                            { label: 'Priority', value: '' },
-                            { label: 'HIGH', value: 'HIGH' },
-                            { label: 'MEDIUM', value: 'MEDIUM' },
-                            { label: 'LOW', value: 'LOW' },
-                        ]}
-                        required
-                    />
-                    <InputField
-                        id="status"
-                        value={editedRequest.status}
-                        onChange={(e) => setEditedRequest((prev) => ({ ...prev, status: e.target.value }))}
-                        type="select"
-                        options={[
-                            { label: 'Status', value: '' },
-                            { label: 'OK', value: 'OK' },
-                            { label: 'N/OK', value: 'N/OK' },
-                        ]}
-                        required
-                    />
+                <InputField
+                    id="priority"
+                    value={editedRequest.priority}
+                    onChange={(e) => setEditedRequest((prev) => ({ ...prev, priority: e.target.value }))}
+                    type="select"
+                    options={[
+                        { label: 'Priority', value: '' },
+                        { label: 'HIGH', value: 'HIGH' },
+                        { label: 'MEDIUM', value: 'MEDIUM' },
+                        { label: 'LOW', value: 'LOW' },
+                    ]}
+                    required
+                />
+
+                <InputField
+                    id="status"
+                    value={editedRequest.status}
+                    onChange={(e) => setEditedRequest((prev) => ({ ...prev, status: e.target.value }))}
+                    type="select"
+                    options={[
+                        { label: 'Status', value: '' },
+                        { label: 'OK', value: 'OK' },
+                        { label: 'N/OK', value: 'N/OK' },
+                    ]}
+                    required
+                />
+                <div className="btnSave">
+                    <button className="deleteBtn" onClick={openModalDelete}>Delete!</button>
+                    <button onClick={() => updateRequest(editedRequest, singleRequest.id)}>Update!</button>
+                </div>
+            </Modal>
+
+            <Modal isOpen={modalDeleteIsOpen} onClose={closeModalDelete}>
+
+                <div className="singleRequest">
+                    <p>
+                        <span>Deseja deletar a request com o ID:</span> {singleRequest.id}
+                    </p>
+                </div>
 
 
-                    {/* Adicione botões para confirmar a atualização */}
-                    <div className="btnSave">
-                        <button onClick={() => updateRequest(editedRequest, singleRequest.id)}>Update!</button>
-                    </div>
+                <div className="btnSave">
+                    <button className="deleteBtn" onClick={() => deleteRequest(editedRequest)}>Delete!</button>
                 </div>
             </Modal>
 

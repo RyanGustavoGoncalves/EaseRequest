@@ -104,8 +104,9 @@ div.boxTools>a {
 }
 
 div.btnSave {
-    display: grid;
-    place-items: center;
+    gap: 5px;
+    display: flex;
+    justify-content: center;
 }
 
 div.btnSave>button {
@@ -119,7 +120,15 @@ div.btnSave>button {
     transition: all 0.5s ease-in-out;
 }
 
-div.toolConfig>div.btnSave>button:hover {
+div.btnSave>button.deleteBtn:hover{
+    color: white;
+    background-color: red;
+    transform: scale(1.1)
+}
+
+div.btnSave>button:hover {
+    color: white;
+    background-color: #5EC57E;
     transform: scale(1.1)
 }
 
@@ -130,8 +139,6 @@ select.selectHome {
     inline-size: 12rem;
     border: none;
     border-bottom: solid 2px #347571;
-    outline: none;
-
 }
 
 div.singleRequest {
@@ -160,6 +167,7 @@ div.singleRequest>p>span {
     }
 
     div.tool {
+        font-size: 12px;
         width: 10rem;
         height: 8rem;
         text-align: center;

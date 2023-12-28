@@ -7,9 +7,11 @@ const Modal = ({ isOpen, onClose, children }) => {
   return ReactDOM.createPortal(
     <div className="modal-overlay">
       <div className="modalComp">
-        <button className="modal-close" onClick={onClose}>
-          Fechar
-        </button>
+        <div className="btnModalClose">
+          <button className="modal-close" onClick={onClose}>
+            Fechar
+          </button>
+        </div>
         {children}
       </div>
     </div>,

@@ -36,10 +36,6 @@ nav>ul>a {
     font-weight: bold;
 }
 
-div.responsiveMenu {
-    width: 5rem;
-}
-
 .menu-icon {
     display: none;
 }
@@ -58,7 +54,10 @@ div.responsiveMenu {
     justify-content: center;
     align-items: center;
 }
-
+div.btnModalClose{
+    display: flex;
+    justify-content: end;
+}
 .modalComp {
     background: white;
     padding: 20px;
@@ -67,7 +66,6 @@ div.responsiveMenu {
     max-height: 80%;
     overflow: auto;
     display: grid;
-    justify-items: end;
 }
 
 .modal-close {
@@ -99,6 +97,7 @@ div.responsiveMenu {
 
     nav.show {
         display: flex;
+        width: 5rem;
         /* Mostrar o menu quando o botão é clicado */
     }
 

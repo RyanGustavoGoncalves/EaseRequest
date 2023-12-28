@@ -43,7 +43,6 @@ public class UserController {
         }
     }
 
-
     @PutMapping("/{idUser}")
     @Transactional
     public ResponseEntity updateUser(@PathVariable String idUser, @RequestBody @Validated DadosAtualizarUser dados) {
@@ -54,7 +53,7 @@ public class UserController {
             // Atualizar os dados do usuário
             user.atualizarUser(dados);
 
-            // Não é necessário chamar repository.save() explicitamente, pois as alterações serão automaticamente sincronizadas com o banco de dados.
+            repository.save(user);
 
             return ResponseEntity.ok(user);
         } catch (NotFoundException e) {
@@ -72,7 +71,7 @@ public class UserController {
             repository.deleteById(idUser);
             return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorNotFoundId("ID não encontrado", idUser));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorNotFoundId("ID não encontrado!", idUser));
         }
     }
 }
