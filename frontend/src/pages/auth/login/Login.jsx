@@ -50,7 +50,6 @@ const Login = ({ toggleForm, login }) => {
             if (response.ok) {
                 const responseJson = await response.json();
                 const token = responseJson.token;
-                console.log(token);
                 localStorage.setItem('token', token);
                 alert("Login bem sucedido!");
                 navigate('/Home');

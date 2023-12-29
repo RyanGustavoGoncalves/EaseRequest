@@ -7,11 +7,12 @@ import java.time.LocalDateTime;
 
 public record DadosNewRequest(String problem,
                               String priority,
+                              String description,
                               String status,
                               LocalDateTime creationRequest,
                               Users user) {
 
     public DadosNewRequest (Request request){
-        this(request.getIdRequest(), request.getProblem(), request.getStatus(),LocalDateTime.now(), request.getUser());
+        this(request.getIdRequest(), request.getProblem(),request.getDescription() ,request.getStatus(),LocalDateTime.now(), request.getUser());
     }
 }

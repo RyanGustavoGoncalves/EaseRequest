@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import wave from './assets/wave(1).svg';
-import './components/style.css';
-import '../auth/components/style.css';
-import mais from './assets/mais(1).png';
-import lupa from './assets/lupa.png';
+import wave from '../assets/wave(1).svg';
+import '../components/style.css';
+import '../components/style.css';
+import mais from '../assets/mais(1).png';
+import lupa from '../assets/lupa.png';
 import { Link } from "react-router-dom";
-import Modal from '../components/Modal';
-import InputField from "./components/InputField";
+import Modal from '../../components/Modal';
+import InputField from "../components/InputField";
 
-const Home = () => {
+const HomeSecurity = () => {
     const token = localStorage.getItem('token');
     const [toolBoxes, setToolBoxes] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -17,9 +17,18 @@ const Home = () => {
         problem: "",
         description: "",
         priority: "",
-        status: "N/OK",
+        status: "",
         creationRequest: "",
+        user: [{
+            idUsers: "",
+            username: "",
+            firstName: "",
+            lastName: "",
+            email: "",
+            role: "",
+        }]
     });
+
     const [isExpanded, setExpanded] = useState(false);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalConfirmIsOpen, setModalConfirmIsOpen] = useState(false);
@@ -32,12 +41,13 @@ const Home = () => {
         id: "",
         problem: "",
         description: "",
+        priority: "",
+        status: "",
     });
 
     const focusDescription = () => {
         setExpanded(!isExpanded);
     };
-    
 
     useEffect(() => {
         if (!requestsLoaded) {
@@ -47,6 +57,7 @@ const Home = () => {
 
     useEffect(() => {
         const intervalId = setInterval(() => {
+            console.log(token);
             fetchRequests();
         }, 5000); // Consulta a cada 5 segundos (ajuste conforme necessário)
 
@@ -58,7 +69,7 @@ const Home = () => {
     const fetchRequests = async () => {
         try {
             setLoading(true);
-            const response = await fetch("http://localhost:8080/request/user", {
+            const response = await fetch("http://localhost:8080/request", {
                 headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json",
@@ -69,14 +80,20 @@ const Home = () => {
             if (response.status === 200) {
                 const responseData = await response.json();
 
-                if (Array.isArray(responseData)) {
-                    setToolBoxes(responseData);
+                if (Array.isArray(responseData.content)) {
+                    // Mapeie as solicitações e inclua os dados do usuário
+                    const updatedToolBoxes = responseData.content.map(box => {
+                        return {
+                            ...box,
+                            user: box.users, // Ajuste o nome do campo aqui
+                        };
+                    });
+
+                    setToolBoxes(updatedToolBoxes);
                     setRequestsLoaded(true);
                 } else {
                     console.error("A resposta não contém uma matriz válida:", responseData);
                 }
-            } else {
-                console.log("Ocorreu um erro inesperado ao buscar as solicitações: " + response.status);
             }
         } catch (error) {
             console.log("Erro ao buscar as solicitações:", error);
@@ -84,6 +101,7 @@ const Home = () => {
             setLoading(false);
         }
     };
+
 
     //Modal Functions
     const openModal = () => {
@@ -138,8 +156,16 @@ const Home = () => {
             problem: "",
             description: "",
             priority: "",
-            status: "N/OK",
+            status: "",
             creationRequest: "",
+            user: [{
+                idUsers: "",
+                username: "",
+                firstName: "",
+                lastName: "",
+                email: "",
+                role: "",
+            }]
         });
         closeModal();
     };
@@ -163,11 +189,12 @@ const Home = () => {
     };
 
     const handleSave = () => {
-        console.log(formData.status)
         setFormData({
             ...formData,
             problem: document.getElementById("problem").value,
             description: document.getElementById("description").value,
+            priority: document.getElementById("priority").value,
+            status: document.getElementById("status").value
         });
         newRequest();
         handleAddBox();
@@ -291,7 +318,15 @@ const Home = () => {
                 if (responseData && typeof responseData === 'object') {
                     // Aqui, você pode lidar com a resposta do endpoint específico
                     // Por exemplo, definir um estado no React para armazenar a solicitação única
-                    setSingleRequest(responseData);
+
+                    // Extraia os dados do usuário e adicione-os à solicitação única
+                    const user = responseData.users; // Supondo que os dados do usuário estejam em "users"
+                    const updatedSingleRequest = {
+                        ...responseData,
+                        user: user,
+                    };
+
+                    setSingleRequest(updatedSingleRequest);
                 } else {
                     console.error("A resposta não contém um objeto válido:", responseData);
                 }
@@ -306,7 +341,6 @@ const Home = () => {
         }
     };
 
-
     // Movendo a declaração para o local apropriado
     const filteredToolBoxes = Array.isArray(toolBoxes)
         ? toolBoxes.filter((box) =>
@@ -319,8 +353,8 @@ const Home = () => {
             <div className="wave">
                 <img src={wave} alt="" />
             </div>
-
             <div className="subNav">
+                <h1>ADMIN</h1>
                 <div className="searchRequest">
                     <div className="lupaSearch">
                         <img src={lupa} alt="Search" />
@@ -350,11 +384,12 @@ const Home = () => {
                                 <div className="loading-overlay">Carregando...</div>
                             ) : (
                                 <>
-                                    <p>ID: {box.id}</p>
+                                    <p>Request ID: {box.id}</p>
                                     <h2>{box.problem}</h2>
                                     <p>{box.priority}</p>
                                     <p>{box.status}</p>
                                     <p>{box.creationRequest}</p>
+                                    <p>User ID: {box.user.idUsers}</p>
                                 </>
                             )}
                         </div>
@@ -383,6 +418,23 @@ const Home = () => {
                         onMouseLeave={() => handleInputBlur('descriptionLabel')}
                     />
 
+                    <div className="authField">
+                        <select className="selectHome" id="priority" value={formData.priority} onChange={(e) => setFormData({ ...formData, priority: e.target.value })} required>
+                            <option value="">Priority</option>
+                            <option value="HIGH">HIGH</option>
+                            <option value="MEDIUM">MEDIUM</option>
+                            <option value="LOW">LOW</option>
+                        </select>
+                    </div>
+
+                    <div className="authField">
+                        <select className="selectHome" id="status" value={formData.status} onChange={(e) => setFormData({ ...formData, status: e.target.value })} required>
+                            <option value="">Status</option>
+                            <option value="OK">OK</option>
+                            <option value="N/OK">N/OK</option>
+                        </select>
+                    </div>
+
                     <div className="btnSave">
                         <button onClick={handleSave}>Salvar</button>
                     </div>
@@ -397,12 +449,35 @@ const Home = () => {
                     <p>
                         <span>Problem:</span> {singleRequest.problem}
                     </p>
-                    <p style={{cursor: "pointer"}} onClick={focusDescription}>
+                    <p onClick={focusDescription}>
                         <span>Description:</span> {isExpanded ? <div className="focusDesc">{singleRequest.description}</div> : <>[EXTEND]</>}
+                    </p>
+                    <p>
+                        <span>Priority:</span> {singleRequest.priority}
+                    </p>
+                    <p>
+                        <span>Status:</span> {singleRequest.status}
                     </p>
                     <p>
                         <span>Date request:</span> {singleRequest.creationRequest}
                     </p>
+                    <p>
+                       <span>ID:</span> {singleRequest.users ? singleRequest.users.idUsers : 'N/A'}
+
+                    </p>
+                    <p>
+                        <span>Username:</span> {singleRequest.users ? singleRequest.users.username : 'N/A'}
+                    </p>
+                    <p>
+                        <span>First Name:</span> {singleRequest.users ? singleRequest.users.firstName : 'N/A'}
+                    </p>
+                    <p>
+                        <span>Last Name:</span> {singleRequest.users ? singleRequest.users.lastName : 'N/A'}
+                    </p>
+                    <p>
+                        <span>Email:</span> {singleRequest.users ? singleRequest.users.email : 'N/A'}
+                    </p>
+
                 </div>
                 <div className="btnSave">
                     <button onClick={() => openModalUpdate(singleRequest.id)}>Update!</button>
@@ -434,6 +509,32 @@ const Home = () => {
                     onMouseLeave={() => handleInputBlur('updateDescriptionLabel')}
                 />
 
+                <InputField
+                    id="priority"
+                    value={editedRequest.priority}
+                    onChange={(e) => setEditedRequest((prev) => ({ ...prev, priority: e.target.value }))}
+                    type="select"
+                    options={[
+                        { label: 'Priority', value: '' },
+                        { label: 'HIGH', value: 'HIGH' },
+                        { label: 'MEDIUM', value: 'MEDIUM' },
+                        { label: 'LOW', value: 'LOW' },
+                    ]}
+                    required
+                />
+
+                <InputField
+                    id="status"
+                    value={editedRequest.status}
+                    onChange={(e) => setEditedRequest((prev) => ({ ...prev, status: e.target.value }))}
+                    type="select"
+                    options={[
+                        { label: 'Status', value: '' },
+                        { label: 'OK', value: 'OK' },
+                        { label: 'N/OK', value: 'N/OK' },
+                    ]}
+                    required
+                />
                 <div className="btnSave">
                     <button className="deleteBtn" onClick={openModalDelete}>Delete!</button>
                     <button onClick={() => updateRequest(editedRequest, singleRequest.id)}>Update!</button>
@@ -458,4 +559,4 @@ const Home = () => {
     );
 }
 
-export default Home;
+export default HomeSecurity;

@@ -120,7 +120,7 @@ div.btnSave>button {
     transition: all 0.5s ease-in-out;
 }
 
-div.btnSave>button.deleteBtn:hover{
+div.btnSave>button.deleteBtn:hover {
     color: white;
     background-color: red;
     transform: scale(1.1)
@@ -148,6 +148,10 @@ div.singleRequest {
 
 div.singleRequest>p>span {
     color: red;
+}
+
+.focusDesc{
+    width: 15rem;
 }
 
 @media (max-width: 620px) {

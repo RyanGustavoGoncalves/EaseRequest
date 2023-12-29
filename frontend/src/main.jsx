@@ -18,6 +18,7 @@ import WelcomeService from './pages/welcomeService/WelcomeService.jsx';
 import WelcomeTecno from './pages/welcomeTecno/WelcomeTecno.jsx';
 import SplashScreen from './pages/components/SplashScreen.jsx';
 import ProtectedRoute from './pages/auth/protectedRoute/ProtectedRoute.jsx';
+import HomeSecurity from './pages/home/auth/HomeSecurity.jsx';
 
 const router = createBrowserRouter([
   {
@@ -29,7 +30,10 @@ const router = createBrowserRouter([
         path: "Home",
         element: <Home />,
       },
-
+      {
+        path: "HomeSecurity",
+        element: <HomeSecurity />
+      },
       {
         path: "Navbar",
         element: <Navbar />,

@@ -1,15 +1,41 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import ScrollReveal from 'scrollreveal';
-import './App.css'
-import Navbar from './pages/components/Navbar'
-import Home from './pages/home/Home'
+import './App.css';
+import Navbar from './pages/components/Navbar';
+import Home from './pages/home/Home';
+import HomeSecurity from './pages/home/auth/HomeSecurity';
+
 function App() {
+  const [role, setRole] = useState(localStorage.getItem('role'));
+  console.log(role);
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    // Simule uma chamada à API para obter a role do usuário
+    // Aqui você deve substituir isso por sua lógica real de obtenção de dados
+    const fetchUserRole = async () => {
+      // Simulando uma chamada à API
+      const response = await fetch('http://localhost:8080/token', {
+        headers: {
+          Authorization: `Bearer ${token}`, // Substitua pelo token real
+        },
+      });
+
+      if (response.ok) {
+        const responseBody = await response.json();
+        setRole(responseBody.role);
+      } else {
+        setRole(null);
+      }
+    };
+
+    fetchUserRole();
+  }, []);
 
   useEffect(() => {
     const sr = ScrollReveal();
 
     const calculateDistance = () => {
-      // Lógica para calcular a distância com base em fatores responsivos
       return window.innerWidth > 768 ? '70px' : '0px';
     };
 
@@ -33,15 +59,14 @@ function App() {
     });
   }, []);
 
-
   return (
     <>
       <main className='appMain'>
         <Navbar />
-        <Home />
+        {role === 'ADMIN' ? <HomeSecurity /> : <Home />}
       </main>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

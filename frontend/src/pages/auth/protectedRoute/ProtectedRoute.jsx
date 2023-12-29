@@ -5,7 +5,7 @@ const ProtectedRoute = ({ element: Element, ...rest }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const token = localStorage.getItem('token');
   console.log(token)
-   // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IndlbGNvbWUiLCJpYXQiOjE1MTYyMzkwMjJ9.PxmS8bO1WyK99LDVfUfTEuWPH4WcG-I_JP68pB70vMo";
+  // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IndlbGNvbWUiLCJpYXQiOjE1MTYyMzkwMjJ9.PxmS8bO1WyK99LDVfUfTEuWPH4WcG-I_JP68pB70vMo";
 
   useEffect(() => {
     const checkToken = async () => {
@@ -19,6 +19,8 @@ const ProtectedRoute = ({ element: Element, ...rest }) => {
           });
 
           if (response.ok) {
+            const responseBody = await response.json();
+            const role = responseBody.role;
             setIsAuthenticated(true);
           } else {
             alert("Token Inválido ou expirado!")

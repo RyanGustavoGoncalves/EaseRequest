@@ -36,7 +36,7 @@ public class RequestController {
     private UserRepository userRepository;
 
     @GetMapping
-    public ResponseEntity<Page<DadosListagemRequest>> getRequest(@PageableDefault(size = 10, sort = {"id"}) Pageable paginacao){
+    public ResponseEntity<Page<DadosListagemRequest>> getRequest(@PageableDefault(size = 10, sort = {"creationRequest"}) Pageable paginacao){
         var page = repository.findAll(paginacao).map(DadosListagemRequest::new);
         return ResponseEntity.ok(page);
     }
@@ -102,6 +102,7 @@ public class RequestController {
             Request newRequest = new Request(
                     dados.problem(),
                     dados.priority(),
+                    dados.description(),
                     dados.status(),
                     dados.creationRequest(),
                     user

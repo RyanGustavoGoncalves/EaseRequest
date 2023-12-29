@@ -10,6 +10,7 @@ const Register = ({ toggleForm }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [birth, setBirth] = useState("");
+    const [role, setRole] = useState("USER");
 
     const [errors, setErrors] = useState([]);
 
@@ -45,6 +46,7 @@ const Register = ({ toggleForm }) => {
             email: email,
             password: password,
             birth: birth,
+            role: role,
         };
 
         try {

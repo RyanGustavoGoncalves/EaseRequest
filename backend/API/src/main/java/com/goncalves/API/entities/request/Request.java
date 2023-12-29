@@ -21,6 +21,7 @@ public class Request {
     @Id
     private String idRequest;
     private String problem;
+    private String description;
     private String priority;
     private String status;
     private LocalDateTime creationRequest;
@@ -29,9 +30,10 @@ public class Request {
     private Users user;
 
 
-    public Request(String problem, String priority, String status, LocalDateTime creationRequest ,Users user) {
+    public Request(String problem, String priority,String description ,String status, LocalDateTime creationRequest ,Users user) {
         this.problem = problem;
         this.priority = priority;
+        this.description = description;
         this.status = status;
         this.user = user;
         this.creationRequest = LocalDateTime.now();
@@ -40,6 +42,9 @@ public class Request {
     public void atualizarRequest (DadosAtualizarRequest dados){
         if (dados.problem() != null){
             this.problem = dados.problem();
+        }
+        if (dados.description() != null){
+            this.description = dados.description();
         }
         if (dados.priority() != null){
             this.priority = dados.priority();

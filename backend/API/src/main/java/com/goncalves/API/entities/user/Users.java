@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
+import static com.goncalves.API.entities.user.UserRole.USER;
+
 @Getter
 @Setter
 @AllArgsConstructor
