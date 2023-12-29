@@ -17,7 +17,7 @@ const Home = () => {
         problem: "",
         description: "",
         priority: "",
-        status: "N/OK",
+        status: "PENDING",
         creationRequest: "",
     });
     const [isExpanded, setExpanded] = useState(false);
@@ -37,7 +37,7 @@ const Home = () => {
     const focusDescription = () => {
         setExpanded(!isExpanded);
     };
-    
+
 
     useEffect(() => {
         if (!requestsLoaded) {
@@ -48,6 +48,15 @@ const Home = () => {
     useEffect(() => {
         const intervalId = setInterval(() => {
             fetchRequests();
+        }, 5000); // Consulta a cada 5 segundos (ajuste conforme necessário)
+
+        return () => clearInterval(intervalId); // Limpa o intervalo quando o componente é desmontado
+
+    }, []);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            getStatusClass();
         }, 5000); // Consulta a cada 5 segundos (ajuste conforme necessário)
 
         return () => clearInterval(intervalId); // Limpa o intervalo quando o componente é desmontado
@@ -65,12 +74,16 @@ const Home = () => {
                     'Authorization': `Bearer ${token}`,
                 },
             });
-
+    
             if (response.status === 200) {
                 const responseData = await response.json();
-
+    
                 if (Array.isArray(responseData)) {
-                    setToolBoxes(responseData);
+                    // Atualiza as solicitações e atribui a cor a cada uma
+                    setToolBoxes(responseData.map(request => ({
+                        ...request,
+                        colorClass: getStatusClass(request.status),
+                    })));
                     setRequestsLoaded(true);
                 } else {
                     console.error("A resposta não contém uma matriz válida:", responseData);
@@ -84,7 +97,6 @@ const Home = () => {
             setLoading(false);
         }
     };
-
     //Modal Functions
     const openModal = () => {
         document.body.style.overflow = "hidden";
@@ -138,7 +150,7 @@ const Home = () => {
             problem: "",
             description: "",
             priority: "",
-            status: "N/OK",
+            status: "PENDING",
             creationRequest: "",
         });
         closeModal();
@@ -306,13 +318,25 @@ const Home = () => {
         }
     };
 
-
     // Movendo a declaração para o local apropriado
     const filteredToolBoxes = Array.isArray(toolBoxes)
         ? toolBoxes.filter((box) =>
             box.problem.toLowerCase().includes(searchTerm.toLowerCase())
         )
         : [];
+
+        const getStatusClass = (status) => {
+            let colorClass = "status-red"; // Assume vermelho como padrão
+        
+            // Verifica o status da solicitação
+            if (status === "PROCESSING") {
+                colorClass = "status-yellow";
+            } else if (status === "FINISH") {
+                colorClass = "status-green";
+            }
+        
+            return colorClass;
+        };
 
     return (
         <section className="homeSection">
@@ -350,11 +374,13 @@ const Home = () => {
                                 <div className="loading-overlay">Carregando...</div>
                             ) : (
                                 <>
-                                    <p>ID: {box.id}</p>
                                     <h2>{box.problem}</h2>
-                                    <p>{box.priority}</p>
-                                    <p>{box.status}</p>
+                                    <p>ID: {box.id}</p>
                                     <p>{box.creationRequest}</p>
+                                    <p className={`status ${getStatusClass(box.status)}`}>
+                                        &#x25CF;
+                                        <span>{box.status}</span>
+                                    </p>
                                 </>
                             )}
                         </div>
@@ -397,7 +423,7 @@ const Home = () => {
                     <p>
                         <span>Problem:</span> {singleRequest.problem}
                     </p>
-                    <p style={{cursor: "pointer"}} onClick={focusDescription}>
+                    <p style={{ cursor: "pointer" }} onClick={focusDescription}>
                         <span>Description:</span> {isExpanded ? <div className="focusDesc">{singleRequest.description}</div> : <>[EXTEND]</>}
                     </p>
                     <p>

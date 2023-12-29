@@ -150,8 +150,29 @@ div.singleRequest>p>span {
     color: red;
 }
 
-.focusDesc{
+.focusDesc {
     width: 15rem;
+}
+
+.status {
+    font-size: 20px;
+    /* ou ajuste conforme necessário */
+}
+
+.status-green {
+    color: green;
+}
+
+.status-yellow {
+    color: yellow;
+}
+
+.status-red {
+    color: red;
+}
+
+p.status>span {
+    font-size: 15px;
 }
 
 @media (max-width: 620px) {

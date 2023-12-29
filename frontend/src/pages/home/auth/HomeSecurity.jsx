@@ -53,6 +53,7 @@ const HomeSecurity = () => {
             { id: 1, priority: 'HIGH', problem: 'Issue 1' },
             { id: 2, priority: 'MEDIUM', problem: 'Issue 2' },
             { id: 3, priority: 'LOW', problem: 'Issue 3' },
+            {id: 4, priority: 'PENDING', problem: 'Issue 4'}
             // Adicione mais dados conforme necessário
         ];
 
@@ -489,8 +490,9 @@ const HomeSecurity = () => {
                     <div className="authField">
                         <select className="selectHome" id="status" value={formData.status} onChange={(e) => setFormData({ ...formData, status: e.target.value })} required>
                             <option value="">Status</option>
-                            <option value="OK">OK</option>
-                            <option value="N/OK">N/OK</option>
+                            <option value="FINISH">FINISH</option>
+                            <option value="PROCESSING">PROCESSING</option>
+                            <option value="PENDING">PENDING</option>
                         </select>
                     </div>
 
@@ -599,8 +601,8 @@ const HomeSecurity = () => {
                     type="select"
                     options={[
                         { label: 'Status', value: '' },
-                        { label: 'OK', value: 'OK' },
-                        { label: 'N/OK', value: 'N/OK' },
+                        { label: 'FINISH', value: 'FINISH' },
+                        { label: 'PROCESSING', value: 'PROCESSING' },
                     ]}
                     required
                 />
