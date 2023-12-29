@@ -44,6 +44,41 @@ const HomeSecurity = () => {
         priority: "",
         status: "",
     });
+    const [sortedToolBoxes, setSortedToolBoxes] = useState([]);
+    const [filterCriteria, setFilterCriteria] = useState('');
+
+    // Simulando os dados iniciais
+    useEffect(() => {
+        const initialToolBoxes = [
+            { id: 1, priority: 'HIGH', problem: 'Issue 1' },
+            { id: 2, priority: 'MEDIUM', problem: 'Issue 2' },
+            { id: 3, priority: 'LOW', problem: 'Issue 3' },
+            // Adicione mais dados conforme necessário
+        ];
+
+        setToolBoxes(initialToolBoxes);
+        setSortedToolBoxes(initialToolBoxes); // Inicialmente, exibe todos os itens sem ordenação
+    }, []);
+
+    // Atualizar a lista ordenada sempre que o critério de filtro ou as caixas de ferramentas mudarem
+    useEffect(() => {
+        updateSortedToolBoxes();
+    }, [filterCriteria, toolBoxes]);
+
+    // Função para atualizar a lista ordenada com base no critério de filtro
+    const updateSortedToolBoxes = () => {
+        let updatedSortedToolBoxes = [...toolBoxes];
+
+        if (filterCriteria) {
+            // Filtrar os itens com base no critério
+            updatedSortedToolBoxes = toolBoxes.filter((box) => box.priority === filterCriteria);
+            // Adicionar os itens restantes que não correspondem ao critério
+            const remainingItems = toolBoxes.filter((box) => box.priority !== filterCriteria);
+            updatedSortedToolBoxes = updatedSortedToolBoxes.concat(remainingItems);
+        }
+
+        setSortedToolBoxes(updatedSortedToolBoxes);
+    };
 
     const focusDescription = () => {
         setExpanded(!isExpanded);
@@ -85,7 +120,7 @@ const HomeSecurity = () => {
                     const updatedToolBoxes = responseData.content.map(box => {
                         return {
                             ...box,
-                            user: box.users, // Ajuste o nome do campo aqui
+                            user: box.user, // Ajuste o nome do campo aqui
                         };
                     });
 
@@ -129,6 +164,7 @@ const HomeSecurity = () => {
         document.body.style.overflow = "hidden";
         fetchRequestById(id);
         setEditedRequest({ ...singleRequest });
+        console.log(editedRequest);
         setModalUpdateIsOpen(true);
     };
 
@@ -320,7 +356,7 @@ const HomeSecurity = () => {
                     // Por exemplo, definir um estado no React para armazenar a solicitação única
 
                     // Extraia os dados do usuário e adicione-os à solicitação única
-                    const user = responseData.users; // Supondo que os dados do usuário estejam em "users"
+                    const user = responseData.user; // Supondo que os dados do usuário estejam em "users"
                     const updatedSingleRequest = {
                         ...responseData,
                         user: user,
@@ -342,11 +378,16 @@ const HomeSecurity = () => {
     };
 
     // Movendo a declaração para o local apropriado
-    const filteredToolBoxes = Array.isArray(toolBoxes)
-        ? toolBoxes.filter((box) =>
-            box.problem.toLowerCase().includes(searchTerm.toLowerCase())
-        )
+    const filteredAndSortedToolBoxes = Array.isArray(toolBoxes)
+        ? toolBoxes
+            .filter((box) => box.problem.toLowerCase().includes(searchTerm.toLowerCase()))
+            .sort((a, b) => {
+                // Ordena com base na prioridade (HIGH, MEDIUM, LOW)
+                const priorityOrder = { HIGH: 1, MEDIUM: 2, LOW: 3 };
+                return priorityOrder[a.priority] - priorityOrder[b.priority];
+            })
         : [];
+
 
     return (
         <section className="homeSection">
@@ -368,6 +409,21 @@ const HomeSecurity = () => {
                         <div className="addBtn">
                             <button onClick={openModal} title="Add">Add</button>
                         </div>
+                        <div>
+                            <div>
+                                <label htmlFor="filterPriority">Filter by Priority:</label>
+                                <select
+                                    id="filterPriority"
+                                    value={filterCriteria}
+                                    onChange={(e) => setFilterCriteria(e.target.value)}
+                                >
+                                    <option value="">All</option>
+                                    <option value="HIGH">HIGH</option>
+                                    <option value="MEDIUM">MEDIUM</option>
+                                    <option value="LOW">LOW</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -378,23 +434,26 @@ const HomeSecurity = () => {
                         <h2>Create new Request</h2>
                         <img src={mais} alt="Add" width={40} />
                     </div>
-                    {filteredToolBoxes.map((box, index) => (
-                        <div key={index} className="tool" onClick={() => openModalConfirm(box.id)}>
-                            {loading ? (
-                                <div className="loading-overlay">Carregando...</div>
-                            ) : (
-                                <>
-                                    <p>Request ID: {box.id}</p>
-                                    <h2>{box.problem}</h2>
-                                    <p>{box.priority}</p>
-                                    <p>{box.status}</p>
-                                    <p>{box.creationRequest}</p>
-                                    <p>User ID: {box.user.idUsers}</p>
-                                </>
-                            )}
-                        </div>
+                    {filteredAndSortedToolBoxes.map((box, index) => (
+                        // Verifica se o item atende aos critérios de filtro antes de renderizá-lo
+                        (filterCriteria === '' || box.priority === filterCriteria) && (
+                            <div key={index} className="tool" onClick={() => openModalConfirm(box.id)}>
+                                {loading ? (
+                                    <div className="loading-overlay">Carregando...</div>
+                                ) : (
+                                    <>
+                                        <p>Request ID: {box.id}</p>
+                                        <h2>{box.problem}</h2>
+                                        <p>{box.priority}</p>
+                                        <p>{box.status}</p>
+                                        <p>{box.creationRequest}</p>
+                                        {/* Adicione uma verificação condicional para box.user */}
+                                        <p>User ID: {box.user ? box.user.idUsers : 'N/A'}</p>
+                                    </>
+                                )}
+                            </div>
+                        )
                     ))}
-
                 </div>
             </div>
 
@@ -446,36 +505,46 @@ const HomeSecurity = () => {
                     <p>
                         <span>ID:</span> {singleRequest.id}
                     </p>
+
                     <p>
                         <span>Problem:</span> {singleRequest.problem}
                     </p>
-                    <p onClick={focusDescription}>
+
+                    <p style={{ cursor: "pointer" }} onClick={focusDescription}>
                         <span>Description:</span> {isExpanded ? <div className="focusDesc">{singleRequest.description}</div> : <>[EXTEND]</>}
                     </p>
+
                     <p>
                         <span>Priority:</span> {singleRequest.priority}
                     </p>
+
                     <p>
                         <span>Status:</span> {singleRequest.status}
                     </p>
+
                     <p>
                         <span>Date request:</span> {singleRequest.creationRequest}
                     </p>
+
                     <p>
-                       <span>ID:</span> {singleRequest.users ? singleRequest.users.idUsers : 'N/A'}
+                        <span>ID:</span> {singleRequest.user ? singleRequest.user.idUsers : 'N/A'}
 
                     </p>
+
                     <p>
-                        <span>Username:</span> {singleRequest.users ? singleRequest.users.username : 'N/A'}
+                        <span>Username:</span> {singleRequest.user ? singleRequest.user.username : 'N/A'}
                     </p>
+
                     <p>
-                        <span>First Name:</span> {singleRequest.users ? singleRequest.users.firstName : 'N/A'}
+                        <span>First Name:</span> {singleRequest.user ? singleRequest.user.firstName : 'N/A'}
                     </p>
+
                     <p>
-                        <span>Last Name:</span> {singleRequest.users ? singleRequest.users.lastName : 'N/A'}
+                        <span>Last Name:</span> {singleRequest.user ? singleRequest.user.lastName : 'N/A'}
                     </p>
+
                     <p>
-                        <span>Email:</span> {singleRequest.users ? singleRequest.users.email : 'N/A'}
+                        <span>Email:</span> {singleRequest.user ? singleRequest.user.email : 'N/A'}
                     </p>
 
                 </div>
