@@ -63,6 +63,7 @@ function App() {
     <>
       <main className='appMain'>
         <Navbar />
+        {/* <HomeSecurity /> */}
         {role === 'ADMIN' ? <HomeSecurity /> : <Home />}
       </main>
     </>

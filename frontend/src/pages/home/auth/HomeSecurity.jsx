@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import wave from '../assets/wave(1).svg';
 import '../components/style.css';
 import '../components/style.css';
+import filtro from '../assets/filtro.png';
 import mais from '../assets/mais(1).png';
 import lupa from '../assets/lupa.png';
 import { Link } from "react-router-dom";
 import Modal from '../../components/Modal';
 import InputField from "../components/InputField";
+import moment from "moment";
+import "moment/locale/pt-br";
 
 const HomeSecurity = () => {
     const token = localStorage.getItem('token');
@@ -34,6 +37,7 @@ const HomeSecurity = () => {
     const [modalConfirmIsOpen, setModalConfirmIsOpen] = useState(false);
     const [modalUpdateIsOpen, setModalUpdateIsOpen] = useState(false);
     const [modalDeleteIsOpen, setModalDeleteIsOpen] = useState(false);
+    const [modalFilterIsOpen, setModalFilterIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [requestsLoaded, setRequestsLoaded] = useState(false);
     const [singleRequest, setSingleRequest] = useState({});
@@ -44,42 +48,8 @@ const HomeSecurity = () => {
         priority: "",
         status: "",
     });
-    const [sortedToolBoxes, setSortedToolBoxes] = useState([]);
     const [filterCriteria, setFilterCriteria] = useState('');
-
-    // Simulando os dados iniciais
-    useEffect(() => {
-        const initialToolBoxes = [
-            { id: 1, priority: 'HIGH', problem: 'Issue 1' },
-            { id: 2, priority: 'MEDIUM', problem: 'Issue 2' },
-            { id: 3, priority: 'LOW', problem: 'Issue 3' },
-            {id: 4, priority: 'PENDING', problem: 'Issue 4'}
-            // Adicione mais dados conforme necessário
-        ];
-
-        setToolBoxes(initialToolBoxes);
-        setSortedToolBoxes(initialToolBoxes); // Inicialmente, exibe todos os itens sem ordenação
-    }, []);
-
-    // Atualizar a lista ordenada sempre que o critério de filtro ou as caixas de ferramentas mudarem
-    useEffect(() => {
-        updateSortedToolBoxes();
-    }, [filterCriteria, toolBoxes]);
-
-    // Função para atualizar a lista ordenada com base no critério de filtro
-    const updateSortedToolBoxes = () => {
-        let updatedSortedToolBoxes = [...toolBoxes];
-
-        if (filterCriteria) {
-            // Filtrar os itens com base no critério
-            updatedSortedToolBoxes = toolBoxes.filter((box) => box.priority === filterCriteria);
-            // Adicionar os itens restantes que não correspondem ao critério
-            const remainingItems = toolBoxes.filter((box) => box.priority !== filterCriteria);
-            updatedSortedToolBoxes = updatedSortedToolBoxes.concat(remainingItems);
-        }
-
-        setSortedToolBoxes(updatedSortedToolBoxes);
-    };
+    const [selectedStatus, setSelectedStatus] = useState([]);
 
     const focusDescription = () => {
         setExpanded(!isExpanded);
@@ -184,6 +154,16 @@ const HomeSecurity = () => {
         document.body.style.overflow = "auto";
         setModalDeleteIsOpen(false);
         closeModalConfirm(false);
+    };
+
+    const openModalFilter = () => {
+        document.body.style.overflow = "hidden";
+        setModalFilterIsOpen(true);
+    };
+
+    const closeModalFilter = () => {
+        document.body.style.overflow = "auto";
+        setModalFilterIsOpen(false);
     };
 
     const handleAddBox = () => {
@@ -381,7 +361,12 @@ const HomeSecurity = () => {
     // Movendo a declaração para o local apropriado
     const filteredAndSortedToolBoxes = Array.isArray(toolBoxes)
         ? toolBoxes
-            .filter((box) => box.problem.toLowerCase().includes(searchTerm.toLowerCase()))
+            .filter(
+                (box) =>
+                    box.problem.toLowerCase().includes(searchTerm.toLowerCase()) &&
+                    (!filterCriteria || box.priority === filterCriteria) &&
+                    (selectedStatus.length === 0 || selectedStatus.includes(box.status))
+            )
             .sort((a, b) => {
                 // Ordena com base na prioridade (HIGH, MEDIUM, LOW)
                 const priorityOrder = { HIGH: 1, MEDIUM: 2, LOW: 3 };
@@ -389,17 +374,48 @@ const HomeSecurity = () => {
             })
         : [];
 
+    const handleStatusChange = (status) => {
+        if (selectedStatus.includes(status)) {
+            setSelectedStatus((prevStatus) =>
+                prevStatus.filter((selected) => selected !== status)
+            );
+        } else {
+            setSelectedStatus((prevStatus) => [...prevStatus, status]);
+        }
+    };
+
+    const priorityCounts = filteredAndSortedToolBoxes.reduce((counts, box) => {
+        // Incrementa a contagem para a prioridade atual
+        counts[box.priority] = (counts[box.priority] || 0) + 1;
+        return counts;
+    }, {});
+
+    const calculateTimeDifference = (launchDate) => {
+        const currentDate = moment();
+        const launchMoment = moment(launchDate);
+        const duration = moment.duration(currentDate.diff(launchMoment));
+
+        // Exibindo a diferença em dias, horas, minutos, etc.
+        const days = duration.days();
+        const hours = duration.hours();
+        const minutes = duration.minutes();
+
+        return `${days} days, ${hours} hour, ${minutes} minutes ago`;
+    };
+
+
 
     return (
         <section className="homeSection">
             <div className="wave">
                 <img src={wave} alt="" />
             </div>
-            <div className="subNav">
-                <h1>ADMIN</h1>
-                <div className="searchRequest">
+            <div className="alignCont">
+                <div className="subNav">
+                    <h1 style={{ padding: "1rem" }}>ADMIN</h1>
+
                     <div className="lupaSearch">
-                        <img src={lupa} alt="Search" />
+                        <div className="lupa"><img src={lupa} alt="Search" /></div>
                         <input
                             type="text"
                             placeholder="Search.."
@@ -407,54 +423,45 @@ const HomeSecurity = () => {
                             value={searchTerm}
                             title="Search"
                         />
-                        <div className="addBtn">
-                            <button onClick={openModal} title="Add">Add</button>
-                        </div>
-                        <div>
-                            <div>
-                                <label htmlFor="filterPriority">Filter by Priority:</label>
-                                <select
-                                    id="filterPriority"
-                                    value={filterCriteria}
-                                    onChange={(e) => setFilterCriteria(e.target.value)}
-                                >
-                                    <option value="">All</option>
-                                    <option value="HIGH">HIGH</option>
-                                    <option value="MEDIUM">MEDIUM</option>
-                                    <option value="LOW">LOW</option>
-                                </select>
-                            </div>
+                        <div className="filter" onClick={openModalFilter}>
+                            <img src={filtro} alt="filter" width={30}/>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div className="homeDescript">
-                <div className="boxTools">
-                    <div className="tool" onClick={openModal}>
-                        <h2>Create new Request</h2>
-                        <img src={mais} alt="Add" width={40} />
+                <div className="homeDescript">
+                    <div className="boxTools">
+                        <div className="tool" style={{ display: "grid", placeItems: "center" }} onClick={openModal}>
+                            <h2>Create new Request</h2>
+                            <img src={mais} alt="Add" width={40} />
+                        </div>
+                        {filteredAndSortedToolBoxes.map((box, index) => (
+                            // Verifica se o item atende aos critérios de filtro antes de renderizá-lo
+                            (filterCriteria === '' || box.priority === filterCriteria) && (
+                                <div key={index} className="tool" onClick={() => openModalConfirm(box.id)}>
+                                    {loading ? (
+                                        <div className="loading-overlay">Carregando...</div>
+                                    ) : (
+                                        <>
+                                            <div className="txtAlignTool">
+                                                <div className="toolTittle">
+                                                    <h2>{box.problem}</h2>
+                                                    <p> {box.id}</p>
+                                                    <p>{calculateTimeDifference(box.creationRequest)}</p>
+                                                </div>
+                                                <div className="dateStatusTool">
+                                                    <p className={box.status}>
+                                                        <p>{box.priority}</p>
+                                                        <p>User ID: {box.user ? box.user.idUsers : 'N/A'}</p>
+                                                        <span>{box.status}</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                            )
+                        ))}
                     </div>
-                    {filteredAndSortedToolBoxes.map((box, index) => (
-                        // Verifica se o item atende aos critérios de filtro antes de renderizá-lo
-                        (filterCriteria === '' || box.priority === filterCriteria) && (
-                            <div key={index} className="tool" onClick={() => openModalConfirm(box.id)}>
-                                {loading ? (
-                                    <div className="loading-overlay">Carregando...</div>
-                                ) : (
-                                    <>
-                                        <p>Request ID: {box.id}</p>
-                                        <h2>{box.problem}</h2>
-                                        <p>{box.priority}</p>
-                                        <p>{box.status}</p>
-                                        <p>{box.creationRequest}</p>
-                                        {/* Adicione uma verificação condicional para box.user */}
-                                        <p>User ID: {box.user ? box.user.idUsers : 'N/A'}</p>
-                                    </>
-                                )}
-                            </div>
-                        )
-                    ))}
                 </div>
             </div>
 
@@ -623,6 +630,39 @@ const HomeSecurity = () => {
 
                 <div className="btnSave">
                     <button className="deleteBtn" onClick={() => deleteRequest(editedRequest)}>Delete!</button>
+                </div>
+            </Modal>
+
+            <Modal isOpen={modalFilterIsOpen} onClose={closeModalFilter}>
+                <div>
+                    <label className="selectFilterPriority" htmlFor="filterPriority">Filter by Priority:</label>
+                    <select
+                        className="selectFilterPriority"
+                        id="filterPriority"
+                        value={filterCriteria}
+                        onChange={(e) => setFilterCriteria(e.target.value)}
+                    >
+                        <option value="">All</option>
+                        <option value="HIGH">HIGH ({priorityCounts.HIGH || 0})</option>
+                        <option value="MEDIUM">MEDIUM ({priorityCounts.MEDIUM || 0})</option>
+                        <option value="LOW">LOW ({priorityCounts.LOW || 0})</option>
+                    </select>
+                </div>
+                <div className="statusFilter">
+                    <label>Status Filter:</label>
+                    <div>
+                        {['FINISH', 'PROCESSING', 'PENDING'].map((status) => (
+                            <label key={status}>
+                                <input
+                                    type="checkbox"
+                                    value={status}
+                                    checked={selectedStatus.includes(status)}
+                                    onChange={() => handleStatusChange(status)}
+                                />
+                                {status}
+                            </label>
+                        ))}
+                    </div>
                 </div>
             </Modal>
 

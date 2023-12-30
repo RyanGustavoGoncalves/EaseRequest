@@ -7,6 +7,8 @@ import lupa from './assets/lupa.png';
 import { Link } from "react-router-dom";
 import Modal from '../components/Modal';
 import InputField from "./components/InputField";
+import moment from "moment";
+import "moment/locale/pt-br";
 
 const Home = () => {
     const token = localStorage.getItem('token');
@@ -63,6 +65,19 @@ const Home = () => {
 
     }, []);
 
+    const calculateTimeDifference = (launchDate) => {
+        const currentDate = moment();
+        const launchMoment = moment(launchDate);
+        const duration = moment.duration(currentDate.diff(launchMoment));
+
+        // Exibindo a diferença em dias, horas, minutos, etc.
+        const days = duration.days();
+        const hours = duration.hours();
+        const minutes = duration.minutes();
+
+        return `${days} days, ${hours} hour, ${minutes} minutes ago`;
+    };
+
     //Request get para mostrar requisições guardadas no banco de dados
     const fetchRequests = async () => {
         try {
@@ -74,10 +89,10 @@ const Home = () => {
                     'Authorization': `Bearer ${token}`,
                 },
             });
-    
+
             if (response.status === 200) {
                 const responseData = await response.json();
-    
+
                 if (Array.isArray(responseData)) {
                     // Atualiza as solicitações e atribui a cor a cada uma
                     setToolBoxes(responseData.map(request => ({
@@ -325,18 +340,18 @@ const Home = () => {
         )
         : [];
 
-        const getStatusClass = (status) => {
-            let colorClass = "status-red"; // Assume vermelho como padrão
-        
-            // Verifica o status da solicitação
-            if (status === "PROCESSING") {
-                colorClass = "status-yellow";
-            } else if (status === "FINISH") {
-                colorClass = "status-green";
-            }
-        
-            return colorClass;
-        };
+    const getStatusClass = (status) => {
+        let colorClass = "status-red"; // Assume vermelho como padrão
+
+        // Verifica o status da solicitação
+        if (status === "PROCESSING") {
+            colorClass = "status-yellow";
+        } else if (status === "FINISH") {
+            colorClass = "status-green";
+        }
+
+        return colorClass;
+    };
 
     return (
         <section className="homeSection">
@@ -344,10 +359,10 @@ const Home = () => {
                 <img src={wave} alt="" />
             </div>
 
-            <div className="subNav">
-                <div className="searchRequest">
+            <div className="alignCont">
+                <div className="subNav">
                     <div className="lupaSearch">
-                        <img src={lupa} alt="Search" />
+                        <div className="lupa"><img src={lupa} alt="Search" /></div>
                         <input
                             type="text"
                             placeholder="Search.."
@@ -360,11 +375,8 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div className="homeDescript">
                 <div className="boxTools">
-                    <div className="tool" onClick={openModal}>
+                    <div className="tool" style={{ display: "grid", placeItems: "center" }} onClick={openModal}>
                         <h2>Create new Request</h2>
                         <img src={mais} alt="Add" width={40} />
                     </div>
@@ -374,18 +386,23 @@ const Home = () => {
                                 <div className="loading-overlay">Carregando...</div>
                             ) : (
                                 <>
-                                    <h2>{box.problem}</h2>
-                                    <p>ID: {box.id}</p>
-                                    <p>{box.creationRequest}</p>
-                                    <p className={`status ${getStatusClass(box.status)}`}>
-                                        &#x25CF;
-                                        <span>{box.status}</span>
-                                    </p>
+                                    <div className="txtAlignTool">
+                                        <div className="toolTittle">
+                                            <h2>{box.problem}</h2>
+                                            <p> {box.id}</p>
+                                            <p>{calculateTimeDifference(box.creationRequest)}</p>
+                                        </div>
+                                        <div className="dateStatusTool">
+                                            <p className={`status ${getStatusClass(box.status)}`}>
+                                                &#x25CF;
+                                                <span>{box.status}</span>
+                                            </p>
+                                        </div>
+                                    </div>
                                 </>
                             )}
                         </div>
                     ))}
-
                 </div>
             </div>
 

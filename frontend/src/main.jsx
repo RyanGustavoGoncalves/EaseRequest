@@ -24,6 +24,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <ProtectedRoute element={App} />,
+    // element: <App />,
     errorElement: <ErrorPage />,
     children: [
       {
