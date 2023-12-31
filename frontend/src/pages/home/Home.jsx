@@ -1,8 +1,8 @@
+// Imports of other components and libraries
+
 import React, { useState, useEffect } from "react";
-import wave from './assets/wave(1).svg';
-import './components/style.css';
-import '../auth/components/style.css';
-import mais from './assets/mais(1).png';
+import wave from './assets/wave.svg';
+import mais from './assets/iconMais.png';
 import lupa from './assets/lupa.png';
 import { Link } from "react-router-dom";
 import Modal from '../components/Modal';
@@ -11,9 +11,14 @@ import moment from "moment";
 import "moment/locale/pt-br";
 
 const Home = () => {
+    // State to store the user's token
     const token = localStorage.getItem('token');
+
+    // States to manage requests and loading
     const [toolBoxes, setToolBoxes] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    // State to store form data
     const [formData, setFormData] = useState({
         id: "",
         problem: "",
@@ -22,12 +27,18 @@ const Home = () => {
         status: "PENDING",
         creationRequest: "",
     });
+
+    // States related to modals
     const [isExpanded, setExpanded] = useState(false);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalConfirmIsOpen, setModalConfirmIsOpen] = useState(false);
     const [modalUpdateIsOpen, setModalUpdateIsOpen] = useState(false);
     const [modalDeleteIsOpen, setModalDeleteIsOpen] = useState(false);
+
+    // State for search term
     const [searchTerm, setSearchTerm] = useState("");
+
+    // States related to a single request
     const [requestsLoaded, setRequestsLoaded] = useState(false);
     const [singleRequest, setSingleRequest] = useState({});
     const [editedRequest, setEditedRequest] = useState({
@@ -40,7 +51,7 @@ const Home = () => {
         setExpanded(!isExpanded);
     };
 
-
+    // Side effects to load requests and update status
     useEffect(() => {
         if (!requestsLoaded) {
             fetchRequests();
@@ -65,6 +76,7 @@ const Home = () => {
 
     }, []);
 
+    // Function to calculate time difference
     const calculateTimeDifference = (launchDate) => {
         const currentDate = moment();
         const launchMoment = moment(launchDate);
@@ -78,7 +90,7 @@ const Home = () => {
         return `${days} days, ${hours} hour, ${minutes} minutes ago`;
     };
 
-    //Request get para mostrar requisições guardadas no banco de dados
+    // Function to fetch requests from the server
     const fetchRequests = async () => {
         try {
             setLoading(true);
@@ -108,11 +120,13 @@ const Home = () => {
             }
         } catch (error) {
             console.log("Erro ao buscar as solicitações:", error);
+            alert("Erro ao buscar as solicitações. Por favor, tente novamente mais tarde.");
         } finally {
             setLoading(false);
         }
     };
-    //Modal Functions
+
+    // Functions related to modals
     const openModal = () => {
         document.body.style.overflow = "hidden";
         setModalIsOpen(true);
@@ -158,6 +172,7 @@ const Home = () => {
         closeModalConfirm(false);
     };
 
+    // Function to add a new request
     const handleAddBox = () => {
         setToolBoxes([...toolBoxes, formData]);
         setFormData({
@@ -171,7 +186,7 @@ const Home = () => {
         closeModal();
     };
 
-    //Function para animação do input do modal
+    // Functions for modal input animation
     const handleInputFocus = (labelId) => {
         const label = document.getElementById(labelId);
         label.classList.add('active');
@@ -189,6 +204,7 @@ const Home = () => {
         label.classList.remove('active');
     };
 
+    // Function to save a new request
     const handleSave = () => {
         console.log(formData.status)
         setFormData({
@@ -240,9 +256,11 @@ const Home = () => {
             }
         } catch (error) {
             console.log("Erro ao enviar a solicitação:", error);
+            alert("Erro ao buscar as solicitações. Por favor, tente novamente mais tarde.");
         }
     };
 
+    // Function to update a request
     const updateRequest = async (editedRequest) => {
         console.log(editedRequest);
         try {
@@ -268,9 +286,11 @@ const Home = () => {
         } catch (error) {
             // Lidar com erros de rede ou outros erros
             console.error('Erro ao fazer a solicitação de atualização:', error);
+            alert("Erro ao buscar as solicitações. Por favor, tente novamente mais tarde.");
         }
     };
 
+    // Function to delete a request
     const deleteRequest = async (editedRequest) => {
         console.log(editedRequest);
         try {
@@ -298,6 +318,7 @@ const Home = () => {
         }
     };
 
+    // Function to fetch a request by ID
     const fetchRequestById = async (id) => {
         try {
             const response = await fetch(`http://localhost:8080/request/${id}`, {
@@ -330,16 +351,18 @@ const Home = () => {
             }
         } catch (error) {
             console.log("Erro ao buscar a solicitação:", error);
+            alert("Erro ao buscar as solicitações. Por favor, tente novamente mais tarde.");
         }
     };
 
-    // Movendo a declaração para o local apropriado
+    // Function to filter requests based on the search term
     const filteredToolBoxes = Array.isArray(toolBoxes)
         ? toolBoxes.filter((box) =>
             box.problem.toLowerCase().includes(searchTerm.toLowerCase())
         )
         : [];
 
+    // Function to get the status class based on the request status
     const getStatusClass = (status) => {
         let colorClass = "status-red"; // Assume vermelho como padrão
 

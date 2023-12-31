@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import ScrollReveal from 'scrollreveal';
 import './App.css';
+import './pages/auth/components/style.css';
 import Navbar from './pages/components/Navbar';
 import Home from './pages/home/Home';
 import HomeSecurity from './pages/home/auth/HomeSecurity';
+
 
 function App() {
   const [role, setRole] = useState(localStorage.getItem('role'));

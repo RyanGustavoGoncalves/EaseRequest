@@ -198,6 +198,7 @@ const Register = ({ toggleForm }) => {
                             <a onClick={toggleForm}><span>Already registered? log in!</span></a>
                         </div>
                     </form>
+                </fieldset>
                     <div className="modal" style={{ display: modal.display }}>
                         <div className="errorModal">
                             <div className="errorIcon">
@@ -217,7 +218,6 @@ const Register = ({ toggleForm }) => {
                     </div>
                     {/* Modal de fundo */}
                     <div className="modalOpacity" onClick={closeModalOpacity} style={{ display: modalOpacity.display }}></div>
-                </fieldset>
             </article>
             <div className="WelcomeDescWave">
                 <img src={wave} alt="" />

@@ -27,7 +27,7 @@ const Auth = ({ login }) => {
     const sr = ScrollReveal();
 
     const calculateDistance = () => {
-      return window.innerWidth > 768 ? '70px' : '0px';
+      return window.innerWidth > 768 ? '70px' : '15px';
     };
 
     sr.reveal('.authFieldset', {

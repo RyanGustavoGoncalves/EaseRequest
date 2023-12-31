@@ -6,6 +6,7 @@ main.authMain {
 
 div.logo {
   position: absolute;
+  z-index: 1001;
 }
 
 div.logo>a>img {
@@ -34,6 +35,15 @@ fieldset.authFieldset {
   border: none;
 }
 
+fieldset.authFieldsetLogin {
+  width: 80%;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  align-items: center;
+  border: none;
+}
+
 form.authForm {
   display: grid;
   place-items: center;
@@ -44,7 +54,7 @@ fieldset.authFieldset>div.imgFront>img {
   height: auto;
 }
 
-fieldset.authFieldset>img {
+fieldset.authFieldsetLogin>img {
   width: 50%;
   height: auto;
 }
@@ -59,14 +69,14 @@ div.authFieldLogin {
 }
 
 div.authField>legend {
-  color: #5EC57E;
+  color: #1fdf64;
   font-weight: bold;
 }
 
 .authField>label,
 .authFieldLogin>label {
   font-size: 15px;
-  color: #5EC57E;
+  color: #1fdf64;
   font-weight: bold;
   position: absolute;
   pointer-events: none;
@@ -169,10 +179,10 @@ div.modal {
 }
 
 div.errorModal {
-  background-color: #6DBF63;
+  background-color: #000;
   height: auto;
   border-radius: 5px;
-  box-shadow: 3px 5px 5px black;
+  box-shadow: 3px 5px 5px #333;
 }
 
 div.errorIcon {
@@ -182,8 +192,10 @@ div.errorIcon {
 }
 
 div.errorMessages {
+  font-weight: bold;
+  color: white;
   padding: 15px;
-  font-size: 18px;
+  font-size: 20px;
   text-align: justify;
 }
 
@@ -194,6 +206,10 @@ div.modalOpacity {
   height: 100%;
   backdrop-filter: blur(2px);
   z-index: 999;
+}
+
+strong {
+  color: #1fdf64;
 }
 
 strong::after {
@@ -215,6 +231,7 @@ strong::after {
     justify-content: center;
     height: 100%;
   }
+
   fieldset.authFieldset>div.imgFront>img {
     width: 100%;
   }

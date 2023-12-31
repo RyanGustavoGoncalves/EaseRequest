@@ -10,20 +10,20 @@ import WelcomeTecno from "../welcomeTecno/WelcomeTecno";
 const welcome = () => {
     const [currentPage, setCurrentPage] = useState(1);
 
-    const nextPage = () => {
-        setCurrentPage((prevPage) => (prevPage < 2 ? prevPage + 1 : 1));
-    };
+    // const nextPage = () => {
+    //     setCurrentPage((prevPage) => (prevPage < 2 ? prevPage + 1 : 1));
+    // };
 
-    const prevPage = () => {
-        setCurrentPage((prevPage) => (prevPage > 1 ? prevPage - 1 : 2));
-    };
+    // const prevPage = () => {
+    //     setCurrentPage((prevPage) => (prevPage > 1 ? prevPage - 1 : 2));
+    // };
 
     useEffect(() => {
         const sr = ScrollReveal();
 
         const calculateDistance = () => {
             // Lógica para calcular a distância com base em fatores responsivos
-            return window.innerWidth > 768 ? '70px' : '0px';
+            return window.innerWidth > 768 ? '70px' : '15px';
         };
         sr.reveal('.logoWelcomeTxt', {
             origin: 'top',
@@ -63,7 +63,7 @@ const welcome = () => {
 
         const calculateDistance = () => {
             // Lógica para calcular a distância com base em fatores responsivos
-            return window.innerWidth > 768 ? '70px' : '0px';
+            return window.innerWidth > 768 ? '70px' : '15px';
         };
 
         sr.reveal('.WelcomeDescArticle', {
