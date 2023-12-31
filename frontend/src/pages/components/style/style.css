@@ -73,8 +73,13 @@ div.btnModalClose{
     border: none;
     cursor: pointer;
     font-size: 16px;
-    color: #333;
+    color: red;
     font-weight: bold;
+    transition: color 0.5s ease-in-out;
+}
+
+.modal-close:hover{
+    color: rgba(255, 0, 0, 0.816);
 }
 
 @media (max-width: 420px) {

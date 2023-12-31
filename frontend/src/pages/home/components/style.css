@@ -86,7 +86,7 @@ div.boxTools {
 
 div.tool {
     font-weight: bold;
-    background-color: #8aec7b;
+    background-color: #9af18c;
     border: solid 2px;
     width: 20rem;
     height: 10rem;
@@ -186,7 +186,7 @@ select.selectHome {
 }
 
 .singleRequest>p>span {
-    color: red;
+    color: #5EC57E;
 }
 
 .focusDesc {
