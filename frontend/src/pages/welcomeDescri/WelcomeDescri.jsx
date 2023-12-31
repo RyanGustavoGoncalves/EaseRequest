@@ -2,7 +2,7 @@ import React from "react";
 import '../welcomePage/components/style.css';
 import wave from './assets/wave.svg';
 import AboutImg from './assets/AboutImg.png'
-import iconBalanca from './assets/iconBalanca(1).png';
+import iconBalanca from './assets/iconBalanca.png';
 
 const WelcomeDescri = () => {
 

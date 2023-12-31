@@ -1,6 +1,7 @@
 main.welcomeMain {
     background-color: #000;
-    color: #1fdf64;
+    /* color: #1fdf64; */
+    color: white;
     width: 100%;
     height: 100%;
     position: absolute;
@@ -20,8 +21,10 @@ div.logoWelcomeTxt>img {
 }
 
 div.logoWelcomeTxt h1 {
+    color: #1fdf64;
     font-size: 20px;
 }
+
 
 /* === CSS Page welcomeIntro ===*/
 
@@ -47,6 +50,7 @@ section.welcomeIntroSection>article>img {
 }
 
 div.welcomeTxt {
+    color: #1fdf64;
     display: grid;
     place-items: center;
     font-size: 50px;
@@ -112,12 +116,12 @@ article.WelcomeDescArticle>img {
 }
 
 div.TxtWelcomeDesc {
-    width: 25rem;
+    width: 30%;
 }
 
 div.TxtWelcomeDesc>h2 {
     font-size: 30px;
-    color: white;
+    color: #1fdf64;
 }
 
 div.TxtWelcomeDesc>span {
@@ -160,13 +164,15 @@ article.WelcomeServiceArticle {
 
 
 div.tittleService {
+    position: relative;
+    z-index: 1000;
     color: white;
     text-align: center;
     padding: 20px;
 }
 
 div.TxtWelcomeServices {
-    background-color: #222;
+    /* background-color: #222; */
     display: grid;
     place-items: center;
     width: 100%;
@@ -188,6 +194,10 @@ div.TxtWelcomeServices>span {
 
 /* === CSS Page WelcomeTecno === */
 
+h2{
+    color: #1fdf64;
+}
+
 article.WelcomeTecnoArticle {
     display: grid;
     place-items: center;
@@ -202,8 +212,8 @@ article.WelcomeTecnoArticleImg>div.tecnoImg {
 }
 
 article.WelcomeTecnoArticleImg>div.tecnoImg>img {
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
 }
 
 div.perfilGitHub {
@@ -234,25 +244,20 @@ div.perfilGitHub img {
 /* === Responsividade === */
 
 @media (max-width: 765px) {
-    
+
     section.welcomeIntroSection>article>img {
         width: 70%;
         height: auto;
     }
 
-    article.WelcomeDescArticle>img{
-        width: 70%;
+    article.WelcomeDescArticle>img {
+        width: 50%;
         height: auto;
     }
 
     div.welcomeTxt {
         text-align: center;
         width: 80%;
-    }
-
-    div.TxtWelcomeDesc {
-        text-align: center;
-        width: 90%;
     }
 
     div.WelcomeDescBalance {
@@ -263,39 +268,92 @@ div.perfilGitHub img {
         flex-direction: column-reverse;
     }
 
-    article.WelcomeDescArticle {
-        flex-direction: column;
-    }
-
     div.centerBalance {
         padding: 0;
     }
 
+    article.WelcomeDescArticle {
+        flex-wrap: wrap;
+    }
+
+    section.WelcomeDescSection {
+        height: 100%;
+        width: 100%;
+        display: grid;
+    }
+
     article.WelcomeServiceArticle {
-        flex-direction: column;
+        justify-content: flex-start;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-padding: 0 10px;
+        /* Ajuste conforme necessário para o espaçamento desejado */
+    }
+
+    .TxtWelcomeServices {
+        flex: 0 0 auto;
+        width: 300px;
+        /* Ajuste conforme necessário para a largura desejada */
+        margin-right: 10px;
+        /* Ajuste conforme necessário para o espaçamento desejado */
+        scroll-snap-align: start;
     }
 }
 
 @media (max-width: 620px) {
+    div.TxtWelcomeDesc>span {
+        font-size: 20px;
+    }
 
     div.welcomeTxt {
         font-size: 40px;
     }
 
-    div.TxtWelcomeDesc {
-        text-align: center;
+    div.WelcomeDescBalance {
+        font-size: 20px;
     }
 
 }
 
 @media (max-width: 520px) {
+    div.TxtWelcomeDesc>h2 {
+        font-size: 25px;
+    }
+
+    div.TxtWelcomeDesc {
+        width: 40%;
+        text-align: center;
+    }
+
+    div.TxtWelcomeDesc>span {
+        font-size: 18px;
+    }
+
+    div.WelcomeDescBalance {
+        font-size: 18px;
+    }
+
     div.welcomeTxt {
         padding: 1rem;
         width: auto;
     }
+
+    div.WelcomeDescBalance>img {
+        width: 60px;
+        height: 60px;
+    }
 }
 
 @media (max-width: 320px) {
+    section.welcomeIntroSection>article>img {
+        border-radius: 2rem;
+    }
+
+    article.WelcomeTecnoArticleImg>div.tecnoImg>img {
+        width: 50px;
+        height: 50px;
+    }
+
     div.welcomeTxt {
         padding: 1rem;
         width: auto;
@@ -303,9 +361,8 @@ div.perfilGitHub img {
     }
 
     div.TxtWelcomeDesc>span {
-        max-width: 90%;
         padding: 1rem;
-        font-size: 18px;
+        font-size: 13px;
     }
 
     div.TxtWelcomeDesc {
@@ -316,17 +373,17 @@ div.perfilGitHub img {
     div.WelcomeDescBalance {
         width: auto;
         margin: 1rem;
-        font-size: 18px;
+        font-size: 13px;
     }
 
     div.TxtWelcomeServices>span {
-        padding: 1rem;
+        padding: 2rem;
         font-size: 18px;
     }
 
     div.WelcomeDescBalance>img {
-        width: 90px;
-        height: 90px;
+        width: 50px;
+        height: 50px;
     }
 
     div.perfilGitHub img {
@@ -334,17 +391,12 @@ div.perfilGitHub img {
         height: 150px;
     }
 
-    article.WelcomeTecnoArticleImg>div.tecnoImg>img {
-        width: 80px;
-        height: 80px;
-    }
-
     div.TxtWelcomeDesc>h2 {
-        font-size: 24px;
+        font-size: 20px;
     }
 
     h2 {
-        font-size: 24px;
+        font-size: 20px;
     }
 
     div.TxtWelcomeServices>h2 {
@@ -354,8 +406,9 @@ div.perfilGitHub img {
 
 @media (max-width: 220px) {
     section.welcomeIntroSection>article>img {
-       margin: 0;
+        margin: 0;
     }
+
     div.welcomeTxt {
         font-size: 20px;
     }

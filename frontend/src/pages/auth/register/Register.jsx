@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import '../components/style.css'
 import imgError from '../assets/icons8-erro-48 (1).png';
 import img from '../assets/aboutImg.png';
+import wave from '../assets/wave.svg';
 
 const Register = ({ toggleForm }) => {
     const [username, setUsername] = useState("");
@@ -20,23 +21,23 @@ const Register = ({ toggleForm }) => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (validateInputs()) {
-          await cadastrar();
-          limpar();
+            await cadastrar();
+            limpar();
         } else {
-          // Exibe um erro indicando que há campos obrigatórios vazios
-          setErrors([{ campo: "Campos obrigatórios", mensagem: "Preencha todos os campos obrigatórios." }]);
-          setModalOpacity({ display: "block" });
-          setModal({ display: "block" });
+            // Exibe um erro indicando que há campos obrigatórios vazios
+            setErrors([{ campo: "Campos obrigatórios", mensagem: "Preencha todos os campos obrigatórios." }]);
+            setModalOpacity({ display: "block" });
+            setModal({ display: "block" });
         }
-      };
-    
-      const validateInputs = () => {
+    };
+
+    const validateInputs = () => {
         // Adicione verificações personalizadas para cada campo, se necessário
         if (!username.trim() || !firstName.trim() || !lastName.trim() || !email.trim() || !password.trim() || !birth.trim()) {
-          return false;
+            return false;
         }
         return true;
-      };
+    };
 
     const cadastrar = async () => {
         const data = {
@@ -117,106 +118,110 @@ const Register = ({ toggleForm }) => {
 
     return (
         <section className="sectionRegister">
-            <fieldset className="authFieldset">
-                <div className="imgFront"><img src={img} alt="authentication" /></div>
-                <form onSubmit={handleSubmit} className="authForm">
-                    <div className="authField">
-                        <label id="usernameLabel" className={username ? 'active' : ''} htmlFor="username">
-                            Username
-                        </label>
-                        <input
-                            id="username"
-                            type="text"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            onMouseEnter={() => handleInputFocus('usernameLabel')}
-                            onMouseLeave={() => handleInputBlur('usernameLabel')}
-
-                        />
-                    </div>
-                    <div className="authField">
-                        <label id="firstNameLabel" className={firstName ? 'active' : ''} htmlFor="firstName">
-                            firstName
-                        </label>
-                        <input
-                            id="firstName"
-                            type="text"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                            onMouseEnter={() => handleInputFocus('firstNameLabel')}
-                            onMouseLeave={() => handleInputBlur('firstNameLabel')}
-                        />
-                    </div>
-                    <div className="authField">
-                        <label id="lastNameLabel" className={lastName ? 'active' : ''} htmlFor="lastName">
-                            lastName
-                        </label>
-                        <input
-                            id="lastName"
-                            type="text"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                            onMouseEnter={() => handleInputFocus('lastNameLabel')}
-                            onMouseLeave={() => handleInputBlur('lastNameLabel')}
-                        />
-                    </div>
-                    <div className="authField">
-                        <label id="emailLabel" className={email ? 'active' : ''} htmlFor="email">
-                            email
-                        </label>
-                        <input
-                            id="email"
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            onMouseEnter={() => handleInputFocus('emailLabel')}
-                            onMouseLeave={() => handleInputBlur('emailLabel')}
-                        />
-                    </div>
-                    <div className="authField">
-                        <label id="passwordLabel" className={password ? 'active' : ''} htmlFor="password">password</label>
-                        <input
-                            id="password"
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            onMouseEnter={() => handleInputFocus('passwordLabel')}
-                            onMouseLeave={() => handleInputBlur('passwordLabel')}
-                        />
-                    </div>
-                    <div className="authField">
-                        <legend>birth</legend>
-                        <input
-                            type="date"
-                            value={birth}
-                            onChange={(e) => setBirth(e.target.value)}
-                        />
-                    </div>
-                    <div className="btn">
-                        <button type="submit">Register</button>
-                        <a onClick={toggleForm}><span>Already registered? log in!</span></a>
-                    </div>
-                </form>
-                <div className="modal" style={{ display: modal.display }}>
-                    <div className="errorModal">
-                        <div className="errorIcon">
-                            <img src={imgError} alt="Error" />
-                            <h2>Erro!</h2>
+            <article className="authArticle">
+                <fieldset className="authFieldset">
+                    <div className="imgFront"><img src={img} alt="authentication" /></div>
+                    <form onSubmit={handleSubmit} className="authForm">
+                        <div className="authField">
+                            <label id="usernameLabel" className={username ? 'active' : ''} htmlFor="username">
+                                Username
+                            </label>
+                            <input
+                                id="username"
+                                type="text"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                onMouseEnter={() => handleInputFocus('usernameLabel')}
+                                onMouseLeave={() => handleInputBlur('usernameLabel')}
+                            />
                         </div>
-                        <hr />
-                        <div className="errorMessages">
-                            {/* Mapeia e exibe os erros */}
-                            {errors.map((error, index) => (
-                                <div key={index}>
-                                    <strong>{error.campo}</strong> {error.mensagem}
-                                </div>
-                            ))}
+                        <div className="authField">
+                            <label id="firstNameLabel" className={firstName ? 'active' : ''} htmlFor="firstName">
+                                firstName
+                            </label>
+                            <input
+                                id="firstName"
+                                type="text"
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                                onMouseEnter={() => handleInputFocus('firstNameLabel')}
+                                onMouseLeave={() => handleInputBlur('firstNameLabel')}
+                            />
+                        </div>
+                        <div className="authField">
+                            <label id="lastNameLabel" className={lastName ? 'active' : ''} htmlFor="lastName">
+                                lastName
+                            </label>
+                            <input
+                                id="lastName"
+                                type="text"
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
+                                onMouseEnter={() => handleInputFocus('lastNameLabel')}
+                                onMouseLeave={() => handleInputBlur('lastNameLabel')}
+                            />
+                        </div>
+                        <div className="authField">
+                            <label id="emailLabel" className={email ? 'active' : ''} htmlFor="email">
+                                email
+                            </label>
+                            <input
+                                id="email"
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                onMouseEnter={() => handleInputFocus('emailLabel')}
+                                onMouseLeave={() => handleInputBlur('emailLabel')}
+                            />
+                        </div>
+                        <div className="authField">
+                            <label id="passwordLabel" className={password ? 'active' : ''} htmlFor="password">password</label>
+                            <input
+                                id="password"
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                onMouseEnter={() => handleInputFocus('passwordLabel')}
+                                onMouseLeave={() => handleInputBlur('passwordLabel')}
+                            />
+                        </div>
+                        <div className="authField">
+                            <legend>birth</legend>
+                            <input
+                                type="date"
+                                value={birth}
+                                onChange={(e) => setBirth(e.target.value)}
+                            />
+                        </div>
+                        <div className="btn">
+                            <button type="submit">Register</button>
+                            <a onClick={toggleForm}><span>Already registered? log in!</span></a>
+                        </div>
+                    </form>
+                    <div className="modal" style={{ display: modal.display }}>
+                        <div className="errorModal">
+                            <div className="errorIcon">
+                                <img src={imgError} alt="Error" />
+                                <h2>Erro!</h2>
+                            </div>
+                            <hr />
+                            <div className="errorMessages">
+                                {/* Mapeia e exibe os erros */}
+                                {errors.map((error, index) => (
+                                    <div key={index}>
+                                        <strong>{error.campo}</strong> {error.mensagem}
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
-                </div>
-                {/* Modal de fundo */}
-                <div className="modalOpacity" onClick={closeModalOpacity} style={{ display: modalOpacity.display }}></div>
-            </fieldset>
+                    {/* Modal de fundo */}
+                    <div className="modalOpacity" onClick={closeModalOpacity} style={{ display: modalOpacity.display }}></div>
+                </fieldset>
+            </article>
+            <div className="WelcomeDescWave">
+                <img src={wave} alt="" />
+            </div>
         </section >
     );
 };

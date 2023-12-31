@@ -50,9 +50,9 @@ const Auth = ({ login }) => {
       <div className="logo"><Link to={"/"}><img src={logo} alt="logo" /></Link></div>
       {isLoginVisible ? <Login toggleForm={toggleForm} login={login} /> : <Register toggleForm={toggleForm} />}
 
-      <div className="WelcomeDescWave">
+      {/* <div className="WelcomeDescWave">
         <img src={wave} alt="" />
-      </div>
+      </div> */}
     </main>
   );
 };

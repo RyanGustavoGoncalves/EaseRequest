@@ -4,21 +4,32 @@ main.authMain {
   height: 100%;
 }
 
+div.logo {
+  position: absolute;
+}
+
 div.logo>a>img {
   width: 50px;
 }
 
 section.sectionRegister {
   display: grid;
+  align-items: end;
+  height: 100%;
+}
+
+article.authArticle {
+  display: grid;
   place-items: center;
+  position: absolute;
+  z-index: 1000;
+  height: 100%;
 }
 
 fieldset.authFieldset {
-  background-color: #222;
-  border-radius: 5rem;
   width: 80%;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
   border: none;
 }
@@ -28,13 +39,14 @@ form.authForm {
   place-items: center;
 }
 
-div.authImgFront {
-  display: grid;
+fieldset.authFieldset>div.imgFront>img {
+  width: 50%;
+  height: auto;
 }
 
-fieldset.authFieldset>div.imgFront>img {
-  width: 500px;
-  height: 500px;
+fieldset.authFieldset>img {
+  width: 50%;
+  height: auto;
 }
 
 div.authField {
@@ -68,14 +80,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 input:-webkit-autofill::placeholder {
-  color: #ff0000; 
+  color: #ff0000;
 }
 
 div.authField>input,
 .authFieldLogin>input {
   inline-size: 12rem;
   border: none;
-  border-bottom: solid 2px white;
+  border-bottom: solid 2px grey;
   font-size: 15px;
   font-weight: bold;
   outline: none;
@@ -189,10 +201,6 @@ strong::after {
 }
 
 @media (max-width: 765px) {
-  fieldset.authFieldset>div.imgFront>img {
-    width: 400px;
-    height: 400px;
-  }
 
   main.authMain>div.WelcomeDescWave {
     display: none;
@@ -207,17 +215,32 @@ strong::after {
     justify-content: center;
     height: 100%;
   }
-}
-
-@media (max-width: 620px) {
   fieldset.authFieldset>div.imgFront>img {
-    width: 350px;
-    height: 350px;
+    width: 100%;
   }
+
 }
 
-@media (max-width: 620px) {
+@media (max-width: 520px) {
   fieldset.authFieldset>div.imgFront>img {
     display: none;
+  }
+
+  fieldset.authFieldset>img {
+    display: none;
+  }
+
+  fieldset.authFieldset {
+    background-color: #80808029;
+    border-radius: 1rem;
+  }
+
+  form.authForm {
+    padding: 1rem;
+  }
+
+  div.authFieldLogin {
+    padding: 0;
+    margin: 3rem 0 3rem 0;
   }
 }
