@@ -243,7 +243,7 @@ strong::after {
     display: none;
   }
 
-  fieldset.authFieldset>img {
+  fieldset.authFieldsetLogin>img {
     display: none;
   }
 

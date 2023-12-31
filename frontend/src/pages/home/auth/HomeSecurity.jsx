@@ -108,7 +108,7 @@ const HomeSecurity = () => {
             }
         } catch (error) {
             console.log("Error fetching requests:", error);
-            alert("Error fetching requests. Please try again later.");
+            // alert("Error fetching requests. Please try again later.");
         } finally {
             setLoading(false);
         }
@@ -265,7 +265,7 @@ const HomeSecurity = () => {
             }
         } catch (error) {
             console.log("Error sending the request:", error);
-            alert("Error fetching requests. Please try again later.");
+            // alert("Error fetching requests. Please try again later.");
         }
     };
 
@@ -295,7 +295,7 @@ const HomeSecurity = () => {
         } catch (error) {
             // Handle network or other errors
             console.error('Error making update request:', error);
-            alert("Error fetching requests. Please try again later.");
+            // alert("Error fetching requests. Please try again later.");
         }
     };
 
@@ -322,7 +322,7 @@ const HomeSecurity = () => {
         } catch (error) {
             // Handle network or other errors
             console.error('Error making delete request:', error);
-            alert("Error fetching requests. Please try again later.");
+            // alert("Error fetching requests. Please try again later.");
         } finally {
             closeModalDelete();
         }

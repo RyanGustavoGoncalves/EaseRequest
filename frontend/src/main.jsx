@@ -23,8 +23,8 @@ import HomeSecurity from './pages/home/auth/HomeSecurity.jsx';
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <ProtectedRoute element={App} />,
-    // element: <App />,
+    // element: <ProtectedRoute element={App} />,
+    element: <App />,
     errorElement: <ErrorPage />,
     children: [
       {
