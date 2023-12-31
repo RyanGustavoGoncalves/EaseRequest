@@ -62,9 +62,9 @@ Certifique-se de ter o ambiente Java e MongoDB configurados para executar o back
 
 ## Capturas de Tela
 
-![Captura de Tela 1](/capturas-de-tela/captura1.png)
+![Captura de Tela 1](frontend/src/assets/HomeEaseRequest.png)
 
-![Captura de Tela 2](/capturas-de-tela/captura2.png)
+![Captura de Tela 2](frontend/src/assets/AboutHomeEaseRequest.png)
 
 ## Contribuições
 
