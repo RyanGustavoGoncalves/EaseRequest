@@ -403,7 +403,18 @@ const HomeSecurity = () => {
         return `${days} days, ${hours} hour, ${minutes} minutes ago`;
     };
 
+    const getStatusClass = (status) => {
+        let colorClass = "status-red"; // Assume vermelho como padrão
 
+        // Verifica o status da solicitação
+        if (status === "PROCESSING") {
+            colorClass = "status-yellow";
+        } else if (status === "FINISH") {
+            colorClass = "status-green";
+        }
+
+        return colorClass;
+    };
 
     return (
         <section className="homeSection">
@@ -424,7 +435,7 @@ const HomeSecurity = () => {
                             title="Search"
                         />
                         <div className="filter" onClick={openModalFilter}>
-                            <img src={filtro} alt="filter" width={30}/>
+                            <img src={filtro} alt="filter" width={30} />
                         </div>
                     </div>
                 </div>
@@ -452,7 +463,10 @@ const HomeSecurity = () => {
                                                     <p className={box.status}>
                                                         <p>{box.priority}</p>
                                                         <p>User ID: {box.user ? box.user.idUsers : 'N/A'}</p>
-                                                        <span>{box.status}</span>
+                                                        <p className={`status ${getStatusClass(box.status)}`}>
+                                                            &#x25CF;
+                                                            <span>{box.status}</span>
+                                                        </p>
                                                     </p>
                                                 </div>
                                             </div>
@@ -512,7 +526,7 @@ const HomeSecurity = () => {
             <Modal isOpen={modalConfirmIsOpen} onClose={closeModalConfirm}>
                 <div className="singleRequest">
                     <p>
-                        <span>ID:</span> {singleRequest.id}
+                        <span>Request ID:</span> {singleRequest.id}
                     </p>
 
                     <p>
@@ -536,7 +550,7 @@ const HomeSecurity = () => {
                     </p>
 
                     <p>
-                        <span>ID:</span> {singleRequest.user ? singleRequest.user.idUsers : 'N/A'}
+                        <span>User ID:</span> {singleRequest.user ? singleRequest.user.idUsers : 'N/A'}
 
                     </p>
 
@@ -634,7 +648,7 @@ const HomeSecurity = () => {
             </Modal>
 
             <Modal isOpen={modalFilterIsOpen} onClose={closeModalFilter}>
-                <div>
+                <div className="filterPriorityConfig">
                     <label className="selectFilterPriority" htmlFor="filterPriority">Filter by Priority:</label>
                     <select
                         className="selectFilterPriority"
@@ -648,9 +662,9 @@ const HomeSecurity = () => {
                         <option value="LOW">LOW ({priorityCounts.LOW || 0})</option>
                     </select>
                 </div>
-                <div className="statusFilter">
+                <div className="filterStatusConfig">
                     <label>Status Filter:</label>
-                    <div>
+                    <div className="statusFilter">
                         {['FINISH', 'PROCESSING', 'PENDING'].map((status) => (
                             <label key={status}>
                                 <input

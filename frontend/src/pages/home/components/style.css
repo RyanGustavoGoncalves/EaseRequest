@@ -217,10 +217,7 @@ select.selectFilterPriority,
 select.selectFilterPriority>option,
 label.selectFilterPriority {
     font-weight: bold;
-}
-
-option>span.countFilterPriority {
-    color: rgba(128, 128, 128, 0.44);
+    margin: 1px;
 }
 
 div.filter{
@@ -229,6 +226,20 @@ div.filter{
 div.filter > img:hover{
     transition: all 0.5s ease-in-out;
     filter: invert();
+}
+div.statusFilter{
+    display: grid;
+}
+
+div.filterPriorityConfig, div.filterStatusConfig{
+    font-weight: bold;
+    padding: 5px;
+}
+
+div.loading-overlay{
+    display: grid;
+    place-items: center;
+    height: 100%;
 }
 
 @media (max-width: 620px) {
