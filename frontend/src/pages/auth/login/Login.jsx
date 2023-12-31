@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import '../components/style.css'
-import img from '../assets/imgFront2.png';
+import img from '../assets/imgFront.png';
 import imgError from '../assets/icons8-erro-48 (1).png';
 import { useNavigate } from "react-router-dom";
 

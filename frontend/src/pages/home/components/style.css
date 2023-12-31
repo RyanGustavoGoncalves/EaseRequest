@@ -142,6 +142,7 @@ div.boxTools>a {
 }
 
 div.btnSave {
+    padding: 5px;
     gap: 5px;
     display: flex;
     justify-content: center;

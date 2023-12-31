@@ -1,6 +1,6 @@
 import React from "react";
 import '../welcomePage/components/style.css';
-import computer from './assets/imgFront2.png';
+import computer from './assets/imgFront.png';
 import seta from './assets/imgSeta.png';
 import { Link } from 'react-router-dom';
 

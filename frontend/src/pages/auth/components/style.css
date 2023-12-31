@@ -8,7 +8,15 @@ div.logo>a>img {
   width: 50px;
 }
 
+section.sectionRegister {
+  display: grid;
+  place-items: center;
+}
+
 fieldset.authFieldset {
+  background-color: #222;
+  border-radius: 5rem;
+  width: 80%;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -54,14 +62,25 @@ div.authField>legend {
   transition: transform 0.3s ease-out, font-size 0.3s ease-out;
 }
 
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  /* Inverte as cores do ícone (preto para branco, branco para preto) */
+}
+
+input:-webkit-autofill::placeholder {
+  color: #ff0000; 
+}
+
 div.authField>input,
 .authFieldLogin>input {
   inline-size: 12rem;
   border: none;
-  border-bottom: solid 2px #347571;
+  border-bottom: solid 2px white;
   font-size: 15px;
   font-weight: bold;
   outline: none;
+  background-color: transparent;
+  color: white;
 }
 
 div.authField>label.active,
@@ -104,18 +123,27 @@ form.authForm>div.btn {
 
 form.authForm>div.btn>button {
   cursor: pointer;
-  color: white;
+  color: black;
+  font-weight: bold;
   margin: 10px;
   padding: 10px;
   border-radius: 50px;
   border: none;
   inline-size: 200px;
-  background-color: #5EC57E;
+  /* background-color: #1fdf64; */
+  background-image: linear-gradient(to right, #1fdf64, #1fdf64, #6cff00c4, #1fdf64);
+  transition: all 0.5s ease-in-out;
+}
+
+form.authForm>div.btn>button:hover {
+  transform: scale(1.1);
+  border: solid 1px white;
+  filter: drop-shadow(0px 0px 10px green);
 }
 
 form.authForm>div.btn>a>span {
   font-size: 10px;
-  color: blue;
+  color: rgba(0, 255, 136, 0.779);
   font-weight: bold;
   cursor: pointer;
 }

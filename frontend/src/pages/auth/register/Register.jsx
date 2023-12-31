@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import '../components/style.css'
 import imgError from '../assets/icons8-erro-48 (1).png';
-import img from '../assets/imgFront2.png';
+import img from '../assets/aboutImg.png';
 
 const Register = ({ toggleForm }) => {
     const [username, setUsername] = useState("");

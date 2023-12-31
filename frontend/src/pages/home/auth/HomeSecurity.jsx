@@ -428,7 +428,7 @@ const HomeSecurity = () => {
                     <div className="lupaSearch">
                         <div className="lupa"><img src={lupa} alt="Search" /></div>
                         <input
-                            type="text"
+                            type="search"
                             placeholder="Search.."
                             onChange={handleSearch}
                             value={searchTerm}
