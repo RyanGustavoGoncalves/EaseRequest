@@ -1,13 +1,13 @@
 import React from "react";
 import '../welcomePage/components/style.css';
-import wave from './assets/wave (2).svg';
+import wave from './assets/wave.svg';
 import AboutImg from './assets/AboutImg.png'
 import iconBalanca from './assets/iconBalanca.png';
 
 const WelcomeDescri = () => {
 
     return (
-        <section className="WelcomeDescSection"id="hyper">
+        <section className="WelcomeDescSection" id="hyper">
             <div className="WelcomeDescWave">
                 <img src={wave} alt="" />
             </div>
@@ -22,7 +22,7 @@ const WelcomeDescri = () => {
                 <div className="WelcomeDescBalance">
                     <img src={iconBalanca} alt="balance" />
                     <span>
-                    Experience, commitment and value. It is our mission to consistently provide this to our customers.
+                        Experience, commitment and value. It is our mission to consistently provide this to our customers.
                     </span>
                 </div>
             </div>

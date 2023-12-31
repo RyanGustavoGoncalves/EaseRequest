@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import wave from '../assets/wave(1).svg';
-import '../components/style.css';
-import '../components/style.css';
+import wave from '../assets/wave.svg';
 import filtro from '../assets/filtro.png';
-import mais from '../assets/mais(1).png';
+import mais from '../assets/iconMais.png';
 import lupa from '../assets/lupa.png';
 import { Link } from "react-router-dom";
 import Modal from '../../components/Modal';
@@ -12,7 +10,10 @@ import moment from "moment";
 import "moment/locale/pt-br";
 
 const HomeSecurity = () => {
+    // Retrieve token from local storage
     const token = localStorage.getItem('token');
+
+    // State variables
     const [toolBoxes, setToolBoxes] = useState([]);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
@@ -51,27 +52,31 @@ const HomeSecurity = () => {
     const [filterCriteria, setFilterCriteria] = useState('');
     const [selectedStatus, setSelectedStatus] = useState([]);
 
+    // Function to toggle the expansion of the description field
     const focusDescription = () => {
         setExpanded(!isExpanded);
     };
 
+    // Fetch requests when the component mounts and requests are not loaded
     useEffect(() => {
         if (!requestsLoaded) {
             fetchRequests();
         }
     }, [requestsLoaded]);
 
+    // Fetch requests periodically (every 5 seconds)
     useEffect(() => {
         const intervalId = setInterval(() => {
             console.log(token);
             fetchRequests();
-        }, 5000); // Consulta a cada 5 segundos (ajuste conforme necessário)
+        }, 5000);
 
-        return () => clearInterval(intervalId); // Limpa o intervalo quando o componente é desmontado
+        // Clear the interval when the component is unmounted
+        return () => clearInterval(intervalId);
 
     }, []);
 
-    //Request get para mostrar requisições guardadas no banco de dados
+    // Fetch requests from the server
     const fetchRequests = async () => {
         try {
             setLoading(true);
@@ -87,29 +92,29 @@ const HomeSecurity = () => {
                 const responseData = await response.json();
 
                 if (Array.isArray(responseData.content)) {
-                    // Mapeie as solicitações e inclua os dados do usuário
+                    // Map the requests and include user data
                     const updatedToolBoxes = responseData.content.map(box => {
                         return {
                             ...box,
-                            user: box.user, // Ajuste o nome do campo aqui
+                            user: box.user,
                         };
                     });
 
                     setToolBoxes(updatedToolBoxes);
                     setRequestsLoaded(true);
                 } else {
-                    console.error("A resposta não contém uma matriz válida:", responseData);
+                    console.error("Response does not contain a valid array:", responseData);
                 }
             }
         } catch (error) {
-            console.log("Erro ao buscar as solicitações:", error);
+            console.log("Error fetching requests:", error);
+            alert("Error fetching requests. Please try again later.");
         } finally {
             setLoading(false);
         }
     };
 
-
-    //Modal Functions
+    // Modal Functions
     const openModal = () => {
         document.body.style.overflow = "hidden";
         setModalIsOpen(true);
@@ -166,6 +171,7 @@ const HomeSecurity = () => {
         setModalFilterIsOpen(false);
     };
 
+    // Function to add a new request
     const handleAddBox = () => {
         setToolBoxes([...toolBoxes, formData]);
         setFormData({
@@ -187,7 +193,7 @@ const HomeSecurity = () => {
         closeModal();
     };
 
-    //Function para animação do input do modal
+    // Function for input focus and blur animation in the modal
     const handleInputFocus = (labelId) => {
         const label = document.getElementById(labelId);
         label.classList.add('active');
@@ -205,6 +211,7 @@ const HomeSecurity = () => {
         label.classList.remove('active');
     };
 
+    // Function to save the form data and create a new request
     const handleSave = () => {
         setFormData({
             ...formData,
@@ -217,11 +224,12 @@ const HomeSecurity = () => {
         handleAddBox();
     };
 
+    // Function to handle search input
     const handleSearch = (e) => {
         setSearchTerm(e.target.value);
     };
 
-    //Request para salvar um nova requisição
+    // Function to create a new request
     const newRequest = async () => {
         const data = {
             problem: formData.problem,
@@ -242,7 +250,7 @@ const HomeSecurity = () => {
             });
 
             if (response.status === 201) {
-                alert("Cadastro bem-sucedido!");
+                alert("Successful registration!");
             } else if (response.status === 400) {
                 const errorData = await response.json();
                 const errorArray = [];
@@ -253,13 +261,15 @@ const HomeSecurity = () => {
                 }
 
             } else {
-                console.log("Ocorreu um erro inesperado: " + response.status);
+                console.log("An unexpected error occurred: " + response.status);
             }
         } catch (error) {
-            console.log("Erro ao enviar a solicitação:", error);
+            console.log("Error sending the request:", error);
+            alert("Error fetching requests. Please try again later.");
         }
     };
 
+    // Function to update a request
     const updateRequest = async (editedRequest) => {
         console.log(editedRequest);
         try {
@@ -273,21 +283,23 @@ const HomeSecurity = () => {
             });
 
             if (response.ok) {
-                // Atualização bem-sucedida
-                console.log('Solicitação atualizada com sucesso!');
-                // Atualize o estado de singleRequest para refletir as alterações
+                // Successful update
+                console.log('Request updated successfully!');
+
                 setSingleRequest({ ...editedRequest });
-                closeModalUpdate(); // Feche o modal após a atualização
+                closeModalUpdate(); // Close the modal after update
             } else {
-                // Lidar com erros de resposta
-                console.error('Erro ao atualizar a solicitação:', response.status);
+                // Handle response errors
+                console.error('Error updating request:', response.status);
             }
         } catch (error) {
-            // Lidar com erros de rede ou outros erros
-            console.error('Erro ao fazer a solicitação de atualização:', error);
+            // Handle network or other errors
+            console.error('Error making update request:', error);
+            alert("Error fetching requests. Please try again later.");
         }
     };
 
+    // Function to delete a request
     const deleteRequest = async (editedRequest) => {
         console.log(editedRequest);
         try {
@@ -301,20 +313,22 @@ const HomeSecurity = () => {
 
             if (response.ok) {
 
-                console.log('Request deletada com sucesso!');
+                console.log('Request deleted successfully!');
                 closeModalUpdate();
             } else {
 
-                console.error('Erro ao deletar a request:', response.status);
+                console.error('Error deleting the request:', response.status);
             }
         } catch (error) {
-            // Lidar com erros de rede ou outros erros
-            console.error('Erro ao fazer a solicitação delete:', error);
+            // Handle network or other errors
+            console.error('Error making delete request:', error);
+            alert("Error fetching requests. Please try again later.");
         } finally {
             closeModalDelete();
         }
     };
 
+    // Function to fetch a request by ID
     const fetchRequestById = async (id) => {
         try {
             const response = await fetch(`http://localhost:8080/request/${id}`, {
@@ -328,16 +342,13 @@ const HomeSecurity = () => {
             if (response.status === 200) {
                 const responseData = await response.json();
 
-                // Log da resposta para análise
-                console.log("Resposta da API:", responseData);
+                // Log the response for analysis
+                console.log("API response:", responseData);
 
-                // Certifica-se de que 'content' é um objeto antes de definir 'singleRequest'
                 if (responseData && typeof responseData === 'object') {
-                    // Aqui, você pode lidar com a resposta do endpoint específico
-                    // Por exemplo, definir um estado no React para armazenar a solicitação única
 
-                    // Extraia os dados do usuário e adicione-os à solicitação única
-                    const user = responseData.user; // Supondo que os dados do usuário estejam em "users"
+                    // Extract user data and add it to the single request
+                    const user = responseData.user;
                     const updatedSingleRequest = {
                         ...responseData,
                         user: user,
@@ -345,20 +356,20 @@ const HomeSecurity = () => {
 
                     setSingleRequest(updatedSingleRequest);
                 } else {
-                    console.error("A resposta não contém um objeto válido:", responseData);
+                    console.error("Response does not contain a valid object:", responseData);
                 }
             } else if (response.status === 404) {
-                console.log("Solicitação não encontrada");
-                // Lidar com o caso em que a solicitação não foi encontrada
+                console.log("Request not found");
+                // Handle the case where the request was not found
             } else {
-                console.log("Ocorreu um erro inesperado: " + response.status);
+                console.log("An unexpected error occurred: " + response.status);
             }
         } catch (error) {
-            console.log("Erro ao buscar a solicitação:", error);
+            console.log("Error fetching the request:", error);
         }
     };
 
-    // Movendo a declaração para o local apropriado
+    // Move the declaration to the appropriate location
     const filteredAndSortedToolBoxes = Array.isArray(toolBoxes)
         ? toolBoxes
             .filter(
@@ -368,12 +379,13 @@ const HomeSecurity = () => {
                     (selectedStatus.length === 0 || selectedStatus.includes(box.status))
             )
             .sort((a, b) => {
-                // Ordena com base na prioridade (HIGH, MEDIUM, LOW)
+                // Sort based on priority (HIGH, MEDIUM, LOW)
                 const priorityOrder = { HIGH: 1, MEDIUM: 2, LOW: 3 };
                 return priorityOrder[a.priority] - priorityOrder[b.priority];
             })
         : [];
 
+    // Function to handle status change
     const handleStatusChange = (status) => {
         if (selectedStatus.includes(status)) {
             setSelectedStatus((prevStatus) =>
@@ -384,18 +396,20 @@ const HomeSecurity = () => {
         }
     };
 
+    // Count the occurrences of each priority
     const priorityCounts = filteredAndSortedToolBoxes.reduce((counts, box) => {
-        // Incrementa a contagem para a prioridade atual
+        // Increment the count for the current priority
         counts[box.priority] = (counts[box.priority] || 0) + 1;
         return counts;
     }, {});
 
+    // Calculate the time difference from the launch date
     const calculateTimeDifference = (launchDate) => {
         const currentDate = moment();
         const launchMoment = moment(launchDate);
         const duration = moment.duration(currentDate.diff(launchMoment));
 
-        // Exibindo a diferença em dias, horas, minutos, etc.
+        // Display the difference in days, hours, minutes, etc.
         const days = duration.days();
         const hours = duration.hours();
         const minutes = duration.minutes();
@@ -403,10 +417,11 @@ const HomeSecurity = () => {
         return `${days} days, ${hours} hour, ${minutes} minutes ago`;
     };
 
+    // Get the CSS class for the status
     const getStatusClass = (status) => {
-        let colorClass = "status-red"; // Assume vermelho como padrão
+        let colorClass = "status-red"; // Assume red as default
 
-        // Verifica o status da solicitação
+        // Check the status of the request
         if (status === "PROCESSING") {
             colorClass = "status-yellow";
         } else if (status === "FINISH") {
@@ -415,7 +430,6 @@ const HomeSecurity = () => {
 
         return colorClass;
     };
-
     return (
         <section className="homeSection">
             <div className="wave">
@@ -423,12 +437,12 @@ const HomeSecurity = () => {
             </div>
             <div className="alignCont">
                 <div className="subNav">
-                    <h1 style={{ padding: "1rem" }}>ADMIN</h1>
+                    <h1 style={{ padding: "1rem", color: "white" }}>ADMIN</h1>
 
                     <div className="lupaSearch">
                         <div className="lupa"><img src={lupa} alt="Search" /></div>
                         <input
-                            type="text"
+                            type="search"
                             placeholder="Search.."
                             onChange={handleSearch}
                             value={searchTerm}

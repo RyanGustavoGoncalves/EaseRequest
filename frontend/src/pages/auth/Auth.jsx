@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import ScrollReveal from 'scrollreveal';
 import Register from "./register/Register";
 import Login from "./login/Login";
-import wave from './assets/wave (2).svg';
+import wave from './assets/wave.svg';
 import './components/style.css';
 import logo from '../welcomePage/assets/iconList.png';
 
@@ -27,7 +27,7 @@ const Auth = ({ login }) => {
     const sr = ScrollReveal();
 
     const calculateDistance = () => {
-      return window.innerWidth > 768 ? '70px' : '0px';
+      return window.innerWidth > 768 ? '70px' : '15px';
     };
 
     sr.reveal('.authFieldset', {
@@ -49,10 +49,10 @@ const Auth = ({ login }) => {
     <main className={`authMain ${transitionClass}`}>
       <div className="logo"><Link to={"/"}><img src={logo} alt="logo" /></Link></div>
       {isLoginVisible ? <Login toggleForm={toggleForm} login={login} /> : <Register toggleForm={toggleForm} />}
-      
-      <div className="WelcomeDescWave">
+
+      {/* <div className="WelcomeDescWave">
         <img src={wave} alt="" />
-      </div>
+      </div> */}
     </main>
   );
 };

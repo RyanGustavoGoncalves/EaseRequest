@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import '../components/style.css'
-import img from '../assets/imgFront2.png';
+import img from '../assets/imgFront.png';
 import imgError from '../assets/icons8-erro-48 (1).png';
 import { useNavigate } from "react-router-dom";
+import wave from '../assets/wave.svg';
 
 const Login = ({ toggleForm, login }) => {
     const navigate = useNavigate();
@@ -87,60 +88,64 @@ const Login = ({ toggleForm, login }) => {
 
     return (
         <section className="sectionRegister">
-            <fieldset className="authFieldset">
-                <form onSubmit={handleSubmit} className="authForm">
-                    <div className="authFieldLogin">
-                        <label id="usernameLabel" className={username ? 'active' : ''} htmlFor="username">
-                            Username
-                        </label>
-                        <input
-                            id="username"
-                            type="text"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            onMouseEnter={() => handleInputFocus('usernameLabel')}
-                            onMouseLeave={() => handleInputBlur('usernameLabel')}
-
-                        />
-                    </div>
-                    <div className="authFieldLogin">
-                        <label id="passwordLabel" className={password ? 'active' : ''} htmlFor="password">password</label>
-                        <input
-                            id="password"
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            onMouseEnter={() => handleInputFocus('passwordLabel')}
-                            onMouseLeave={() => handleInputBlur('passwordLabel')}
-                        />
-                    </div>
-                    <div className="btn">
-                        <button type="submit">Login</button>
-                        <a onClick={toggleForm}>
-                            <span>Don't have registration? register now!</span>
-                        </a>
-                    </div>
-                </form>
-                <div className="imgFront"><img src={img} alt="authentication" /></div>
-                <div className="modal" style={{ display: modal.display }}>
-                    <div className="errorModal">
-                        <div className="errorIcon">
-                            <img src={imgError} alt="Error" />
-                            <h2>Erro!</h2>
+            <article className="authArticle">
+                <fieldset className="authFieldsetLogin">
+                    <img src={img} alt="authentication" />
+                    <form onSubmit={handleSubmit} className="authForm">
+                        <div className="authFieldLogin">
+                            <label id="usernameLabel" className={username ? 'active' : ''} htmlFor="username">
+                                Username
+                            </label>
+                            <input
+                                id="username"
+                                type="text"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                onMouseEnter={() => handleInputFocus('usernameLabel')}
+                                onMouseLeave={() => handleInputBlur('usernameLabel')}
+                            />
                         </div>
-                        <hr />
-                        <div className="errorMessages">
-                            {errors.map((erro, index) => (
-                                <div key={index}>
-                                    <strong>{erro.Error}</strong>
-                                </div>
-                            ))}
+                        <div className="authFieldLogin">
+                            <label id="passwordLabel" className={password ? 'active' : ''} htmlFor="password">password</label>
+                            <input
+                                id="password"
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                onMouseEnter={() => handleInputFocus('passwordLabel')}
+                                onMouseLeave={() => handleInputBlur('passwordLabel')}
+                            />
+                        </div>
+                        <div className="btn">
+                            <button type="submit">Login</button>
+                            <a onClick={toggleForm}>
+                                <span>Don't have registration? register now!</span>
+                            </a>
+                        </div>
+                    </form>
+                </fieldset>
+                    <div className="modal" style={{ display: modal.display }}>
+                        <div className="errorModal">
+                            <div className="errorIcon">
+                                <img src={imgError} alt="Error" />
+                                <h2>Erro!</h2>
+                            </div>
+                            <hr />
+                            <div className="errorMessages">
+                                {errors.map((erro, index) => (
+                                    <div key={index}>
+                                        <strong>{erro.Error}</strong>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
-                </div>
-                {/* Modal de fundo */}
-                <div className="modalOpacity" onClick={closeModalOpacity} style={{ display: modalOpacity.display }}></div>
-            </fieldset>
+                    {/* Modal de fundo */}
+                    <div className="modalOpacity" onClick={closeModalOpacity} style={{ display: modalOpacity.display }}></div>
+            </article>
+            <div className="WelcomeDescWave">
+                <img src={wave} alt="" />
+            </div>
         </section>
     );
 };

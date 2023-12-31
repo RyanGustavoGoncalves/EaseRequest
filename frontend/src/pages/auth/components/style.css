@@ -4,13 +4,42 @@ main.authMain {
   height: 100%;
 }
 
+div.logo {
+  position: absolute;
+  z-index: 1001;
+}
+
 div.logo>a>img {
   width: 50px;
 }
 
+section.sectionRegister {
+  display: grid;
+  align-items: end;
+  height: 100%;
+}
+
+article.authArticle {
+  display: grid;
+  place-items: center;
+  position: absolute;
+  z-index: 1000;
+  height: 100%;
+}
+
 fieldset.authFieldset {
+  width: 80%;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  align-items: center;
+  border: none;
+}
+
+fieldset.authFieldsetLogin {
+  width: 80%;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
   align-items: center;
   border: none;
 }
@@ -20,13 +49,14 @@ form.authForm {
   place-items: center;
 }
 
-div.authImgFront {
-  display: grid;
+fieldset.authFieldset>div.imgFront>img {
+  width: 50%;
+  height: auto;
 }
 
-fieldset.authFieldset>div.imgFront>img {
-  width: 500px;
-  height: 500px;
+fieldset.authFieldsetLogin>img {
+  width: 50%;
+  height: auto;
 }
 
 div.authField {
@@ -39,14 +69,14 @@ div.authFieldLogin {
 }
 
 div.authField>legend {
-  color: #5EC57E;
+  color: #1fdf64;
   font-weight: bold;
 }
 
 .authField>label,
 .authFieldLogin>label {
   font-size: 15px;
-  color: #5EC57E;
+  color: #1fdf64;
   font-weight: bold;
   position: absolute;
   pointer-events: none;
@@ -54,14 +84,25 @@ div.authField>legend {
   transition: transform 0.3s ease-out, font-size 0.3s ease-out;
 }
 
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  /* Inverte as cores do ícone (preto para branco, branco para preto) */
+}
+
+input:-webkit-autofill::placeholder {
+  color: #ff0000;
+}
+
 div.authField>input,
 .authFieldLogin>input {
   inline-size: 12rem;
   border: none;
-  border-bottom: solid 2px #347571;
+  border-bottom: solid 2px grey;
   font-size: 15px;
   font-weight: bold;
   outline: none;
+  background-color: transparent;
+  color: white;
 }
 
 div.authField>label.active,
@@ -104,18 +145,27 @@ form.authForm>div.btn {
 
 form.authForm>div.btn>button {
   cursor: pointer;
-  color: white;
+  color: black;
+  font-weight: bold;
   margin: 10px;
   padding: 10px;
   border-radius: 50px;
   border: none;
   inline-size: 200px;
-  background-color: #5EC57E;
+  /* background-color: #1fdf64; */
+  background-image: linear-gradient(to right, #1fdf64, #1fdf64, #6cff00c4, #1fdf64);
+  transition: all 0.5s ease-in-out;
+}
+
+form.authForm>div.btn>button:hover {
+  transform: scale(1.1);
+  border: solid 1px white;
+  filter: drop-shadow(0px 0px 10px green);
 }
 
 form.authForm>div.btn>a>span {
   font-size: 10px;
-  color: blue;
+  color: rgba(0, 255, 136, 0.779);
   font-weight: bold;
   cursor: pointer;
 }
@@ -129,10 +179,10 @@ div.modal {
 }
 
 div.errorModal {
-  background-color: #6DBF63;
+  background-color: #000;
   height: auto;
   border-radius: 5px;
-  box-shadow: 3px 5px 5px black;
+  box-shadow: 3px 5px 5px #333;
 }
 
 div.errorIcon {
@@ -142,8 +192,10 @@ div.errorIcon {
 }
 
 div.errorMessages {
+  font-weight: bold;
+  color: white;
   padding: 15px;
-  font-size: 18px;
+  font-size: 20px;
   text-align: justify;
 }
 
@@ -156,15 +208,15 @@ div.modalOpacity {
   z-index: 999;
 }
 
+strong {
+  color: #1fdf64;
+}
+
 strong::after {
   content: ":";
 }
 
 @media (max-width: 765px) {
-  fieldset.authFieldset>div.imgFront>img {
-    width: 400px;
-    height: 400px;
-  }
 
   main.authMain>div.WelcomeDescWave {
     display: none;
@@ -179,17 +231,33 @@ strong::after {
     justify-content: center;
     height: 100%;
   }
-}
 
-@media (max-width: 620px) {
   fieldset.authFieldset>div.imgFront>img {
-    width: 350px;
-    height: 350px;
+    width: 100%;
   }
+
 }
 
-@media (max-width: 620px) {
+@media (max-width: 520px) {
   fieldset.authFieldset>div.imgFront>img {
     display: none;
+  }
+
+  fieldset.authFieldset>img {
+    display: none;
+  }
+
+  fieldset.authFieldset {
+    background-color: #80808029;
+    border-radius: 1rem;
+  }
+
+  form.authForm {
+    padding: 1rem;
+  }
+
+  div.authFieldLogin {
+    padding: 0;
+    margin: 3rem 0 3rem 0;
   }
 }
