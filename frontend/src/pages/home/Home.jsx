@@ -484,20 +484,20 @@ const Home = () => {
 
                 <InputField
                     id="problem"
-                    label="Updated Problem"
+                    label="UpdatedProblem"
                     value={editedRequest.problem}
                     onChange={(e) => setEditedRequest((prev) => ({ ...prev, problem: e.target.value }))}
-                    onMouseEnter={() => handleInputFocus('updatedProblemLabel')}
-                    onMouseLeave={() => handleInputBlur('updatedProblemLabel')}
+                    onMouseEnter={() => handleInputFocus('problemLabel')}
+                    onMouseLeave={() => handleInputBlur('problemLabel')}
                 />
 
                 <InputField
                     id="description"
-                    label="description"
+                    label="Updatedescription"
                     value={editedRequest.description}
                     onChange={(e) => setEditedRequest((prev) => ({ ...prev, description: e.target.value }))}
-                    onMouseEnter={() => handleInputFocus('updateDescriptionLabel')}
-                    onMouseLeave={() => handleInputBlur('updateDescriptionLabel')}
+                    onMouseEnter={() => handleInputFocus('descriptionLabel')}
+                    onMouseLeave={() => handleInputBlur('descriptionLabel')}
                 />
 
                 <div className="btnSave">

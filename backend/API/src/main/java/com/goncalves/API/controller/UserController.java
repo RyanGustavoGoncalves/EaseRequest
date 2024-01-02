@@ -2,7 +2,9 @@ package com.goncalves.API.controller;
 
 import com.goncalves.API.DTO.DadosAtualizarUser;
 import com.goncalves.API.DTO.DadosListagemUser;
+import com.goncalves.API.entities.request.RequestRepository;
 import com.goncalves.API.entities.user.UserRepository;
+import com.goncalves.API.entities.user.Users;
 import com.goncalves.API.infra.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +23,19 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    UserRepository repository;
+    private UserRepository repository;
 
 
     @GetMapping
     public ResponseEntity<Page<DadosListagemUser>> getUsers(@PageableDefault(size = 10, sort = {"creationAccount"})Pageable paginacao){
         var page = repository.findAll(paginacao).map(DadosListagemUser::new);
         return ResponseEntity.ok(page);
+    }
+
+    @GetMapping("/user/token")
+    public ResponseEntity getUserFromToken (){
+        Users user = (Users) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok().body(repository.findById(user.getIdUsers()));
     }
 
     @GetMapping("/{idUser}")
