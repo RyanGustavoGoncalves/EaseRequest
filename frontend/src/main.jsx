@@ -44,7 +44,6 @@ const router = createBrowserRouter([
   {
     path: "/Welcome",
     element: <Welcome />,
-    errorElement: <ErrorPage />,
     children: [
       {
         path: "intro",
@@ -67,7 +66,6 @@ const router = createBrowserRouter([
   {
     path: "/auth",
     element: <Auth />,
-    errorElement: <ErrorPage />,
     children:
       [
         {
