@@ -3,7 +3,6 @@ import wave from '../assets/wave.svg';
 import filtro from '../assets/filtro.png';
 import mais from '../assets/iconMais.png';
 import lupa from '../assets/lupa.png';
-import { Link } from "react-router-dom";
 import Modal from '../../components/Modal';
 import InputField from "../components/InputField";
 import moment from "moment";
