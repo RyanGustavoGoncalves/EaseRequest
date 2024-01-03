@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import wave from './assets/wave.svg';
 import mais from './assets/iconMais.png';
 import lupa from './assets/lupa.png';
-import { Link } from "react-router-dom";
 import Modal from '../components/Modal';
 import InputField from "./components/InputField";
 import moment from "moment";
@@ -332,20 +331,15 @@ const Home = () => {
             if (response.status === 200) {
                 const responseData = await response.json();
 
-                // Log da resposta para análise
                 console.log("Resposta da API:", responseData);
 
-                // Certifica-se de que 'content' é um objeto antes de definir 'singleRequest'
                 if (responseData && typeof responseData === 'object') {
-                    // Aqui, você pode lidar com a resposta do endpoint específico
-                    // Por exemplo, definir um estado no React para armazenar a solicitação única
                     setSingleRequest(responseData);
                 } else {
                     console.error("A resposta não contém um objeto válido:", responseData);
                 }
             } else if (response.status === 404) {
                 console.log("Solicitação não encontrada");
-                // Lidar com o caso em que a solicitação não foi encontrada
             } else {
                 console.log("Ocorreu um erro inesperado: " + response.status);
             }

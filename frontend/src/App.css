@@ -152,6 +152,12 @@ div.btnModalClose {
 }
 
 @media (max-width: 420px) {
+
+    div.headerLogoName {
+        gap: 0;
+        padding-bottom: 1rem;
+    }
+
     header>div.headerLogoName>a {
         gap: 0;
     }
@@ -455,12 +461,14 @@ div.loading-overlay {
 
 div.page {
     display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 1rem;
-    color: white;
-    padding: 1rem;
     position: relative;
+    color: white;
+    gap: 1rem;
+    padding: 1rem;
     z-index: 1000;
+    width: 100%;
 }
 
 div.page>button {
@@ -470,11 +478,11 @@ div.page>button {
     border: none;
     border-radius: 50px 50px;
     padding: 12px;
-    inline-size: 100px;
+    max-width: 80%;
     transition: all 0.5s ease-in-out;
 }
 
-div.page>button:hover{
+div.page>button:hover {
     background-color: #0e9a41;
     transform: scale(1.1);
 }

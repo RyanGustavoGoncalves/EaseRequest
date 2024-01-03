@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import './style/style.css';
 import '../welcomePage/components/style.css';
 import error404page from './assets/error404page.png'
-import wave from './assets/wave (2).svg';
+import wave from './assets/wave.svg';
 
 const DateTimeCounter = () => {
     const [currentDateTime, setCurrentDateTime] = useState(new Date());
@@ -19,7 +19,7 @@ const DateTimeCounter = () => {
 
     return (
         <main className="errorPage404Main">
-             <div className="WelcomeDescWaveError">
+            <div className="WelcomeDescWaveError">
                 <img src={wave} alt="" />
             </div>
             <section className="sectionError404">

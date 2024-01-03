@@ -1,3 +1,5 @@
+// Imports of other components and libraries
+
 import React, { useState, useEffect } from "react";
 import wave from '../assets/wave.svg';
 import filtro from '../assets/filtro.png';
@@ -495,14 +497,13 @@ const HomeSecurity = () => {
                                                 <p>{calculateTimeDifference(box.creationRequest)}</p>
                                             </div>
                                             <div className="dateStatusTool">
-                                                <p className={box.status}>
+                                                <p className={box.status}></p>
                                                     <p>{box.priority}</p>
                                                     <p>User ID: {box.user ? box.user.idUsers : 'N/A'}</p>
                                                     <p className={`status ${getStatusClass(box.status)}`}>
                                                         &#x25CF;
                                                         <span>{box.status}</span>
                                                     </p>
-                                                </p>
                                             </div>
                                         </div>
                                     </>
