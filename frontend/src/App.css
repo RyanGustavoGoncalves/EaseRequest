@@ -5,48 +5,103 @@ main.appMain {
     background-color: #000;
 }
 
-/* CSS NavBar and Modal */
-
+/* CSS NavBar */
 header {
+    display: flex;
+    width: 100%;
+}
+
+nav.navSup {
     display: grid;
     background-color: transparent;
-    position: fixed;
+    /* position: fixed; */
     z-index: 1000;
     width: 100%;
     height: 15%;
+    padding: 1rem;
 }
 
-header>div.headerLogoName>a {
+div.headerLogoName {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 1rem;
+}
+
+div.headerLogoName>a {
     text-decoration: none;
-    color: #1fdf64;
 }
 
-header>div.headerLogoName>a>h1 {
+div.headerLogoName>div.userPerfil>h1 {
     font-size: 20px;
+    color: white;
 }
 
-header>div.headerLogoName>a>img {
+div.userPerfil {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+div.headerLogoName>a>img {
     width: 50px;
 }
 
-nav>ul {
-    width: 15rem;
+nav.show {
     display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    box-shadow: inset 0 -1px #222;
+}
+
+nav.show>ul {
+    display: flex;
+    gap: 5rem;
     justify-content: space-around;
 }
 
-nav>ul>a {
+nav.show>ul>li {
+    list-style: none;
+}
+
+div.noActive {
+    cursor: pointer;
+}
+
+nav.show>ul>li>a,
+nav.show>a {
     text-decoration: none;
-    color: #1fdf64;
-    font-weight: bold;
+    color: white;
+    position: relative;
+}
+
+nav.show>ul>li>a.noActive::after,
+nav.show>a::after,
+nav.show>ul>li>a.active::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 1px;
+    background-color: #1fdf64;
+    filter: drop-shadow(0px 0px 5px #1fdf64);
+    left: 0;
+    bottom: 0;
+    transition: width 0.3s ease;
+}
+
+nav.show>ul>li>a.active::after {
+    width: 100%;
+}
+
+
+nav>ul>li>a.noActive:hover::after,
+nav.show>a.noActive:hover::after {
+    width: 100%;
 }
 
 .menu-icon {
     display: none;
 }
+
 
 /* === CSS Modal === */
 
@@ -71,13 +126,15 @@ div.btnModalClose {
 .modalComp {
     background: #000;
     color: white;
-    padding: 20px;
+    padding: 1rem;
     border: solid 2px #333;
     border-radius: 8px;
     max-width: 80%;
     max-height: 80%;
     overflow: auto;
     display: grid;
+    grid-template-columns: repeat(1, minmax(120px, 1fr));
+
 }
 
 .modal-close {
@@ -101,30 +158,20 @@ div.btnModalClose {
 
     header {
         position: relative;
-        text-align: center;
     }
 
     div.headerLogoName>a>h1 {
         display: none;
     }
 
-    nav {
+    div.headerLogoName>a>img {
         display: none;
     }
 
-    nav.show {
-        display: flex;
-        width: 5rem;
-        /* Mostrar o menu quando o botão é clicado */
-    }
-
-    nav ul {
-        flex-direction: column;
-        width: 0;
-    }
-
-    nav ul li {
-        margin: 0.5rem 0;
+    div.scroll {
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-padding: 0 10px;
     }
 
     .menu-icon {
@@ -141,25 +188,20 @@ div.btnModalClose {
 
 section.homeSection {
     background-color: #111;
-    position: absolute;
     width: 100%;
     height: 100%;
-    display: grid;
 }
 
-section.homeSection>div.wave>img {
+div.wave>img {
     position: absolute;
     z-index: 0;
 }
 
-section.homeSection>div.homeDescript {
-    position: relative;
-    z-index: 990;
-}
-
 div.alignCont {
+    position: absolute;
     display: grid;
     place-items: center;
+    width: 100%;
 }
 
 div.subNav {
@@ -193,10 +235,10 @@ div.lupa {
 }
 
 div.lupaSearch>div.lupa>img {
-    width: 20px;
+    width: 60px;
     padding-inline: 20px;
     position: absolute;
-    filter: invert(1);
+    z-index: 10000;
 }
 
 div.addBtn>button {
@@ -226,7 +268,8 @@ div.boxTools {
     align-items: center;
     justify-content: space-evenly;
     padding: 1rem;
-    max-height: 20rem;
+    gap: 10px;
+    max-height: 100vh;
     /* Defina a altura máxima que você deseja para o scroll */
     overflow-y: auto;
 }
@@ -240,6 +283,7 @@ div.tool {
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.5s;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
 }
 
 div.txtAlignTool {
@@ -247,15 +291,19 @@ div.txtAlignTool {
     display: grid;
 }
 
-div.toolTittle>h2 {
+div.toolTitle>h2 {
     font-size: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 18rem;
 }
 
-div.toolTittle>p>span {
+div.toolTitle>p>span {
     color: white;
 }
 
-div.toolTittle>p {
+div.toolTitle>p {
     color: rgba(128, 128, 128, 0.658);
     font-size: 12px;
 }
@@ -264,7 +312,7 @@ div.dateStatusTool>p {
     font-size: 12px;
 }
 
-div.toolTittle,
+div.toolTitle,
 div.dateStatusTool {
     padding: 1rem;
 }
@@ -330,7 +378,6 @@ select.selectHome {
 }
 
 .singleRequest>p {
-    font-weight: bold;
     padding: 1rem;
 }
 
@@ -406,6 +453,32 @@ div.loading-overlay {
     height: 100%;
 }
 
+div.page {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: white;
+    padding: 1rem;
+    position: relative;
+    z-index: 1000;
+}
+
+div.page>button {
+    cursor: pointer;
+    background-color: #1fdf64;
+    font-weight: bold;
+    border: none;
+    border-radius: 50px 50px;
+    padding: 12px;
+    inline-size: 100px;
+    transition: all 0.5s ease-in-out;
+}
+
+div.page>button:hover{
+    background-color: #0e9a41;
+    transform: scale(1.1);
+}
+
 @media (max-width: 620px) {
     div.searchRequest {
         display: grid;
@@ -418,16 +491,28 @@ div.loading-overlay {
 }
 
 @media (max-width: 420px) {
-
-    div.toolTittle>h2 {
-        font-size: 18px;
+    .boxTools {
+        height: 60vh;
     }
 
-    div.toolTittle>p {
+    .singleRequest>p {
+        padding: 1px;
+    }
+
+    div.toolTitle>h2 {
+        font-size: 15px;
+        padding: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 10rem;
+    }
+
+    div.toolTitle>p {
         font-size: 10px;
     }
 
-    div.toolTittle,
+    div.toolTitle,
     div.dateStatusTool {
         padding: 0;
     }
@@ -438,7 +523,6 @@ div.loading-overlay {
 
     div.tool {
         width: 10rem;
-        height: 8rem;
         text-align: center;
     }
 
@@ -452,10 +536,6 @@ div.loading-overlay {
     }
 
     div.subNav {
-        padding: 0;
-    }
-
-    div.boxTools {
         padding: 0;
     }
 }

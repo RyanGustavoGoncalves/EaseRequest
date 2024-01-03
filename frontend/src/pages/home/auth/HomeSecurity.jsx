@@ -51,6 +51,8 @@ const HomeSecurity = () => {
     const [filterCriteria, setFilterCriteria] = useState('');
     const [selectedStatus, setSelectedStatus] = useState([]);
 
+    const [currentPage, setCurrentPage] = useState(0);
+
     // Function to toggle the expansion of the description field
     const focusDescription = () => {
         setExpanded(!isExpanded);
@@ -67,19 +69,40 @@ const HomeSecurity = () => {
     useEffect(() => {
         const intervalId = setInterval(() => {
             console.log(token);
-            fetchRequests();
+            fetchRequests(currentPage);
         }, 5000);
 
         // Clear the interval when the component is unmounted
         return () => clearInterval(intervalId);
 
-    }, []);
+    }, [currentPage, token]);
+
+
+
+    const handleNextPage = () => {
+        setCurrentPage(prevPage => {
+            // Chama a função fetchRequests imediatamente após a mudança da página
+            fetchRequests(prevPage + 1);
+
+            return prevPage + 1;
+        });
+    };
+
+    const handlePreviousPage = () => {
+        setCurrentPage(prevPage => {
+            // Chama a função fetchRequests imediatamente após a mudança da página
+            fetchRequests(prevPage - 1);
+
+            return prevPage - 1;
+        });
+    };
 
     // Fetch requests from the server
-    const fetchRequests = async () => {
+    const fetchRequests = async (currentPage, size = 15) => {
+
         try {
             setLoading(true);
-            const response = await fetch("http://localhost:8080/request", {
+            const response = await fetch(`http://localhost:8080/request?page=${currentPage}&size=${size}`, {
                 headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json",
@@ -452,43 +475,50 @@ const HomeSecurity = () => {
                         </div>
                     </div>
                 </div>
-                <div className="homeDescript">
-                    <div className="boxTools">
-                        <div className="tool" style={{ display: "grid", placeItems: "center" }} onClick={openModal}>
-                            <h2>Create new Request</h2>
-                            <img src={mais} alt="Add" width={40} />
-                        </div>
-                        {filteredAndSortedToolBoxes.map((box, index) => (
-                            // Verifica se o item atende aos critérios de filtro antes de renderizá-lo
-                            (filterCriteria === '' || box.priority === filterCriteria) && (
-                                <div key={index} className="tool" onClick={() => openModalConfirm(box.id)}>
-                                    {loading ? (
-                                        <div className="loading-overlay">Carregando...</div>
-                                    ) : (
-                                        <>
-                                            <div className="txtAlignTool">
-                                                <div className="toolTittle">
-                                                    <h2>{box.problem}</h2>
-                                                    <p> {box.id}</p>
-                                                    <p>{calculateTimeDifference(box.creationRequest)}</p>
-                                                </div>
-                                                <div className="dateStatusTool">
-                                                    <p className={box.status}>
-                                                        <p>{box.priority}</p>
-                                                        <p>User ID: {box.user ? box.user.idUsers : 'N/A'}</p>
-                                                        <p className={`status ${getStatusClass(box.status)}`}>
-                                                            &#x25CF;
-                                                            <span>{box.status}</span>
-                                                        </p>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
-                            )
-                        ))}
+                <div className="boxTools">
+                    <div className="tool" style={{ display: "grid", placeItems: "center" }} onClick={openModal}>
+                        <h2>Create new Request</h2>
+                        <img src={mais} alt="Add" width={40} />
                     </div>
+                    {filteredAndSortedToolBoxes.map((box, index) => (
+                        // Verifica se o item atende aos critérios de filtro antes de renderizá-lo
+                        (filterCriteria === '' || box.priority === filterCriteria) && (
+                            <div key={index} className="tool" onClick={() => openModalConfirm(box.id)}>
+                                {loading ? (
+                                    <div className="loading-overlay">Carregando...</div>
+                                ) : (
+                                    <>
+                                        <div className="txtAlignTool">
+                                            <div className="toolTitle">
+                                                <h2>{box.problem}</h2>
+                                                <p> {box.id}</p>
+                                                <p>{calculateTimeDifference(box.creationRequest)}</p>
+                                            </div>
+                                            <div className="dateStatusTool">
+                                                <p className={box.status}>
+                                                    <p>{box.priority}</p>
+                                                    <p>User ID: {box.user ? box.user.idUsers : 'N/A'}</p>
+                                                    <p className={`status ${getStatusClass(box.status)}`}>
+                                                        &#x25CF;
+                                                        <span>{box.status}</span>
+                                                    </p>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        )
+                    ))}
+                </div>
+                <div className="page">
+                    <button onClick={handlePreviousPage} disabled={currentPage === 0}>
+                        Anterior
+                    </button>
+                    <span>Página {currentPage + 1}</span>
+                    <button onClick={handleNextPage}>
+                        Próxima
+                    </button>
                 </div>
             </div>
 

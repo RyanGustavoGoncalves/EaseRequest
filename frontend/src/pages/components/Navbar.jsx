@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import Logo from '../welcomePage/assets/iconList.png'
+import Logo from '../welcomePage/assets/iconList.png';
+import user from './assets/user.png';
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
     const token = localStorage.getItem('token');
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [userName, setUserName] = useState('');
-    
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
+    const [userData, setUserData] = useState({});
+
+    const isActive = (path) => {
+        return location.pathname === path;
     };
 
     useEffect(() => {
@@ -25,8 +25,8 @@ const Navbar = () => {
                 if (response.status === 200) {
                     const responseData = await response.json();
 
-                    if (responseData && responseData.username) {
-                        setUserName(responseData.username);
+                    if (responseData && responseData) {
+                        setUserData(responseData);
                     } else {
                         console.error("A resposta não contém um nome de usuário válido:", responseData);
                     }
@@ -44,30 +44,42 @@ const Navbar = () => {
 
     return (
         <header>
-            <div className="headerLogoName">
-                <Link to={"/"}>
-                    <img src={Logo} width={30} />
-                    <h1>{userName}</h1>
-                </Link>
-            </div>
-            <div className="responsiveMenu">
-                <div className="menu-icon" onClick={toggleMenu}>
-                    &#9776;
+            <nav className="navSup">
+                <div className="headerLogoName">
+                    <Link to={"/"}>
+                        <img src={Logo} width={30} />
+                    </Link>
+                    <div className="userPerfil">
+                        <img src={user} alt="userImage" width={30} style={{ filter: "invert(1)" }} />
+                        <h1>{userData.username}</h1>
+                    </div>
                 </div>
-                <nav className={isMenuOpen ? "show" : ""}>
-                    <ul>
-                        <Link to={"/Welcome"}>
-                            Overview
-                        </Link>
-                        <Link to={"/Welcome"}>
-                            Welcome
-                        </Link>
-                        <Link to={"/Welcome"}>
-                            Welcome
-                        </Link>
-                    </ul>
-                </nav>
-            </div>
+                <div className="scroll">
+                    <nav className={"show"}>
+                        <ul>
+                            <li key="overview">
+                                <Link to={"/"} className={isActive("/") ? "active" : "noActive"}>
+                                    Overview
+                                </Link>
+                            </li>
+                            <li key="welcome">
+                                <Link to={"/Welcome"} className={isActive("/Welcome") ? "active" : "noActive"}>
+                                    Welcome
+                                </Link>
+                            </li>
+
+                        </ul>
+                        <ul>
+                            <li key="overview">
+                                <Link to={"/settings"} className={isActive("/settings") ? "active" : "noActive"}>
+                                    settings
+                                </Link>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </nav>
+
         </header>
     );
 }

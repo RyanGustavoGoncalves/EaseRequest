@@ -120,7 +120,7 @@ const Home = () => {
             }
         } catch (error) {
             console.log("Erro ao buscar as solicitações:", error);
-            alert("Erro ao buscar as solicitações. Por favor, tente novamente mais tarde.");
+            // alert("Erro ao buscar as solicitações. Por favor, tente novamente mais tarde.");
         } finally {
             setLoading(false);
         }
@@ -256,7 +256,7 @@ const Home = () => {
             }
         } catch (error) {
             console.log("Erro ao enviar a solicitação:", error);
-            alert("Erro ao buscar as solicitações. Por favor, tente novamente mais tarde.");
+            // alert("Erro ao buscar as solicitações. Por favor, tente novamente mais tarde.");
         }
     };
 
@@ -286,7 +286,7 @@ const Home = () => {
         } catch (error) {
             // Lidar com erros de rede ou outros erros
             console.error('Erro ao fazer a solicitação de atualização:', error);
-            alert("Erro ao buscar as solicitações. Por favor, tente novamente mais tarde.");
+            // alert("Erro ao buscar as solicitações. Por favor, tente novamente mais tarde.");
         }
     };
 
@@ -351,7 +351,7 @@ const Home = () => {
             }
         } catch (error) {
             console.log("Erro ao buscar a solicitação:", error);
-            alert("Erro ao buscar as solicitações. Por favor, tente novamente mais tarde.");
+            // alert("Erro ao buscar as solicitações. Por favor, tente novamente mais tarde.");
         }
     };
 
@@ -410,7 +410,7 @@ const Home = () => {
                             ) : (
                                 <>
                                     <div className="txtAlignTool">
-                                        <div className="toolTittle">
+                                        <div className="toolTitle">
                                             <h2>{box.problem}</h2>
                                             <p> {box.id}</p>
                                             <p>{calculateTimeDifference(box.creationRequest)}</p>

@@ -53,7 +53,7 @@ const Login = ({ toggleForm, login }) => {
                 const token = responseJson.token;
                 localStorage.setItem('token', token);
                 alert("Login bem sucedido!");
-                navigate('/Home');
+                navigate('/');
 
             } else if (response.status === 401) {
                 const error = await response.json(Error);
