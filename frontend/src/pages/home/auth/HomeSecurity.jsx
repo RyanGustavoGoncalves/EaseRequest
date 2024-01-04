@@ -1,12 +1,12 @@
 // Imports of other components and libraries
 
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import wave from '../assets/wave.svg';
 import filtro from '../assets/filtro.png';
 import mais from '../assets/iconMais.png';
 import lupa from '../assets/lupa.png';
 import Modal from '../../components/Modal';
-import InputField from "../components/InputField";
+import InputField from '../components/inputField/InputField'
 import moment from "moment";
 import "moment/locale/pt-br";
 

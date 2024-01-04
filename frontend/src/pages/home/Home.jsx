@@ -1,11 +1,10 @@
-// Imports of other components and libraries
-
-import React, { useState, useEffect } from "react";
+// Imports of other components and libraries";
+import { useState, useEffect } from "react";
 import wave from './assets/wave.svg';
 import mais from './assets/iconMais.png';
 import lupa from './assets/lupa.png';
 import Modal from '../components/Modal';
-import InputField from "./components/InputField";
+import InputField from './components/inputField/InputField';
 import moment from "moment";
 import "moment/locale/pt-br";
 
@@ -261,7 +260,6 @@ const Home = () => {
 
     // Function to update a request
     const updateRequest = async (editedRequest) => {
-        console.log(editedRequest);
         try {
             const response = await fetch(`http://localhost:8080/request/${editedRequest.id}`, {
                 method: 'PUT',
@@ -291,7 +289,6 @@ const Home = () => {
 
     // Function to delete a request
     const deleteRequest = async (editedRequest) => {
-        console.log(editedRequest);
         try {
             const response = await fetch(`http://localhost:8080/request/${editedRequest.id}`, {
                 method: 'DELETE',
