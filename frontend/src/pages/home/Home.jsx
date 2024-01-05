@@ -5,8 +5,15 @@ import mais from './assets/iconMais.png';
 import lupa from './assets/lupa.png';
 import Modal from '../components/Modal';
 import InputField from './components/inputField/InputField';
-import moment from "moment";
-import "moment/locale/pt-br";
+import { getStatusClass } from "./components/utils/getStatusClass/getStatusClass";
+import { fetchRequestById } from "./components/utils/fetchRequestById/fetchRequestById";
+import { calculateTimeDifference } from "./components/utils/calculateTimeDifference/CalculateTimeDifference";
+import { deleteRequest } from "./components/utils/deleteRequest/DeleteRequest";
+import { updateRequest } from "./components/utils/updateRequest/UpdateRequest";
+import { CreateNewRequest } from "./components/utils/createNewRequest/CreateNewRequest";
+import { handleInputBlur, handleInputFocus } from "./components/utils/handleInput/HandleInput";
+import { closeModal, closeModalConfirm, closeModalDelete, closeModalUpdate, openModal, openModalConfirm, openModalDelete, openModalUpdate } from "./components/utils/ModalFunctions/ModalFunctions";
+import { fetchRequests } from "./components/utils/fetchRequests/FetchRequest";
 
 const Home = () => {
     // State to store the user's token
@@ -52,13 +59,13 @@ const Home = () => {
     // Side effects to load requests and update status
     useEffect(() => {
         if (!requestsLoaded) {
-            fetchRequests();
+            fetch();
         }
     }, [requestsLoaded]);
 
     useEffect(() => {
         const intervalId = setInterval(() => {
-            fetchRequests();
+            fetch();
         }, 5000); // Consulta a cada 5 segundos (ajuste conforme necessário)
 
         return () => clearInterval(intervalId); // Limpa o intervalo quando o componente é desmontado
@@ -74,102 +81,6 @@ const Home = () => {
 
     }, []);
 
-    // Function to calculate time difference
-    const calculateTimeDifference = (launchDate) => {
-        const currentDate = moment();
-        const launchMoment = moment(launchDate);
-        const duration = moment.duration(currentDate.diff(launchMoment));
-
-        // Exibindo a diferença em dias, horas, minutos, etc.
-        const days = duration.days();
-        const hours = duration.hours();
-        const minutes = duration.minutes();
-
-        return `${days} days, ${hours} hour, ${minutes} minutes ago`;
-    };
-
-    // Function to fetch requests from the server
-    const fetchRequests = async () => {
-        try {
-            setLoading(true);
-            const response = await fetch("http://localhost:8080/request/user", {
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-
-            if (response.status === 200) {
-                const responseData = await response.json();
-
-                if (Array.isArray(responseData)) {
-                    // Atualiza as solicitações e atribui a cor a cada uma
-                    setToolBoxes(responseData.map(request => ({
-                        ...request,
-                        colorClass: getStatusClass(request.status),
-                    })));
-                    setRequestsLoaded(true);
-                } else {
-                    console.error("A resposta não contém uma matriz válida:", responseData);
-                }
-            } else {
-                console.log("Ocorreu um erro inesperado ao buscar as solicitações: " + response.status);
-            }
-        } catch (error) {
-            console.log("Erro ao buscar as solicitações:", error);
-            // alert("Erro ao buscar as solicitações. Por favor, tente novamente mais tarde.");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // Functions related to modals
-    const openModal = () => {
-        document.body.style.overflow = "hidden";
-        setModalIsOpen(true);
-    };
-
-    const closeModal = () => {
-        document.body.style.overflow = "auto";
-        setModalIsOpen(false);
-    };
-
-    const openModalConfirm = (id) => {
-        document.body.style.overflow = "hidden";
-        fetchRequestById(id)
-        setModalConfirmIsOpen(true);
-    };
-
-    const closeModalConfirm = () => {
-        document.body.style.overflow = "auto";
-        setModalConfirmIsOpen(false);
-    };
-
-    const openModalUpdate = (id) => {
-        document.body.style.overflow = "hidden";
-        fetchRequestById(id);
-        setEditedRequest({ ...singleRequest });
-        setModalUpdateIsOpen(true);
-    };
-
-    const closeModalUpdate = () => {
-        document.body.style.overflow = "auto";
-        setModalUpdateIsOpen(false);
-    };
-
-    const openModalDelete = (id) => {
-        document.body.style.overflow = "hidden";
-        fetchRequestById(id)
-        setModalDeleteIsOpen(true);
-    };
-
-    const closeModalDelete = () => {
-        document.body.style.overflow = "auto";
-        setModalDeleteIsOpen(false);
-        closeModalConfirm(false);
-    };
-
     // Function to add a new request
     const handleAddBox = () => {
         setToolBoxes([...toolBoxes, formData]);
@@ -181,25 +92,7 @@ const Home = () => {
             status: "PENDING",
             creationRequest: "",
         });
-        closeModal();
-    };
-
-    // Functions for modal input animation
-    const handleInputFocus = (labelId) => {
-        const label = document.getElementById(labelId);
-        label.classList.add('active');
-    };
-
-    const handleInputBlur = (labelId) => {
-        const label = document.getElementById(labelId);
-        const input = document.getElementById(labelId.replace('Label', ''));
-
-        if (input && input.value.trim() !== '') {
-            label.classList.add('active');
-            return;
-        }
-
-        label.classList.remove('active');
+        closeModal(modalIsOpen);
     };
 
     // Function to save a new request
@@ -210,140 +103,39 @@ const Home = () => {
             problem: document.getElementById("problem").value,
             description: document.getElementById("description").value,
         });
-        newRequest();
+        createNewRequest();
         handleAddBox();
     };
+
 
     const handleSearch = (e) => {
         setSearchTerm(e.target.value);
     };
 
-    //Request para salvar um nova requisição
-    const newRequest = async () => {
-        const data = {
-            problem: formData.problem,
-            description: formData.description,
-            priority: formData.priority,
-            status: formData.status
-        };
+    const fetch = async () => {
+        await fetchRequests(setLoading, token, setToolBoxes, getStatusClass, setRequestsLoaded)
+    }
 
-        try {
-            const response = await fetch("http://localhost:8080/request", {
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    'Authorization': `Bearer ${token}`,
-                },
-                method: "POST",
-                body: JSON.stringify(data),
-            });
+    const createNewRequest = async () => {
+        await CreateNewRequest(formData, token);
+        closeModal(setModalIsOpen);
+    }
 
-            if (response.status === 201) {
-                alert("Cadastro bem-sucedido!");
-            } else if (response.status === 400) {
-                const errorData = await response.json();
-                const errorArray = [];
+    const handleUpdateAction = async () => {
+        await updateRequest(token, editedRequest, setSingleRequest);
+        closeModalUpdate(setModalUpdateIsOpen);
+    }
 
-                for (const fieldName in errorData) {
-                    const errorMessage = errorData[fieldName];
-                    errorArray.push({ fieldName, errorMessage });
-                }
-
-            } else {
-                console.log("Ocorreu um erro inesperado: " + response.status);
-            }
-        } catch (error) {
-            console.log("Erro ao enviar a solicitação:", error);
-            // alert("Erro ao buscar as solicitações. Por favor, tente novamente mais tarde.");
-        }
+    const handleDeleteAction = async () => {
+        await deleteRequest(token, editedRequest);
+        closeModalConfirm(setModalConfirmIsOpen);
+        closeModalUpdate(setModalUpdateIsOpen);
+        closeModalDelete(setModalDeleteIsOpen);
     };
 
-    // Function to update a request
-    const updateRequest = async (editedRequest) => {
-        try {
-            const response = await fetch(`http://localhost:8080/request/${editedRequest.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify(editedRequest),
-            });
+    const handleSomeAction = async (id) => {
+        await fetchRequestById(id, token, setSingleRequest);
 
-            if (response.ok) {
-                // Atualização bem-sucedida
-                console.log('Solicitação atualizada com sucesso!');
-                // Atualize o estado de singleRequest para refletir as alterações
-                setSingleRequest({ ...editedRequest });
-                closeModalUpdate(); // Feche o modal após a atualização
-            } else {
-                // Lidar com erros de resposta
-                console.error('Erro ao atualizar a solicitação:', response.status);
-            }
-        } catch (error) {
-            // Lidar com erros de rede ou outros erros
-            console.error('Erro ao fazer a solicitação de atualização:', error);
-            // alert("Erro ao buscar as solicitações. Por favor, tente novamente mais tarde.");
-        }
-    };
-
-    // Function to delete a request
-    const deleteRequest = async (editedRequest) => {
-        try {
-            const response = await fetch(`http://localhost:8080/request/${editedRequest.id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-
-            if (response.ok) {
-
-                console.log('Request deletada com sucesso!');
-                closeModalUpdate();
-            } else {
-
-                console.error('Erro ao deletar a request:', response.status);
-            }
-        } catch (error) {
-            // Lidar com erros de rede ou outros erros
-            console.error('Erro ao fazer a solicitação delete:', error);
-        } finally {
-            closeModalDelete();
-        }
-    };
-
-    // Function to fetch a request by ID
-    const fetchRequestById = async (id) => {
-        try {
-            const response = await fetch(`http://localhost:8080/request/${id}`, {
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-
-            if (response.status === 200) {
-                const responseData = await response.json();
-
-                console.log("Resposta da API:", responseData);
-
-                if (responseData && typeof responseData === 'object') {
-                    setSingleRequest(responseData);
-                } else {
-                    console.error("A resposta não contém um objeto válido:", responseData);
-                }
-            } else if (response.status === 404) {
-                console.log("Solicitação não encontrada");
-            } else {
-                console.log("Ocorreu um erro inesperado: " + response.status);
-            }
-        } catch (error) {
-            console.log("Erro ao buscar a solicitação:", error);
-            // alert("Erro ao buscar as solicitações. Por favor, tente novamente mais tarde.");
-        }
     };
 
     // Function to filter requests based on the search term
@@ -352,20 +144,6 @@ const Home = () => {
             box.problem.toLowerCase().includes(searchTerm.toLowerCase())
         )
         : [];
-
-    // Function to get the status class based on the request status
-    const getStatusClass = (status) => {
-        let colorClass = "status-red"; // Assume vermelho como padrão
-
-        // Verifica o status da solicitação
-        if (status === "PROCESSING") {
-            colorClass = "status-yellow";
-        } else if (status === "FINISH") {
-            colorClass = "status-green";
-        }
-
-        return colorClass;
-    };
 
     return (
         <section className="homeSection">
@@ -385,17 +163,17 @@ const Home = () => {
                             title="Search"
                         />
                         <div className="addBtn">
-                            <button onClick={openModal} title="Add">Add</button>
+                            <button onClick={() => openModal(setModalIsOpen)} title="Add">Add</button>
                         </div>
                     </div>
                 </div>
                 <div className="boxTools">
-                    <div className="tool" style={{ display: "grid", placeItems: "center" }} onClick={openModal}>
+                    <div className="tool" style={{ display: "grid", placeItems: "center" }} onClick={() => openModal(setModalIsOpen)}>
                         <h2>Create new Request</h2>
                         <img src={mais} alt="Add" width={40} />
                     </div>
                     {filteredToolBoxes.map((box, index) => (
-                        <div key={index} className="tool" onClick={() => openModalConfirm(box.id)}>
+                        <div key={index} className="tool" onClick={() => openModalConfirm(box.id, handleSomeAction, setModalConfirmIsOpen)}>
                             {loading ? (
                                 <div className="loading-overlay">Carregando...</div>
                             ) : (
@@ -420,7 +198,7 @@ const Home = () => {
                 </div>
             </div>
 
-            <Modal isOpen={modalIsOpen} onClose={closeModal}>
+            <Modal isOpen={modalIsOpen} onClose={() => closeModal(setModalIsOpen)}>
                 <div className="toolConfig">
                     <InputField
                         id="problem"
@@ -446,27 +224,30 @@ const Home = () => {
                 </div>
             </Modal>
 
-            <Modal isOpen={modalConfirmIsOpen} onClose={closeModalConfirm}>
+            <Modal isOpen={modalConfirmIsOpen} onClose={() => closeModalConfirm(setModalConfirmIsOpen)}>
                 <div className="singleRequest">
-                    <p>
+                    <div>
                         <span>ID:</span> {singleRequest.id}
-                    </p>
-                    <p>
+                    </div>
+
+                    <div>
                         <span>Problem:</span> {singleRequest.problem}
-                    </p>
-                    <p style={{ cursor: "pointer" }} onClick={focusDescription}>
+                    </div>
+
+                    <div style={{ cursor: "pointer" }} onClick={focusDescription}>
                         <span>Description:</span> {isExpanded ? <div className="focusDesc">{singleRequest.description}</div> : <>[EXTEND]</>}
-                    </p>
-                    <p>
+                    </div>
+
+                    <div>
                         <span>Date request:</span> {singleRequest.creationRequest}
-                    </p>
+                    </div>
                 </div>
                 <div className="btnSave">
-                    <button onClick={() => openModalUpdate(singleRequest.id)}>Update!</button>
+                    <button onClick={() => openModalUpdate(singleRequest.id, handleSomeAction, setEditedRequest, singleRequest, editedRequest, setModalUpdateIsOpen)}>Update!</button>
                 </div>
             </Modal>
 
-            <Modal isOpen={modalUpdateIsOpen} onClose={closeModalUpdate}>
+            <Modal isOpen={modalUpdateIsOpen} onClose={() => closeModalUpdate(setModalUpdateIsOpen)}>
                 <div className="singleRequest">
                     <p>
                         <span>ID:</span> {singleRequest.id}
@@ -492,12 +273,12 @@ const Home = () => {
                 />
 
                 <div className="btnSave">
-                    <button className="deleteBtn" onClick={openModalDelete}>Delete!</button>
-                    <button onClick={() => updateRequest(editedRequest, singleRequest.id)}>Update!</button>
+                    <button className="deleteBtn" onClick={() => openModalDelete(singleRequest.id, handleSomeAction, setModalDeleteIsOpen)}>Delete!</button>
+                    <button onClick={() => handleUpdateAction(editedRequest, singleRequest.id)}>Update!</button>
                 </div>
             </Modal>
 
-            <Modal isOpen={modalDeleteIsOpen} onClose={closeModalDelete}>
+            <Modal isOpen={modalDeleteIsOpen} onClose={() => closeModalDelete(setModalDeleteIsOpen)}>
 
                 <div className="singleRequest">
                     <p>
@@ -507,7 +288,7 @@ const Home = () => {
 
 
                 <div className="btnSave">
-                    <button className="deleteBtn" onClick={() => deleteRequest(editedRequest)}>Delete!</button>
+                    <button className="deleteBtn" onClick={() => handleDeleteAction(editedRequest)}>Delete!</button>
                 </div>
             </Modal>
 

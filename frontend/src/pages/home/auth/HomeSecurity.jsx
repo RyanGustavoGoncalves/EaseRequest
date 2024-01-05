@@ -1,14 +1,21 @@
 // Imports of other components and libraries
 
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import wave from '../assets/wave.svg';
 import filtro from '../assets/filtro.png';
 import mais from '../assets/iconMais.png';
 import lupa from '../assets/lupa.png';
 import Modal from '../../components/Modal';
 import InputField from '../components/inputField/InputField'
-import moment from "moment";
-import "moment/locale/pt-br";
+import { getStatusClass } from "../components/utils/getStatusClass/getStatusClass";
+import { fetchRequestById } from "../components/utils/fetchRequestById/fetchRequestById";
+import { calculateTimeDifference } from "../components/utils/calculateTimeDifference/CalculateTimeDifference";
+import { deleteRequest } from "../components/utils/deleteRequest/DeleteRequest";
+import { updateRequest } from "../components/utils/updateRequest/UpdateRequest";
+import { CreateNewRequest } from "../components/utils/createNewRequest/CreateNewRequest";
+import { handleInputBlur, handleInputFocus } from "../components/utils/handleInput/HandleInput";
+import { closeModal, closeModalConfirm, closeModalDelete, closeModalFilter, closeModalUpdate, openModal, openModalConfirm, openModalDelete, openModalFilter, openModalUpdate } from "../components/utils/ModalFunctions/ModalFunctions";
+import { fetchRequestsPage } from "../components/utils/fetchRequestsPagination/FetchRequestPage";
 
 const HomeSecurity = () => {
     // Retrieve token from local storage
@@ -63,7 +70,7 @@ const HomeSecurity = () => {
     // Fetch requests when the component mounts and requests are not loaded
     useEffect(() => {
         if (!requestsLoaded) {
-            fetchRequests();
+            fetch();
         }
     }, [requestsLoaded]);
 
@@ -71,7 +78,7 @@ const HomeSecurity = () => {
     useEffect(() => {
         const intervalId = setInterval(() => {
             console.log(token);
-            fetchRequests(currentPage);
+            fetch(currentPage);
         }, 5000);
 
         // Clear the interval when the component is unmounted
@@ -79,12 +86,10 @@ const HomeSecurity = () => {
 
     }, [currentPage, token]);
 
-
-
     const handleNextPage = () => {
         setCurrentPage(prevPage => {
             // Chama a função fetchRequests imediatamente após a mudança da página
-            fetchRequests(prevPage + 1);
+            fetch(prevPage + 1);
 
             return prevPage + 1;
         });
@@ -93,106 +98,10 @@ const HomeSecurity = () => {
     const handlePreviousPage = () => {
         setCurrentPage(prevPage => {
             // Chama a função fetchRequests imediatamente após a mudança da página
-            fetchRequests(prevPage - 1);
+            fetch(prevPage - 1);
 
             return prevPage - 1;
         });
-    };
-
-    // Fetch requests from the server
-    const fetchRequests = async (currentPage, size = 15) => {
-
-        try {
-            setLoading(true);
-            const response = await fetch(`http://localhost:8080/request?page=${currentPage}&size=${size}`, {
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-
-            if (response.status === 200) {
-                const responseData = await response.json();
-
-                if (Array.isArray(responseData.content)) {
-                    // Map the requests and include user data
-                    const updatedToolBoxes = responseData.content.map(box => {
-                        return {
-                            ...box,
-                            user: box.user,
-                        };
-                    });
-
-                    setToolBoxes(updatedToolBoxes);
-                    setRequestsLoaded(true);
-                } else {
-                    console.error("Response does not contain a valid array:", responseData);
-                }
-            }
-        } catch (error) {
-            console.log("Error fetching requests:", error);
-            // alert("Error fetching requests. Please try again later.");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // Modal Functions
-    const openModal = () => {
-        document.body.style.overflow = "hidden";
-        setModalIsOpen(true);
-    };
-
-    const closeModal = () => {
-        document.body.style.overflow = "auto";
-        setModalIsOpen(false);
-    };
-
-    const openModalConfirm = (id) => {
-        document.body.style.overflow = "hidden";
-        fetchRequestById(id)
-        setModalConfirmIsOpen(true);
-    };
-
-    const closeModalConfirm = () => {
-        document.body.style.overflow = "auto";
-        setModalConfirmIsOpen(false);
-    };
-
-    const openModalUpdate = (id) => {
-        document.body.style.overflow = "hidden";
-        fetchRequestById(id);
-        setEditedRequest({ ...singleRequest });
-        console.log(editedRequest);
-        setModalUpdateIsOpen(true);
-    };
-
-    const closeModalUpdate = () => {
-        document.body.style.overflow = "auto";
-        setModalUpdateIsOpen(false);
-    };
-
-    const openModalDelete = (id) => {
-        document.body.style.overflow = "hidden";
-        fetchRequestById(id)
-        setModalDeleteIsOpen(true);
-    };
-
-    const closeModalDelete = () => {
-        document.body.style.overflow = "auto";
-        setModalDeleteIsOpen(false);
-        closeModalConfirm(false);
-    };
-
-    const openModalFilter = () => {
-        document.body.style.overflow = "hidden";
-        setModalFilterIsOpen(true);
-    };
-
-    const closeModalFilter = () => {
-        document.body.style.overflow = "auto";
-        setModalFilterIsOpen(false);
     };
 
     // Function to add a new request
@@ -214,25 +123,7 @@ const HomeSecurity = () => {
                 role: "",
             }]
         });
-        closeModal();
-    };
-
-    // Function for input focus and blur animation in the modal
-    const handleInputFocus = (labelId) => {
-        const label = document.getElementById(labelId);
-        label.classList.add('active');
-    };
-
-    const handleInputBlur = (labelId) => {
-        const label = document.getElementById(labelId);
-        const input = document.getElementById(labelId.replace('Label', ''));
-
-        if (input && input.value.trim() !== '') {
-            label.classList.add('active');
-            return;
-        }
-
-        label.classList.remove('active');
+        closeModal(modalIsOpen);
     };
 
     // Function to save the form data and create a new request
@@ -244,7 +135,7 @@ const HomeSecurity = () => {
             priority: document.getElementById("priority").value,
             status: document.getElementById("status").value
         });
-        newRequest();
+        createNewRequest();
         handleAddBox();
     };
 
@@ -253,144 +144,29 @@ const HomeSecurity = () => {
         setSearchTerm(e.target.value);
     };
 
-    // Function to create a new request
-    const newRequest = async () => {
-        const data = {
-            problem: formData.problem,
-            description: formData.description,
-            priority: formData.priority,
-            status: formData.status
-        };
+    const fetch = async () => {
+        await fetchRequestsPage(currentPage, setLoading, token, setToolBoxes, getStatusClass, setRequestsLoaded)
+    }
 
-        try {
-            const response = await fetch("http://localhost:8080/request", {
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    'Authorization': `Bearer ${token}`,
-                },
-                method: "POST",
-                body: JSON.stringify(data),
-            });
+    const createNewRequest = async () => {
+        await CreateNewRequest(formData, token);
+        closeModal(setModalIsOpen);
+    }
 
-            if (response.status === 201) {
-                alert("Successful registration!");
-            } else if (response.status === 400) {
-                const errorData = await response.json();
-                const errorArray = [];
+    const handleUpdateAction = async () => {
+        await updateRequest(token, editedRequest, setSingleRequest);
+        closeModalUpdate(setModalUpdateIsOpen);
+    }
 
-                for (const fieldName in errorData) {
-                    const errorMessage = errorData[fieldName];
-                    errorArray.push({ fieldName, errorMessage });
-                }
-
-            } else {
-                console.log("An unexpected error occurred: " + response.status);
-            }
-        } catch (error) {
-            console.log("Error sending the request:", error);
-            // alert("Error fetching requests. Please try again later.");
-        }
+    const handleDeleteAction = async () => {
+        await deleteRequest(token, editedRequest);
+        closeModalConfirm(setModalConfirmIsOpen);
+        closeModalUpdate(setModalUpdateIsOpen); 
+        closeModalDelete(setModalDeleteIsOpen);
     };
 
-    // Function to update a request
-    const updateRequest = async (editedRequest) => {
-        console.log(editedRequest);
-        try {
-            const response = await fetch(`http://localhost:8080/request/${editedRequest.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify(editedRequest),
-            });
-
-            if (response.ok) {
-                // Successful update
-                console.log('Request updated successfully!');
-
-                setSingleRequest({ ...editedRequest });
-                closeModalUpdate(); // Close the modal after update
-            } else {
-                // Handle response errors
-                console.error('Error updating request:', response.status);
-            }
-        } catch (error) {
-            // Handle network or other errors
-            console.error('Error making update request:', error);
-            // alert("Error fetching requests. Please try again later.");
-        }
-    };
-
-    // Function to delete a request
-    const deleteRequest = async (editedRequest) => {
-        console.log(editedRequest);
-        try {
-            const response = await fetch(`http://localhost:8080/request/${editedRequest.id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-
-            if (response.ok) {
-
-                console.log('Request deleted successfully!');
-                closeModalUpdate();
-            } else {
-
-                console.error('Error deleting the request:', response.status);
-            }
-        } catch (error) {
-            // Handle network or other errors
-            console.error('Error making delete request:', error);
-            // alert("Error fetching requests. Please try again later.");
-        } finally {
-            closeModalDelete();
-        }
-    };
-
-    // Function to fetch a request by ID
-    const fetchRequestById = async (id) => {
-        try {
-            const response = await fetch(`http://localhost:8080/request/${id}`, {
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-
-            if (response.status === 200) {
-                const responseData = await response.json();
-
-                // Log the response for analysis
-                console.log("API response:", responseData);
-
-                if (responseData && typeof responseData === 'object') {
-
-                    // Extract user data and add it to the single request
-                    const user = responseData.user;
-                    const updatedSingleRequest = {
-                        ...responseData,
-                        user: user,
-                    };
-
-                    setSingleRequest(updatedSingleRequest);
-                } else {
-                    console.error("Response does not contain a valid object:", responseData);
-                }
-            } else if (response.status === 404) {
-                console.log("Request not found");
-                // Handle the case where the request was not found
-            } else {
-                console.log("An unexpected error occurred: " + response.status);
-            }
-        } catch (error) {
-            console.log("Error fetching the request:", error);
-        }
+    const handleSomeAction = async (id) => {
+        await fetchRequestById(id, token, setSingleRequest);
     };
 
     // Move the declaration to the appropriate location
@@ -427,33 +203,6 @@ const HomeSecurity = () => {
         return counts;
     }, {});
 
-    // Calculate the time difference from the launch date
-    const calculateTimeDifference = (launchDate) => {
-        const currentDate = moment();
-        const launchMoment = moment(launchDate);
-        const duration = moment.duration(currentDate.diff(launchMoment));
-
-        // Display the difference in days, hours, minutes, etc.
-        const days = duration.days();
-        const hours = duration.hours();
-        const minutes = duration.minutes();
-
-        return `${days} days, ${hours} hour, ${minutes} minutes ago`;
-    };
-
-    // Get the CSS class for the status
-    const getStatusClass = (status) => {
-        let colorClass = "status-red"; // Assume red as default
-
-        // Check the status of the request
-        if (status === "PROCESSING") {
-            colorClass = "status-yellow";
-        } else if (status === "FINISH") {
-            colorClass = "status-green";
-        }
-
-        return colorClass;
-    };
     return (
         <section className="homeSection">
             <div className="wave">
@@ -472,20 +221,20 @@ const HomeSecurity = () => {
                             value={searchTerm}
                             title="Search"
                         />
-                        <div className="filter" onClick={openModalFilter}>
+                        <div className="filter" onClick={() => openModalFilter(setModalFilterIsOpen)}>
                             <img src={filtro} alt="filter" width={30} />
                         </div>
                     </div>
                 </div>
                 <div className="boxTools">
-                    <div className="tool" style={{ display: "grid", placeItems: "center" }} onClick={openModal}>
+                    <div className="tool" style={{ display: "grid", placeItems: "center" }} onClick={() => openModal(setModalIsOpen)}>
                         <h2>Create new Request</h2>
                         <img src={mais} alt="Add" width={40} />
                     </div>
                     {filteredAndSortedToolBoxes.map((box, index) => (
                         // Verifica se o item atende aos critérios de filtro antes de renderizá-lo
                         (filterCriteria === '' || box.priority === filterCriteria) && (
-                            <div key={index} className="tool" onClick={() => openModalConfirm(box.id)}>
+                            <div key={index} className="tool" onClick={() => openModalConfirm(box.id, handleSomeAction, setModalConfirmIsOpen)}>
                                 {loading ? (
                                     <div className="loading-overlay">Carregando...</div>
                                 ) : (
@@ -498,12 +247,12 @@ const HomeSecurity = () => {
                                             </div>
                                             <div className="dateStatusTool">
                                                 <p className={box.status}></p>
-                                                    <p>{box.priority}</p>
-                                                    <p>User ID: {box.user ? box.user.idUsers : 'N/A'}</p>
-                                                    <p className={`status ${getStatusClass(box.status)}`}>
-                                                        &#x25CF;
-                                                        <span>{box.status}</span>
-                                                    </p>
+                                                <p>{box.priority}</p>
+                                                <p>User ID: {box.user ? box.user.idUsers : 'N/A'}</p>
+                                                <p className={`status ${getStatusClass(box.status)}`}>
+                                                    &#x25CF;
+                                                    <span>{box.status}</span>
+                                                </p>
                                             </div>
                                         </div>
                                     </>
@@ -523,7 +272,7 @@ const HomeSecurity = () => {
                 </div>
             </div>
 
-            <Modal isOpen={modalIsOpen} onClose={closeModal}>
+            <Modal isOpen={modalIsOpen} onClose={() => closeModal(setModalIsOpen)}>
                 <div className="toolConfig">
                     <InputField
                         id="problem"
@@ -567,60 +316,60 @@ const HomeSecurity = () => {
                 </div>
             </Modal>
 
-            <Modal isOpen={modalConfirmIsOpen} onClose={closeModalConfirm}>
+            <Modal isOpen={modalConfirmIsOpen} onClose={() => closeModalConfirm(setModalConfirmIsOpen)}>
                 <div className="singleRequest">
-                    <p>
+                    <div>
                         <span>Request ID:</span> {singleRequest.id}
-                    </p>
+                    </div>
 
-                    <p>
+                    <div>
                         <span>Problem:</span> {singleRequest.problem}
-                    </p>
+                    </div>
 
-                    <p style={{ cursor: "pointer" }} onClick={focusDescription}>
+                    <div style={{ cursor: "pointer" }} onClick={focusDescription}>
                         <span>Description:</span> {isExpanded ? <div className="focusDesc">{singleRequest.description}</div> : <>[EXTEND]</>}
-                    </p>
+                    </div>
 
-                    <p>
+                    <div>
                         <span>Priority:</span> {singleRequest.priority}
-                    </p>
+                    </div>
 
-                    <p>
+                    <div>
                         <span>Status:</span> {singleRequest.status}
-                    </p>
+                    </div>
 
-                    <p>
+                    <div>
                         <span>Date request:</span> {singleRequest.creationRequest}
-                    </p>
+                    </div>
 
-                    <p>
+                    <div>
                         <span>User ID:</span> {singleRequest.user ? singleRequest.user.idUsers : 'N/A'}
 
-                    </p>
+                    </div>
 
-                    <p>
+                    <div>
                         <span>Username:</span> {singleRequest.user ? singleRequest.user.username : 'N/A'}
-                    </p>
+                    </div>
 
-                    <p>
+                    <div>
                         <span>First Name:</span> {singleRequest.user ? singleRequest.user.firstName : 'N/A'}
-                    </p>
+                    </div>
 
-                    <p>
+                    <div>
                         <span>Last Name:</span> {singleRequest.user ? singleRequest.user.lastName : 'N/A'}
-                    </p>
+                    </div>
 
-                    <p>
+                    <div>
                         <span>Email:</span> {singleRequest.user ? singleRequest.user.email : 'N/A'}
-                    </p>
+                    </div>
 
                 </div>
                 <div className="btnSave">
-                    <button onClick={() => openModalUpdate(singleRequest.id)}>Update!</button>
+                    <button onClick={() => openModalUpdate(singleRequest.id, handleSomeAction, setEditedRequest, singleRequest, editedRequest, setModalUpdateIsOpen)}>Update!</button>
                 </div>
             </Modal>
 
-            <Modal isOpen={modalUpdateIsOpen} onClose={closeModalUpdate}>
+            <Modal isOpen={modalUpdateIsOpen} onClose={() => closeModalUpdate(setModalUpdateIsOpen)}>
                 <div className="singleRequest">
                     <p>
                         <span>ID:</span> {singleRequest.id}
@@ -672,12 +421,12 @@ const HomeSecurity = () => {
                     required
                 />
                 <div className="btnSave">
-                    <button className="deleteBtn" onClick={openModalDelete}>Delete!</button>
-                    <button onClick={() => updateRequest(editedRequest, singleRequest.id)}>Update!</button>
+                    <button className="deleteBtn" onClick={() => openModalDelete(singleRequest.id, handleSomeAction, setModalDeleteIsOpen)}>Delete!</button>
+                    <button onClick={() => handleUpdateAction(editedRequest, singleRequest.id)}>Update!</button>
                 </div>
             </Modal>
 
-            <Modal isOpen={modalDeleteIsOpen} onClose={closeModalDelete}>
+            <Modal isOpen={modalDeleteIsOpen} onClose={() => closeModalDelete(setModalDeleteIsOpen)}>
 
                 <div className="singleRequest">
                     <p>
@@ -687,11 +436,11 @@ const HomeSecurity = () => {
 
 
                 <div className="btnSave">
-                    <button className="deleteBtn" onClick={() => deleteRequest(editedRequest)}>Delete!</button>
+                    <button className="deleteBtn" onClick={() => handleDeleteAction(editedRequest)}>Delete!</button>
                 </div>
             </Modal>
 
-            <Modal isOpen={modalFilterIsOpen} onClose={closeModalFilter}>
+            <Modal isOpen={modalFilterIsOpen} onClose={() => closeModalFilter(setModalFilterIsOpen)}>
                 <div className="filterPriorityConfig">
                     <label className="selectFilterPriority" htmlFor="filterPriority">Filter by Priority:</label>
                     <select

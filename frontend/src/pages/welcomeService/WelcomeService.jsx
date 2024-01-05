@@ -1,4 +1,3 @@
-import React from "react";
 import '../welcomePage/components/style.css';
 import iconDatabase from './assets/iconDatabase.png';
 import iconColaboracao from './assets/iconColaboracao.png';
@@ -11,7 +10,7 @@ const WelcomeService = () => {
              <div className="WelcomeDescWave">
                 <img src={wave} alt="" />
             </div>
-            <div className="tittleService">
+            <div className="title-service">
                 <h2>Services</h2>
             </div>
             <article className="WelcomeServiceArticle">

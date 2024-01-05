@@ -383,11 +383,11 @@ select.selectHome {
     border-bottom: solid 2px grey;
 }
 
-.singleRequest>p {
+.singleRequest>div {
     padding: 1rem;
 }
 
-.singleRequest>p>span {
+.singleRequest>div>span {
     color: #1fdf64;
 }
 

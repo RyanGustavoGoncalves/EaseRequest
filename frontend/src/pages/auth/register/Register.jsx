@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import '../components/style.css'
 import imgError from '../assets/icons8-erro-48 (1).png';
 import img from '../assets/aboutImg.png';

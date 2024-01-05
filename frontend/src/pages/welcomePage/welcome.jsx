@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import ScrollReveal from 'scrollreveal';
+
+import Icon from "../components/Icon";
+
 import './components/style.css';
 import logo from './assets/iconList.png';
+
 import WelcomeIntro from "../welcomeIntro/WelcomeIntro";
 import WelcomeDescri from "../welcomeDescri/WelcomeDescri";
 import WelcomeService from "../welcomeService/WelcomeService";
@@ -97,7 +101,7 @@ const welcome = () => {
     return (
         <main className={`welcomeMain page-${currentPage}`}>
             <div className="logoWelcomeTxt">
-                <img src={logo} alt="logo" />
+                <Icon src={logo} alt="logo" />
                 <h1>RequestEase</h1>
             </div>
 

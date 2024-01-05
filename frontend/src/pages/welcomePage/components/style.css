@@ -1,6 +1,15 @@
+:root {
+    --main-bg-color: #000;
+    --main-text-color: #1fdf64;
+    --accent-color: #1fdf64;
+    --secondary-text-color: white;
+    --secondary-bg-color: #111
+    --hover-color: green;
+}
+
+
 main.welcomeMain {
-    background-color: #000;
-    /* color: #1fdf64; */
+    background-color: var(--main-bg-color);
     color: white;
     width: 100%;
     height: 100%;
@@ -21,7 +30,7 @@ div.logoWelcomeTxt>img {
 }
 
 div.logoWelcomeTxt h1 {
-    color: #1fdf64;
+    color: var(--accent-color);
     font-size: 20px;
 }
 
@@ -42,7 +51,7 @@ section.welcomeIntroSection>article.welcomeIntroArticle {
 }
 
 section.welcomeIntroSection>article>img {
-    background-color: #111;
+    background-color: var(--secondary-bg-color);
     border-radius: 5rem;
     margin: 3rem;
     width: 450px;
@@ -50,7 +59,7 @@ section.welcomeIntroSection>article>img {
 }
 
 div.welcomeTxt {
-    color: #1fdf64;
+    color: var(--main-text-color);
     display: grid;
     place-items: center;
     font-size: 50px;
@@ -67,7 +76,7 @@ div.btnTxt>a {
 
 div.btnTxt>a>button {
     cursor: pointer;
-    background-color: #1fdf64;
+    background-color: var(--main-text-color);
     font-weight: bold;
     border: none;
     border-radius: 50px;
@@ -79,7 +88,7 @@ div.btnTxt>a>button {
 div.btnTxt>a>button:hover {
     transform: scale(1.1);
     border: solid 1px white;
-    filter: drop-shadow(0px 0px 10px green);
+    filter: drop-shadow(0px 0px 10px var(--hover-color));
 }
 
 div.setaWelcomeIntro {
@@ -89,7 +98,7 @@ div.setaWelcomeIntro {
 
 div.setaWelcomeIntro:hover {
     transform: scale(1.1);
-    filter: drop-shadow(0px 0px 20px green);
+    filter: drop-shadow(0px 0px 20px var(--hover-color));
 }
 
 div.setaWelcomeIntro img {
@@ -99,7 +108,7 @@ div.setaWelcomeIntro img {
 /* === CSS page WelcomeDescri ===*/
 
 section.WelcomeDescSection {
-    background-color: #111;
+    background-color: var(--secondary-bg-color);
 }
 
 article.WelcomeDescArticle {
@@ -121,7 +130,7 @@ div.TxtWelcomeDesc {
 
 div.TxtWelcomeDesc>h2 {
     font-size: 30px;
-    color: #1fdf64;
+    color: var(--main-text-color);
 }
 
 div.TxtWelcomeDesc>span {
@@ -150,8 +159,8 @@ div.WelcomeDescBalance {
 
 /* === CSS page WelcomeService === */
 
-section.WelcomeServiceSection {
-    background-color: #111;
+.Welcome-service-section {
+    background-color: var(--secondary-bg-color);
 }
 
 article.WelcomeServiceArticle {
@@ -163,7 +172,7 @@ article.WelcomeServiceArticle {
 }
 
 
-div.tittleService {
+.title-service {
     position: relative;
     z-index: 1000;
     color: white;
@@ -172,7 +181,6 @@ div.tittleService {
 }
 
 div.TxtWelcomeServices {
-    /* background-color: #222; */
     display: grid;
     place-items: center;
     width: 100%;
@@ -194,16 +202,16 @@ div.TxtWelcomeServices>span {
 
 /* === CSS Page WelcomeTecno === */
 
-h2{
-    color: #1fdf64;
+h2 {
+    color: var(--main-text-color);
 }
 
-article.WelcomeTecnoArticle {
+.welcome-tecno-Article {
     display: grid;
     place-items: center;
 }
 
-article.WelcomeTecnoArticleImg>div.tecnoImg {
+.tecno-img {
     padding: 20px;
     display: flex;
     justify-content: center;
@@ -211,7 +219,7 @@ article.WelcomeTecnoArticleImg>div.tecnoImg {
     gap: 10px;
 }
 
-article.WelcomeTecnoArticleImg>div.tecnoImg>img {
+.tecno-img>img {
     width: 100px;
     height: 100px;
 }
@@ -287,15 +295,12 @@ div.perfilGitHub img {
         overflow-x: auto;
         scroll-snap-type: x mandatory;
         scroll-padding: 0 10px;
-        /* Ajuste conforme necessário para o espaçamento desejado */
     }
 
     .TxtWelcomeServices {
         flex: 0 0 auto;
         width: 300px;
-        /* Ajuste conforme necessário para a largura desejada */
         margin-right: 10px;
-        /* Ajuste conforme necessário para o espaçamento desejado */
         scroll-snap-align: start;
     }
 }
@@ -349,7 +354,7 @@ div.perfilGitHub img {
         border-radius: 2rem;
     }
 
-    article.WelcomeTecnoArticleImg>div.tecnoImg>img {
+    .tecno-img>img {
         width: 50px;
         height: 50px;
     }
@@ -436,7 +441,7 @@ div.perfilGitHub img {
         height: 120px;
     }
 
-    article.WelcomeTecnoArticle>div.tecnoImg>img {
+    .tecno-img>img {
         width: 70px;
         height: 70px;
     }

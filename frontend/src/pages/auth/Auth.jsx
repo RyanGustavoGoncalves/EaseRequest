@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import ScrollReveal from 'scrollreveal';
 import Register from "./register/Register";
 import Login from "./login/Login";
-import wave from './assets/wave.svg';
 import './components/style.css';
 import logo from '../welcomePage/assets/iconList.png';
+import Icon from "../components/Icon";
 
-const Auth = ({ login }) => {
+const Auth = () => {
   const [isLoginVisible, setLoginVisible] = useState(false);
   const [transitionClass, setTransitionClass] = useState('');
 
@@ -47,12 +47,13 @@ const Auth = ({ login }) => {
 
   return (
     <main className={`authMain ${transitionClass}`}>
-      <div className="logo"><Link to={"/"}><img src={logo} alt="logo" /></Link></div>
-      {isLoginVisible ? <Login toggleForm={toggleForm} login={login} /> : <Register toggleForm={toggleForm} />}
+      <div className="logo">
+        <Link to={"/"}>
+          <Icon src={logo} alt="logo" />
+        </Link>
+      </div>
 
-      {/* <div className="WelcomeDescWave">
-        <img src={wave} alt="" />
-      </div> */}
+      {isLoginVisible ? <Login toggleForm={toggleForm} /> : <Register toggleForm={toggleForm} />}
     </main>
   );
 };

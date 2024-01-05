@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import '../components/style.css'
 import img from '../assets/imgFront.png';
 import imgError from '../assets/icons8-erro-48 (1).png';
 import { useNavigate } from "react-router-dom";
 import wave from '../assets/wave.svg';
 
-const Login = ({ toggleForm, login }) => {
+const Login = ({ toggleForm }) => {
     const navigate = useNavigate();
 
     const [username, setUsername] = useState("");

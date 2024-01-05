@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 
 const ProtectedRoute = ({ element: Element, ...rest }) => {
@@ -27,6 +27,7 @@ const ProtectedRoute = ({ element: Element, ...rest }) => {
             setIsAuthenticated(false);
           }
         } catch (error) {
+          alert("Erro ao buscar token!", error)
           setIsAuthenticated(false);
         }
       } else {
@@ -38,7 +39,6 @@ const ProtectedRoute = ({ element: Element, ...rest }) => {
   }, []);
 
   if (isAuthenticated === null) {
-    // Aguardando a verificação do token
     return null;
   }
 
