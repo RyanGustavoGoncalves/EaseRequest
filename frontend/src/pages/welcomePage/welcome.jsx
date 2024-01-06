@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ScrollReveal from 'scrollreveal';
+import { Link } from "react-router-dom";
 
 import Icon from "../components/Icon";
 
@@ -100,10 +101,12 @@ const welcome = () => {
 
     return (
         <main className={`welcomeMain page-${currentPage}`}>
-            <div className="logoWelcomeTxt">
-                <Icon src={logo} alt="logo" />
-                <h1>RequestEase</h1>
-            </div>
+            <Link to={"/"}>
+                <div className="logoWelcomeTxt">
+                    <Icon src={logo} alt="logo" />
+                    <h1>RequestEase</h1>
+                </div>
+            </Link>
 
             <WelcomeIntro />
             {currentPage === 1 && <WelcomeDescri />}

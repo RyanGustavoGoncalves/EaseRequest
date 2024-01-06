@@ -1,11 +1,61 @@
+/* Color Variables */
+:root {
+    --primary-color: #1fdf64;
+    --background-color: #000;
+    --text-color: white;
+    --secondary-color: #333;
+    --box-shadow-color: #222;
+    --accent-color: red;
+}
+
+/* Font Variables */
+:root {
+    --base-font-size: 16px;
+    --heading-font-family: 'Roboto', sans-serif;
+    --body-font-family: 'Open Sans', sans-serif;
+}
+
+/* Spacing Variables */
+:root {
+    --padding-small: 8px;
+    --padding-medium: 16px;
+    --padding-large: 24px;
+}
+
+/* Border Radius Variables */
+:root {
+    --border-radius-small: 4px;
+    --border-radius-medium: 8px;
+    --border-radius-large: 12px;
+}
+
+/* Box Shadow Variables */
+:root {
+    --box-shadow-small: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --box-shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --box-shadow-large: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Transition Variables */
+:root {
+    --transition-duration: 0.3s;
+    --transition-easing: ease;
+}
+
+:root {
+    --gap-medium: .5rem
+}
+
+
 main.appMain {
     position: absolute;
     width: 100%;
-    height: 100%;
-    background-color: #000;
+    /* height: 100%; */
+    background-color: var(--background-color);
 }
 
 /* CSS NavBar */
+
 header {
     display: flex;
     width: 100%;
@@ -18,13 +68,13 @@ nav.navSup {
     z-index: 1000;
     width: 100%;
     height: 15%;
-    padding: 1rem;
+    padding: var(--padding-medium);
 }
 
 div.headerLogoName {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: var(--padding-medium);
 }
 
 div.headerLogoName>a {
@@ -33,13 +83,13 @@ div.headerLogoName>a {
 
 div.headerLogoName>div.userPerfil>h1 {
     font-size: 20px;
-    color: white;
+    color: var(--text-color);
 }
 
 div.userPerfil {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: var(--padding-medium);
 }
 
 div.headerLogoName>a>img {
@@ -49,7 +99,7 @@ div.headerLogoName>a>img {
 nav.show {
     display: flex;
     justify-content: space-between;
-    gap: 1rem;
+    gap: var(--padding-medium);
     box-shadow: inset 0 -1px #222;
 }
 
@@ -70,7 +120,7 @@ div.noActive {
 nav.show>ul>li>a,
 nav.show>a {
     text-decoration: none;
-    color: white;
+    color: var(--text-color);
     position: relative;
 }
 
@@ -81,17 +131,16 @@ nav.show>ul>li>a.active::after {
     position: absolute;
     width: 0;
     height: 1px;
-    background-color: #1fdf64;
-    filter: drop-shadow(0px 0px 5px #1fdf64);
+    background-color: var(--primary-color);
+    filter: drop-shadow(0px 0px 5px var(--primary-color));
     left: 0;
     bottom: 0;
-    transition: width 0.3s ease;
+    transition: width var(--transition-duration) var(--transition-easing);
 }
 
 nav.show>ul>li>a.active::after {
     width: 100%;
 }
-
 
 nav>ul>li>a.noActive:hover::after,
 nav.show>a.noActive:hover::after {
@@ -101,7 +150,6 @@ nav.show>a.noActive:hover::after {
 .menu-icon {
     display: none;
 }
-
 
 /* === CSS Modal === */
 
@@ -120,21 +168,20 @@ nav.show>a.noActive:hover::after {
 
 div.btnModalClose {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
 }
 
 .modalComp {
-    background: #000;
-    color: white;
-    padding: 1rem;
-    border: solid 2px #333;
-    border-radius: 8px;
+    background: var(--background-color);
+    color: var(--text-color);
+    padding: var(--padding-medium);
+    border: solid 2px var(--secondary-color);
+    border-radius: var(--border-radius-medium);
     max-width: 80%;
     max-height: 80%;
     overflow: auto;
     display: grid;
     grid-template-columns: repeat(1, minmax(120px, 1fr));
-
 }
 
 .modal-close {
@@ -142,14 +189,15 @@ div.btnModalClose {
     border: none;
     cursor: pointer;
     font-size: 16px;
-    color: red;
+    color: var(--accent-color);
     font-weight: bold;
-    transition: color 0.5s ease-in-out;
+    transition: color var(--transition-duration) var(--transition-easing);
 }
 
 .modal-close:hover {
     color: rgba(255, 0, 0, 0.816);
 }
+
 
 @media (max-width: 420px) {
 
@@ -191,9 +239,8 @@ div.btnModalClose {
 
 /* CSS Home and HomeConfig*/
 
-
 section.homeSection {
-    background-color: #111;
+    background-color: var(--background-color-dark);
     width: 100%;
     height: 100%;
 }
@@ -213,26 +260,26 @@ div.alignCont {
 div.subNav {
     width: 100%;
     position: relative;
-    z-index: 990;
+    z-index: var(--z-index-high);
 }
 
 div.lupaSearch {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    gap: var(--padding-small);
 }
 
 div.lupaSearch>input {
     width: 80%;
-    padding: 10px;
-    border-radius: 5px;
-    color: #999;
+    padding: var(--padding-small);
+    border-radius: var(--border-radius-small);
+    color: var(--text-color-light);
     font-weight: bold;
-    background-color: #000;
-    border: solid 1px #333;
+    background-color: var(--background-color);
+    border: solid 1px var(--secondary-color);
     outline: none;
-    text-indent: 40px;
+    text-indent: var(--padding-large);
 }
 
 div.lupa {
@@ -241,18 +288,18 @@ div.lupa {
 }
 
 div.lupaSearch>div.lupa>img {
-    width: 60px;
-    padding-inline: 20px;
+    width: 50px;
+    padding-inline: var(--padding-medium);
     position: absolute;
-    z-index: 10000;
+    z-index: var(--z-index-highest);
 }
 
 div.addBtn>button {
-    color: black;
+    color: var(--text-color-dark);
     font-weight: bold;
-    background-color: white;
-    padding: 10px;
-    border-radius: 5px;
+    background-color: var(--background-color-light);
+    padding: var(--padding-small);
+    border-radius: var(--border-radius-small);
     inline-size: 5rem;
     cursor: pointer;
     border: none;
@@ -260,8 +307,8 @@ div.addBtn>button {
 }
 
 div.addBtn>button:hover {
-    background-color: #e8e8e8;
-    transform: scale(1.1)
+    background-color: var(--background-color-lighter);
+    transform: scale(1.1);
 }
 
 div.subNav>div.more>img {
@@ -273,20 +320,19 @@ div.boxTools {
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-evenly;
-    padding: 1rem;
-    gap: 10px;
+    padding: var(--padding-medium);
+    gap: var(--gap-medium);
     max-height: 100vh;
-    /* Defina a altura máxima que você deseja para o scroll */
     overflow-y: auto;
 }
 
 div.tool {
     font-weight: bold;
-    background-color: #000;
-    border: solid 2px #333;
+    background-color: var(--background-color);
+    border: solid 2px var(--secondary-color);
     width: 20rem;
     height: 10rem;
-    border-radius: 10px;
+    border-radius: var(--border-radius-medium);
     cursor: pointer;
     transition: all 0.5s;
     box-shadow: 0 0 10px rgba(0, 0, 0, 1);
@@ -298,7 +344,7 @@ div.txtAlignTool {
 }
 
 div.toolTitle>h2 {
-    font-size: 20px;
+    font-size: var(--font-size-medium);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -306,21 +352,21 @@ div.toolTitle>h2 {
 }
 
 div.toolTitle>p>span {
-    color: white;
+    color: var(--text-color-light);
 }
 
 div.toolTitle>p {
     color: rgba(128, 128, 128, 0.658);
-    font-size: 12px;
+    font-size: var(--font-size-small);
 }
 
 div.dateStatusTool>p {
-    font-size: 12px;
+    font-size: var(--font-size-small);
 }
 
 div.toolTitle,
 div.dateStatusTool {
-    padding: 1rem;
+    padding: var(--padding-small);
 }
 
 
@@ -333,28 +379,28 @@ div.tool>p {
 }
 
 div.homeDescript>div.more {
-    padding: 5px;
+    padding: var(--padding-tiny);
 }
 
 div.boxTools>a {
     text-decoration: none;
-    color: black;
+    color: var(--text-color-dark);
     display: contents;
 }
 
 div.btnSave {
-    padding: 5px;
-    gap: 5px;
+    padding: var(--padding-tiny);
+    gap: var(--gap-tiny);
     display: flex;
     justify-content: center;
 }
 
 div.btnSave>button {
-    background-color: rgb(202, 202, 202);
+    background-color: var(--primary-color);
     font-weight: bold;
-    font-size: 15px;
-    padding: 10px;
-    border-radius: 5px;
+    font-size: var(--font-size-small);
+    padding: var(--padding-small);
+    border-radius: var(--border-radius-small);
     inline-size: 5rem;
     cursor: pointer;
     border: none;
@@ -362,41 +408,41 @@ div.btnSave>button {
 }
 
 div.btnSave>button.deleteBtn:hover {
-    color: white;
-    background-color: red;
-    transform: scale(1.1)
+    color: var(--text-color-light);
+    background-color: var(--accent-color);
+    transform: scale(1.1);
 }
 
 div.btnSave>button:hover {
-    color: white;
-    background-color: #1fdf64;
-    transform: scale(1.1)
+    color: var(--text-color-light);
+    background-color: var(--primary-color);
+    transform: scale(1.1);
 }
 
 select.selectHome {
-    color: #1fdf64;
-    background-color: black;
+    color: var(--primary-color);
+    background-color: var(--background-color-dark);
     font-weight: bold;
-    font-size: 15px;
-    inline-size: 12rem;
+    font-size: var(--font-size-small);
+    inline-size: var(--inline-size-medium);
     border: none;
-    border-bottom: solid 2px grey;
+    border-bottom: solid 2px var(--border-color);
 }
 
 .singleRequest>div {
-    padding: 1rem;
+    padding: var(--padding-medium);
 }
 
 .singleRequest>div>span {
-    color: #1fdf64;
+    color: var(--primary-color);
 }
 
 .focusDesc {
-    width: 15rem;
+    width: var(--inline-size-medium);
 }
 
 .status {
-    font-size: 20px;
+    font-size: var(--font-size-medium);
 }
 
 .status-green {
@@ -412,14 +458,14 @@ select.selectHome {
 }
 
 p.status>span {
-    font-size: 15px;
+    font-size: var(--font-size-small);
 }
 
 select.selectFilterPriority,
 select.selectFilterPriority>option {
-    color: white;
-    background-color: black;
-    border: solid 2px #333;
+    color: var(--text-color-light);
+    background-color: var(--background-color-dark);
+    border: solid 2px var(--secondary-color);
     font-weight: bold;
     margin: 1px;
 }
@@ -443,17 +489,17 @@ div.statusFilter {
 
 div.filterStatusConfig>label,
 label.selectFilterPriority {
-    color: #1fdf64;
+    color: var(--primary-color);
 }
 
 div.filterPriorityConfig,
 div.filterStatusConfig {
     font-weight: bold;
-    padding: 5px;
+    padding: var(--padding-small);
 }
 
 div.loading-overlay {
-    color: white;
+    color: var(--text-color-light);
     display: grid;
     place-items: center;
     height: 100%;
@@ -464,21 +510,21 @@ div.page {
     justify-content: center;
     align-items: center;
     position: relative;
-    color: white;
-    gap: 1rem;
-    padding: 1rem;
-    z-index: 1000;
+    color: var(--text-color);
+    gap: var(--gap-medium);
+    padding: var(--padding-medium);
+    z-index: var(--z-index-high);
     width: 100%;
 }
 
 div.page>button {
     cursor: pointer;
-    background-color: #1fdf64;
+    background-color: var(--primary-color);
     font-weight: bold;
     border: none;
-    border-radius: 50px 50px;
-    padding: 12px;
-    max-width: 80%;
+    border-radius: 50px;
+    padding: 0.7rem;
+    max-width: var(--inline-size-medium);
     transition: all 0.5s ease-in-out;
 }
 
@@ -547,3 +593,5 @@ div.page>button:hover {
         padding: 0;
     }
 }
+
+/* CSS settings */
