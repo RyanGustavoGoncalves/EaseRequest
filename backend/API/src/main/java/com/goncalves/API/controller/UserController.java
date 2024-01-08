@@ -2,7 +2,6 @@ package com.goncalves.API.controller;
 
 import com.goncalves.API.DTO.DadosAtualizarUser;
 import com.goncalves.API.DTO.DadosListagemUser;
-import com.goncalves.API.entities.request.RequestRepository;
 import com.goncalves.API.entities.user.UserRepository;
 import com.goncalves.API.entities.user.Users;
 import com.goncalves.API.infra.security.*;
@@ -13,9 +12,12 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 
 @RestController
@@ -64,6 +66,27 @@ public class UserController {
 
             repository.save(user);
 
+            return ResponseEntity.ok(user);
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorNotFoundId(e.getMessage(), e.getId()));
+        } catch (Exception e) {
+            // Lidar com outras exceções aqui, se necessário
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Erro interno do servidor"));
+        }
+    }
+
+    @PutMapping
+    @Transactional
+    public ResponseEntity updateUserForToken(@RequestBody @Validated DadosAtualizarUser dados) {
+        try {
+            var user = (Users) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if (user == null){
+                return ResponseEntity.notFound().build();
+            }
+
+            user.atualizarUser(dados);
+
+            repository.save(user);
             return ResponseEntity.ok(user);
         } catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorNotFoundId(e.getMessage(), e.getId()));

@@ -281,9 +281,7 @@ const Home = () => {
             <Modal isOpen={modalDeleteIsOpen} onClose={() => closeModalDelete(setModalDeleteIsOpen)}>
 
                 <div className="singleRequest">
-                    <p>
-                        <span>Deseja deletar a request com o ID:</span> {singleRequest.id}
-                    </p>
+                    <span>Deseja deletar a request com o ID:</span> {singleRequest.id}
                 </div>
 
 

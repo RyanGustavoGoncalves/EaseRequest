@@ -36,14 +36,20 @@ const router = createBrowserRouter([
         path: "HomeSecurity",
         element: <HomeSecurity />
       },
-      // {
-      //   path: "Settings",
-      //   element: <Settings />,
-      // },
       {
         path: "Navbar",
         element: <Navbar />,
       },
+    ]
+  },
+  {
+    path: "/Settings",
+    element: <Settings />,
+    children: [
+      {
+        path: "Navbar",
+        element: <Navbar />
+      }
     ]
   },
   {

@@ -4,17 +4,25 @@ import img from '../assets/imgFront.png';
 import imgError from '../assets/icons8-erro-48 (1).png';
 import { useNavigate } from "react-router-dom";
 import wave from '../assets/wave.svg';
+import openEye from '../assets/openEye.png';
+import closeEye from '../assets/closeEye.png';
 
 const Login = ({ toggleForm }) => {
     const navigate = useNavigate();
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
 
     const [errors, setErrors] = useState([]);
 
     const [modal, setModal] = useState({ display: 'none' });
     const [modalOpacity, setModalOpacity] = useState({ display: 'none' });
+
+    const handleTogglePassword = () => {
+        setShowPassword(!showPassword);
+    };
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -105,11 +113,18 @@ const Login = ({ toggleForm }) => {
                                 onMouseLeave={() => handleInputBlur('usernameLabel')}
                             />
                         </div>
-                        <div className="authFieldLogin">
-                            <label id="passwordLabel" className={password ? 'active' : ''} htmlFor="password">password</label>
+                        <div className="authField">
+                            <label id="passwordLabel" className={password ? 'active' : ''} htmlFor="password">
+                                password
+                            </label>
+                            <div className="togglePassword">
+                                <span onClick={handleTogglePassword}>
+                                    {showPassword ? <img src={openEye} alt="Open Eye" /> : <img src={closeEye} alt="Closed Eye" />}
+                                </span>
+                            </div>
                             <input
                                 id="password"
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 onMouseEnter={() => handleInputFocus('passwordLabel')}
@@ -124,24 +139,24 @@ const Login = ({ toggleForm }) => {
                         </div>
                     </form>
                 </fieldset>
-                    <div className="modal" style={{ display: modal.display }}>
-                        <div className="errorModal">
-                            <div className="errorIcon">
-                                <img src={imgError} alt="Error" />
-                                <h2>Erro!</h2>
-                            </div>
-                            <hr />
-                            <div className="errorMessages">
-                                {errors.map((erro, index) => (
-                                    <div key={index}>
-                                        <strong>{erro.Error}</strong>
-                                    </div>
-                                ))}
-                            </div>
+                <div className="modal" style={{ display: modal.display }}>
+                    <div className="errorModal">
+                        <div className="errorIcon">
+                            <img src={imgError} alt="Error" />
+                            <h2>Erro!</h2>
+                        </div>
+                        <hr />
+                        <div className="errorMessages">
+                            {errors.map((erro, index) => (
+                                <div key={index}>
+                                    <strong>{erro.Error}</strong>
+                                </div>
+                            ))}
                         </div>
                     </div>
-                    {/* Modal de fundo */}
-                    <div className="modalOpacity" onClick={closeModalOpacity} style={{ display: modalOpacity.display }}></div>
+                </div>
+                {/* Modal de fundo */}
+                <div className="modalOpacity" onClick={closeModalOpacity} style={{ display: modalOpacity.display }}></div>
             </article>
             <div className="WelcomeDescWave">
                 <img src={wave} alt="" />

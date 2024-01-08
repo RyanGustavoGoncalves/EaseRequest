@@ -161,7 +161,7 @@ const HomeSecurity = () => {
     const handleDeleteAction = async () => {
         await deleteRequest(token, editedRequest);
         closeModalConfirm(setModalConfirmIsOpen);
-        closeModalUpdate(setModalUpdateIsOpen); 
+        closeModalUpdate(setModalUpdateIsOpen);
         closeModalDelete(setModalDeleteIsOpen);
     };
 
@@ -371,9 +371,7 @@ const HomeSecurity = () => {
 
             <Modal isOpen={modalUpdateIsOpen} onClose={() => closeModalUpdate(setModalUpdateIsOpen)}>
                 <div className="singleRequest">
-                    <p>
-                        <span>ID:</span> {singleRequest.id}
-                    </p>
+                    <span>ID:</span> {singleRequest.id}
                 </div>
 
                 <InputField
@@ -429,9 +427,7 @@ const HomeSecurity = () => {
             <Modal isOpen={modalDeleteIsOpen} onClose={() => closeModalDelete(setModalDeleteIsOpen)}>
 
                 <div className="singleRequest">
-                    <p>
-                        <span>Deseja deletar a request com o ID:</span> {singleRequest.id}
-                    </p>
+                    <span>Deseja deletar a request com o ID:</span> {singleRequest.id}
                 </div>
 
 

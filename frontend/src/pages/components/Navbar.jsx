@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Logo from '../welcomePage/assets/iconList.png';
 import user from './assets/user.png';
 import { Link } from "react-router-dom";
+import { FetchUser } from "../home/components/utils/getInfoUser/FetchUser";
 
 const Navbar = () => {
     const token = localStorage.getItem('token');
@@ -12,34 +13,7 @@ const Navbar = () => {
     };
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch("http://localhost:8080/user/token", {
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json",
-                        'Authorization': `Bearer ${token}`,
-                    },
-                });
-
-                if (response.status === 200) {
-                    const responseData = await response.json();
-
-                    if (responseData && responseData) {
-                        setUserData(responseData);
-                    } else {
-                        console.error("A resposta não contém um nome de usuário válido:", responseData);
-                    }
-                } else {
-                    console.log("Ocorreu um erro inesperado ao buscar as informações do usuário: " + response.status);
-                }
-            } catch (error) {
-                console.log("Erro ao buscar as informações do usuário:", error);
-                alert("Erro ao buscar as informações do usuário. Por favor, tente novamente mais tarde.");
-            }
-        };
-
-        fetchData();
+        FetchUser(token, setUserData);
     }, [token]);
 
     return (
@@ -71,7 +45,7 @@ const Navbar = () => {
                         </ul>
                         <ul>
                             <li key="overview">
-                                <Link to={"/Settings"} className={isActive("/settings") ? "active" : "noActive"}>
+                                <Link to={"/Settings"} className={isActive("/Settings") ? "active" : "noActive"}>
                                     settings
                                 </Link>
                             </li>

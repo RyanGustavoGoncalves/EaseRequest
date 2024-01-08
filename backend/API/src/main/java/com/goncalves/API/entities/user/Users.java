@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -47,15 +48,27 @@ public class Users implements UserDetails {
         this.creationAccount = creationAccount;
         this.role = role;
     }
-    public void atualizarUser(DadosAtualizarUser dados){
-        if(dados.username() != null){
+
+    public void atualizarUser(DadosAtualizarUser dados) {
+        if (dados.username() != null && !dados.username().isEmpty()) {
             this.username = dados.username();
         }
-        if(dados.email() != null){
+        if (dados.firstName() != null && !dados.firstName().isEmpty()) {
+            this.firstName = dados.firstName();
+        }
+        if (dados.lastName() != null && !dados.lastName().isEmpty()) {
+            this.lastName = dados.lastName();
+        }
+        if (dados.email() != null && !dados.email().isEmpty()) {
             this.email = dados.email();
         }
-        if(dados.password() != null){
-            this.password = dados.password();
+        if (dados.password() != null && !dados.password().isEmpty()) {
+            // Somente atualize a senha se ela não estiver em branco
+            String encryptedPassword = new BCryptPasswordEncoder().encode(dados.password());
+            this.password = encryptedPassword;
+        }
+        if (dados.birth() != null && !dados.birth().isEmpty()) {
+            this.birth = dados.birth();
         }
     }
 

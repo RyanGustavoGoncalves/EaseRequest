@@ -43,7 +43,13 @@
 }
 
 :root {
-    --gap-medium: .5rem
+    --gap-large: 2rem;
+    --gap-medium: .5rem;
+    --gap-tiny: 0.2rem;
+}
+
+:root {
+    --inline-size-medium: 12rem
 }
 
 
@@ -54,7 +60,7 @@ main.appMain {
     background-color: var(--background-color);
 }
 
-/* CSS NavBar */
+/* === CSS Navbar === */
 
 header {
     display: flex;
@@ -117,16 +123,18 @@ div.noActive {
     cursor: pointer;
 }
 
-nav.show>ul>li>a,
-nav.show>a {
+nav.show>ul>li a,
+nav.show a,
+a.active {
     text-decoration: none;
     color: var(--text-color);
     position: relative;
 }
 
-nav.show>ul>li>a.noActive::after,
-nav.show>a::after,
-nav.show>ul>li>a.active::after {
+nav.show>ul>li a.noActive::after,
+nav.show a::after,
+nav.show>ul>li a.active::after,
+a.active::after {
     content: "";
     position: absolute;
     width: 0;
@@ -138,12 +146,13 @@ nav.show>ul>li>a.active::after {
     transition: width var(--transition-duration) var(--transition-easing);
 }
 
-nav.show>ul>li>a.active::after {
+nav.show>ul>li a.active::after,
+a.active::after {
     width: 100%;
 }
 
-nav>ul>li>a.noActive:hover::after,
-nav.show>a.noActive:hover::after {
+nav>ul>li a.noActive:hover::after,
+nav.show a.noActive:hover::after {
     width: 100%;
 }
 
@@ -295,19 +304,18 @@ div.lupaSearch>div.lupa>img {
 }
 
 div.addBtn>button {
-    color: var(--text-color-dark);
     font-weight: bold;
-    background-color: var(--background-color-light);
+    background-color: var(--primary-color);
     padding: var(--padding-small);
     border-radius: var(--border-radius-small);
     inline-size: 5rem;
     cursor: pointer;
     border: none;
-    transition: all 0.5s;
+    transition: all 1s;
 }
 
 div.addBtn>button:hover {
-    background-color: var(--background-color-lighter);
+    background-color: #1fdf6538;
     transform: scale(1.1);
 }
 
@@ -390,7 +398,7 @@ div.boxTools>a {
 
 div.btnSave {
     padding: var(--padding-tiny);
-    gap: var(--gap-tiny);
+    gap: var(--gap-medium);
     display: flex;
     justify-content: center;
 }
@@ -408,25 +416,25 @@ div.btnSave>button {
 }
 
 div.btnSave>button.deleteBtn:hover {
-    color: var(--text-color-light);
-    background-color: var(--accent-color);
+    color: var(--text-color);
+    background-color: red;
     transform: scale(1.1);
 }
 
 div.btnSave>button:hover {
-    color: var(--text-color-light);
+    color: var(--text-color);
     background-color: var(--primary-color);
     transform: scale(1.1);
 }
 
 select.selectHome {
     color: var(--primary-color);
-    background-color: var(--background-color-dark);
+    background-color: var(--background-color);
     font-weight: bold;
-    font-size: var(--font-size-small);
+    font-size: var(--font-size-medium);
     inline-size: var(--inline-size-medium);
     border: none;
-    border-bottom: solid 2px var(--border-color);
+    border-bottom: solid 2px grey;
 }
 
 .singleRequest>div {
@@ -434,6 +442,10 @@ select.selectHome {
 }
 
 .singleRequest>div>span {
+    color: var(--primary-color);
+}
+
+.singleRequest>span {
     color: var(--primary-color);
 }
 
@@ -596,10 +608,99 @@ div.page>button:hover {
 
 /* === CSS settings === */
 
-.main-settings-content{
-    position: absolute;
-    z-index: 12989481984;
+.main-settings-content {
     width: 100%;
-    height: 100%;
-    background-color: red;
+}
+
+.section-settings-content h1 {
+    color: var(--primary-color);
+}
+
+.article-settings-content {
+    width: 100%;
+}
+
+/* === CSS Aside */
+
+.aside-settings-content {
+    width: 20%;
+    border-right: solid 1px var(--box-shadow-color);
+}
+
+.aside-ul-settings-content {
+    display: grid;
+    gap: var(--gap-medium);
+}
+
+.aside-ul-settings-content li {
+    padding: 0.5rem;
+}
+
+.aside-ul-settings-content a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+/* === CSS ProfileSettings === */
+
+.section-settings-content {
+    display: flex;
+    gap: var(--gap-large);
+}
+
+.user-info-image-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.information-user-content {
+    display: grid;
+    max-width: 50%;
+    padding-top: var(--gap-large);
+    gap: var(--gap-medium);
+}
+
+.information-user-content span {
+    font-size: 18px;
+    color: var(--primary-color);
+}
+
+.information-user-content p {
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.userImage {
+    display: grid;
+    align-items: center;
+    max-width: 100%;
+}
+
+.userImage h2 {
+    font-weight: normal;
+}
+
+div.image {
+    position: relative;
+    display: flex;
+    align-items: end;
+}
+
+.userImage>div.image>img {
+    width: 50%;
+    height: auto;
+    border-radius: 50%;
+    border: dotted 2px var(--text-color);
+}
+
+.userImage>div.image>div.editIcon {
+    position: absolute;
+    left: 2rem;
+}
+
+.userImage>div.image>div>img {
+    width: 30%;
+    filter: invert(1);
 }
