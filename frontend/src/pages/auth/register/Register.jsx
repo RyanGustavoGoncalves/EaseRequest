@@ -1,8 +1,10 @@
-import  { useState } from "react";
+import { useState } from "react";
 import '../components/style.css'
 import imgError from '../assets/icons8-erro-48 (1).png';
 import img from '../assets/aboutImg.png';
 import wave from '../assets/wave.svg';
+import openEye from '../assets/openEye.png';
+import closeEye from '../assets/closeEye.png';
 
 const Register = ({ toggleForm }) => {
     const [username, setUsername] = useState("");
@@ -10,6 +12,8 @@ const Register = ({ toggleForm }) => {
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const [birth, setBirth] = useState("");
     const [role, setRole] = useState("USER");
 
@@ -18,11 +22,22 @@ const Register = ({ toggleForm }) => {
     const [modal, setModal] = useState({ display: 'none' });
     const [modalOpacity, setModalOpacity] = useState({ display: 'none' });
 
+    const handleTogglePassword = () => {
+        setShowPassword(!showPassword);
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (validateInputs()) {
-            await cadastrar();
-            limpar();
+            if (password === confirmPassword) {
+                await cadastrar();
+                limpar();
+            } else {
+                // Exibe um erro indicando que as senhas não coincidem
+                setErrors([{ campo: "Confirmação de senha", mensagem: "As senhas não coincidem." }]);
+                setModalOpacity({ display: "block" });
+                setModal({ display: "block" });
+            }
         } else {
             // Exibe um erro indicando que há campos obrigatórios vazios
             setErrors([{ campo: "Campos obrigatórios", mensagem: "Preencha todos os campos obrigatórios." }]);
@@ -96,6 +111,7 @@ const Register = ({ toggleForm }) => {
         setLastName("");
         setEmail("");
         setPassword("");
+        setConfirmPassword("");
         setBirth("");
     };
 
@@ -175,14 +191,34 @@ const Register = ({ toggleForm }) => {
                             />
                         </div>
                         <div className="authField">
-                            <label id="passwordLabel" className={password ? 'active' : ''} htmlFor="password">password</label>
+                            <label id="passwordLabel" className={password ? 'active' : ''} htmlFor="password">
+                                password
+                            </label>
+                            <div className="togglePassword">
+                                <span onClick={handleTogglePassword}>
+                                    {showPassword ? <img src={openEye} alt="Open Eye" /> : <img src={closeEye} alt="Closed Eye" />}
+                                </span>
+                            </div>
                             <input
                                 id="password"
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 onMouseEnter={() => handleInputFocus('passwordLabel')}
                                 onMouseLeave={() => handleInputBlur('passwordLabel')}
+                            />
+                        </div>
+                        <div className="authField">
+                            <label id="confirmPasswordLabel" className={confirmPassword ? 'active' : ''} htmlFor="confirmPassword">
+                                Confirmar senha
+                            </label>
+                            <input
+                                id="confirmPassword"
+                                type={showPassword ? "text" : "password"}
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                onMouseEnter={() => handleInputFocus('confirmPasswordLabel')}
+                                onMouseLeave={() => handleInputBlur('confirmPasswordLabel')}
                             />
                         </div>
                         <div className="authField">
@@ -199,25 +235,25 @@ const Register = ({ toggleForm }) => {
                         </div>
                     </form>
                 </fieldset>
-                    <div className="modal" style={{ display: modal.display }}>
-                        <div className="errorModal">
-                            <div className="errorIcon">
-                                <img src={imgError} alt="Error" />
-                                <h2>Erro!</h2>
-                            </div>
-                            <hr />
-                            <div className="errorMessages">
-                                {/* Mapeia e exibe os erros */}
-                                {errors.map((error, index) => (
-                                    <div key={index}>
-                                        <strong>{error.campo}</strong> {error.mensagem}
-                                    </div>
-                                ))}
-                            </div>
+                <div className="modal" style={{ display: modal.display }}>
+                    <div className="errorModal">
+                        <div className="errorIcon">
+                            <img src={imgError} alt="Error" />
+                            <h2>Erro!</h2>
+                        </div>
+                        <hr />
+                        <div className="errorMessages">
+                            {/* Mapeia e exibe os erros */}
+                            {errors.map((error, index) => (
+                                <div key={index}>
+                                    <strong>{error.campo}</strong> {error.mensagem}
+                                </div>
+                            ))}
                         </div>
                     </div>
-                    {/* Modal de fundo */}
-                    <div className="modalOpacity" onClick={closeModalOpacity} style={{ display: modalOpacity.display }}></div>
+                </div>
+                {/* Modal de fundo */}
+                <div className="modalOpacity" onClick={closeModalOpacity} style={{ display: modalOpacity.display }}></div>
             </article>
             <div className="WelcomeDescWave">
                 <img src={wave} alt="" />

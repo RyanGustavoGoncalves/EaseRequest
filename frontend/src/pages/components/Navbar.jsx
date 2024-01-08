@@ -71,7 +71,7 @@ const Navbar = () => {
                         </ul>
                         <ul>
                             <li key="overview">
-                                <Link to={"/settings"} className={isActive("/settings") ? "active" : "noActive"}>
+                                <Link to={"/Settings"} className={isActive("/settings") ? "active" : "noActive"}>
                                     settings
                                 </Link>
                             </li>

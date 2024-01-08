@@ -73,8 +73,8 @@ div.authField>legend {
   font-weight: bold;
 }
 
-.authField>label,
-.authFieldLogin>label {
+.authField label,
+.authFieldLogin label {
   font-size: 15px;
   color: #1fdf64;
   font-weight: bold;
@@ -137,6 +137,16 @@ div.authFieldLogin>input:not(:focus):not(:placeholder-shown)+label {
   color: #5EC57E;
 }
 
+.togglePassword{
+  position: absolute;
+  color: white;
+  left: 11.9rem;
+}
+
+.togglePassword img {
+  width: 20px;
+  filter: invert(1);
+}
 
 form.authForm>div.btn {
   display: grid;

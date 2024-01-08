@@ -594,4 +594,12 @@ div.page>button:hover {
     }
 }
 
-/* CSS settings */
+/* === CSS settings === */
+
+.main-settings-content{
+    position: absolute;
+    z-index: 12989481984;
+    width: 100%;
+    height: 100%;
+    background-color: red;
+}

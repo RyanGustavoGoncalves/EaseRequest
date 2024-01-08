@@ -23,8 +23,8 @@ const ProtectedRoute = ({ element: Element, ...rest }) => {
             const role = responseBody.role;
             setIsAuthenticated(true);
           } else {
-            alert("Token Inválido ou expirado!")
             setIsAuthenticated(false);
+            alert("Token Inválido ou expirado!")
           }
         } catch (error) {
           alert("Erro ao buscar token!", error)

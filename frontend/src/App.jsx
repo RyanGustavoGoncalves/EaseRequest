@@ -5,6 +5,7 @@ import './pages/auth/components/style.css';
 import Navbar from './pages/components/Navbar';
 import Home from './pages/home/Home';
 import HomeSecurity from './pages/home/auth/HomeSecurity';
+import Settings from './pages/settings/settings';
 
 
 function App() {
