@@ -243,7 +243,7 @@ const Home = () => {
                     </div>
                 </div>
                 <div className="btnSave">
-                    <button onClick={() => openModalUpdate(singleRequest.id, handleSomeAction, setEditedRequest, singleRequest, editedRequest, setModalUpdateIsOpen)}>Update!</button>
+                    <button onClick={() => openModalUpdate(singleRequest.id, handleSomeAction, setEditedRequest, singleRequest, setModalUpdateIsOpen)}>Update!</button>
                 </div>
             </Modal>
 
@@ -256,7 +256,7 @@ const Home = () => {
 
                 <InputField
                     id="problem"
-                    label="UpdatedProblem"
+                    label="Updated Problem"
                     value={editedRequest.problem}
                     onChange={(e) => setEditedRequest((prev) => ({ ...prev, problem: e.target.value }))}
                     onMouseEnter={() => handleInputFocus('problemLabel')}
@@ -265,7 +265,7 @@ const Home = () => {
 
                 <InputField
                     id="description"
-                    label="Updatedescription"
+                    label="Update Description"
                     value={editedRequest.description}
                     onChange={(e) => setEditedRequest((prev) => ({ ...prev, description: e.target.value }))}
                     onMouseEnter={() => handleInputFocus('descriptionLabel')}

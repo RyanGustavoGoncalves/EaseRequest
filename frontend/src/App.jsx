@@ -9,7 +9,6 @@ import HomeSecurity from './pages/home/auth/HomeSecurity';
 
 function App() {
   const [role, setRole] = useState(localStorage.getItem('role'));
-  console.log(role);
   const token = localStorage.getItem('token');
 
   useEffect(() => {

@@ -24,8 +24,10 @@ const Navbar = () => {
                         <img src={Logo} width={30} />
                     </Link>
                     <div className="userPerfil">
-                        <img src={user} alt="userImage" width={30} style={{ filter: "invert(1)" }} />
-                        <h1>{userData.username}</h1>
+                        <Link to={"/Settings"}>
+                            <img src={user} alt="userImage" width={30} style={{ filter: "invert(1)" }} />
+                            <h1>{userData.username}</h1>
+                        </Link>
                     </div>
                 </div>
                 <div className="scroll">

@@ -6,7 +6,6 @@ public record DadosAtualizarUser(String username,
                                  String firstName,
                                  String lastName,
                                  String email,
-                                 String password,
                                  String birth) {
 
 }

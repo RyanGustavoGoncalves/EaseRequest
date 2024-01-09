@@ -70,7 +70,7 @@ const HomeSecurity = () => {
     // Fetch requests when the component mounts and requests are not loaded
     useEffect(() => {
         if (!requestsLoaded) {
-            fetch();
+            fetchData();
         }
     }, [requestsLoaded]);
 
@@ -78,31 +78,13 @@ const HomeSecurity = () => {
     useEffect(() => {
         const intervalId = setInterval(() => {
             console.log(token);
-            fetch(currentPage);
+            fetchData(currentPage);
         }, 5000);
 
         // Clear the interval when the component is unmounted
         return () => clearInterval(intervalId);
 
     }, [currentPage, token]);
-
-    const handleNextPage = () => {
-        setCurrentPage(prevPage => {
-            // Chama a função fetchRequests imediatamente após a mudança da página
-            fetch(prevPage + 1);
-
-            return prevPage + 1;
-        });
-    };
-
-    const handlePreviousPage = () => {
-        setCurrentPage(prevPage => {
-            // Chama a função fetchRequests imediatamente após a mudança da página
-            fetch(prevPage - 1);
-
-            return prevPage - 1;
-        });
-    };
 
     // Function to add a new request
     const handleAddBox = () => {
@@ -139,12 +121,30 @@ const HomeSecurity = () => {
         handleAddBox();
     };
 
+    const handleNextPage = () => {
+        setCurrentPage(prevPage => {
+            // Chama a função fetchRequests imediatamente após a mudança da página
+            const nextPage = prevPage + 1;
+            fetchRequestsPage(nextPage, setLoading, token, setToolBoxes, getStatusClass, setRequestsLoaded);
+            return nextPage;
+        });
+    };
+    
+    const handlePreviousPage = () => {
+        setCurrentPage(prevPage => {
+            // Chama a função fetchRequests imediatamente após a mudança da página
+            const previousPage = prevPage - 1;
+            fetchRequestsPage(previousPage, setLoading, token, setToolBoxes, getStatusClass, setRequestsLoaded);
+            return previousPage;
+        });
+    };
+
     // Function to handle search input
     const handleSearch = (e) => {
         setSearchTerm(e.target.value);
     };
 
-    const fetch = async () => {
+    const fetchData = async () => {
         await fetchRequestsPage(currentPage, setLoading, token, setToolBoxes, getStatusClass, setRequestsLoaded)
     }
 

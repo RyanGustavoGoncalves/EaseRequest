@@ -28,6 +28,7 @@ public class Users implements UserDetails {
 
     @Id
     private String idUsers;
+
     private String username;
     private String firstName;
     private String lastName;
@@ -62,11 +63,11 @@ public class Users implements UserDetails {
         if (dados.email() != null && !dados.email().isEmpty()) {
             this.email = dados.email();
         }
-        if (dados.password() != null && !dados.password().isEmpty()) {
+      /*  if (dados.password() != null && !dados.password().isEmpty()) {
             // Somente atualize a senha se ela não estiver em branco
             String encryptedPassword = new BCryptPasswordEncoder().encode(dados.password());
             this.password = encryptedPassword;
-        }
+        }*/
         if (dados.birth() != null && !dados.birth().isEmpty()) {
             this.birth = dados.birth();
         }

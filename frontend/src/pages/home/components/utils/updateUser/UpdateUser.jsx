@@ -1,18 +1,20 @@
-export const FetchUser = async (token, setUserData) => {
+export const updateUser = async (editUser, token, setUserData) => {
     try {
-        const response = await fetch("http://localhost:8080/user/token", {
+        const response = await fetch("http://localhost:8080", {
+            method: 'PUT',
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${token}`,
             },
+            body: JSON.stringify(editUser),
         });
 
         if (response.status === 200) {
             const responseData = await response.json();
-
             if (responseData && responseData) {
                 setUserData(responseData);
+                alert("Update realizado com sucesso!");
             } else {
                 console.error("A resposta não contém um nome de usuário válido:", responseData);
             }
@@ -24,4 +26,3 @@ export const FetchUser = async (token, setUserData) => {
         alert("Erro ao buscar as informações do usuário. Por favor, tente novamente mais tarde.");
     }
 };
-

@@ -13,6 +13,6 @@ public record DadosListagemUser(String idUser,
                                 String birth,
                                 LocalDateTime creationAccount) {
     public DadosListagemUser(Users users) {
-        this(users.getUsername(), users.getIdUsers(), users.getFirstName(), users.getLastName(), users.getEmail(), users.getPassword(), users.getBirth(), users.getCreationAccount());
+        this(users.getIdUsers(), users.getUsername(), users.getFirstName(), users.getLastName(), users.getEmail(), users.getPassword(), users.getBirth(), users.getCreationAccount());
     }
 }

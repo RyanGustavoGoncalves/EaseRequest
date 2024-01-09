@@ -1,3 +1,5 @@
+import { FetchUser } from "../getInfoUser/FetchUser";
+
  // Modal Functions
  export const openModal = (setModalIsOpen) => {
     document.body.style.overflow = "hidden";
@@ -24,7 +26,6 @@ export const openModalUpdate = (id, handleSomeAction, setEditedRequest, singleRe
     document.body.style.overflow = "hidden";
     handleSomeAction(id)
     setEditedRequest({ ...singleRequest });
-    console.log(editedRequest);
     setModalUpdateIsOpen(true);
 };
 
@@ -53,3 +54,13 @@ export const closeModalFilter = (setModalFilterIsOpen) => {
     document.body.style.overflow = "auto";
     setModalFilterIsOpen(false);
 };
+
+export const openModalUserUpdate = (setModalIsOpen, setEditData, userData) => {
+    document.body.style.overflow = "hidden";
+    setEditData({ ...userData })
+    setModalIsOpen(true);
+}
+export const closeModalUserUpdate = (setModalIsOpen) => {
+    document.body.style.overflow = "hidden";
+    setModalIsOpen(false);
+}

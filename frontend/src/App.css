@@ -87,9 +87,13 @@ div.headerLogoName>a {
     text-decoration: none;
 }
 
-div.headerLogoName>div.userPerfil>h1 {
+div.headerLogoName>div.userPerfil h1 {
     font-size: 20px;
     color: var(--text-color);
+}
+div.headerLogoName>div.userPerfil a{
+    display: contents;
+    text-decoration: none;
 }
 
 div.userPerfil {
@@ -107,6 +111,7 @@ nav.show {
     justify-content: space-between;
     gap: var(--padding-medium);
     box-shadow: inset 0 -1px #222;
+    padding: 0.5rem;
 }
 
 nav.show>ul {
@@ -129,6 +134,7 @@ a.active {
     text-decoration: none;
     color: var(--text-color);
     position: relative;
+    padding: 0.5rem;
 }
 
 nav.show>ul>li a.noActive::after,
@@ -237,6 +243,16 @@ div.btnModalClose {
         scroll-padding: 0 10px;
     }
 
+    nav.show {
+        padding: 0;
+    }
+
+    nav.show>ul>li a,
+    nav.show a,
+    a.active {
+        padding: 0;
+    }
+
     .menu-icon {
         display: block;
         cursor: pointer;
@@ -283,7 +299,7 @@ div.lupaSearch>input {
     width: 80%;
     padding: var(--padding-small);
     border-radius: var(--border-radius-small);
-    color: var(--text-color-light);
+    color: var(--text-color);
     font-weight: bold;
     background-color: var(--background-color);
     border: solid 1px var(--secondary-color);
@@ -623,7 +639,7 @@ div.page>button:hover {
 /* === CSS Aside */
 
 .aside-settings-content {
-    width: 20%;
+    width: 15%;
     border-right: solid 1px var(--box-shadow-color);
 }
 
