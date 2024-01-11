@@ -1,6 +1,6 @@
 # EaseRequest 🚀
 
-# [![My Skills](https://skillicons.dev/icons?i=java,spring,vite,react,mongo,css,)](https://skillicons.dev)
+# [![My Skills](https://skillicons.dev/icons?i=java,spring,vite,react,mongo,css,pyhon)](https://skillicons.dev)
 
 EaseRequest é uma aplicação web construída com React (Vite), Java Spring (backend), e MongoDB para facilitar a gestão de solicitações de usuários. Permite que os usuários criem, atualizem e excluam solicitações, com atualizações em tempo real sobre o status das solicitações. A aplicação possui uma interface amigável com modais para interações simples.
 
