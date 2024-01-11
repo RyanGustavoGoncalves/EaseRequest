@@ -2,18 +2,28 @@ import { useState, useEffect } from "react";
 import { FetchUser } from "../../../home/components/utils/getInfoUser/FetchUser";
 import { closeModalUserUpdate, openModalUserUpdate } from "../../../home/components/utils/ModalFunctions/ModalFunctions";
 import { handleInputBlur, handleInputFocus } from "../../../home/components/utils/handleInput/HandleInput";
+import { PasswordUpdateWithNewPasswordModal } from "./components/PasswordUpdateWithNewPasswordModal ";
+import { updateUser } from '../../../home/components/utils/updateUser/UpdateUser'
+import { PasswordUpdateModal } from "./components/PasswordUpdateModal ";
 import InputField from "../../../home/components/inputField/InputField";
 import Modal from '../../../components/Modal';
-import { updateUser } from '../../../home/components/utils/updateUser/UpdateUser'
 
 import user from '../../assets/perfil.png';
 import edit from '../../assets/edit.png'
+import { tokenMail } from "../../../home/components/utils/getTokenFromEmail/tokenMail";
+import { tokenCheckAndUpdatePassword } from "../../../home/components/utils/tokenCheckUpdate/TokenCheckAndUpdatePassword";
 
 export const ProfileSettings = () => {
 
     const token = localStorage.getItem('token');
     const [showUpdateScreen, setShowUpdateScreen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [updateModal, setUpdateModal] = useState(false);
+    const [modalLabelAndPassword, setModalLabelAndPassword] = useState(false);
+    const [tokenMailLabel, setTokenMailLabel] = useState({
+        token: "",
+        newPassword: ""
+    });
     const [userData, setUserData] = useState({
         username: "",
         firstName: "",
@@ -39,36 +49,23 @@ export const ProfileSettings = () => {
         closeModalUserUpdate(setModalIsOpen);
     }
 
-    const tokenMail = async (email, e) => {
-        if (e) {
-            e.preventDefault();
-        }
+    const sendToken = async (email) => {
         setLoading(true);
-        try {
-            const response = await fetch("http://localhost:8080/update-password/generate-token", {
-                method: 'PUT',
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify(email),
-            });
+        await tokenMail(email, token)
+        setLoading(false);
+        setShowUpdateScreen(false);
+        setUpdateModal(true);
 
-            if (response.ok) { // Verifica se o status é 2xx (sucesso)
-                alert("Token enviado!");
-            } else {
-                console.log("Ocorreu um erro ao gerar o token:", response.status);
-                const errorMessage = await response.text(); // Obtém o corpo da resposta em caso de erro
-                alert(`Erro ao gerar o token: ${errorMessage}`);
-            }
-        } catch (error) {
-            console.log("Erro ao gerar o token:", error);
-            alert("Erro ao gerar o token. Por favor, tente novamente mais tarde.");
-        } finally {
-            setLoading(false);
-        }
-    };
+    }
+
+    const handleTokenCheckAndUpdatePassword = async (tokenMailLabel) => {
+        await tokenCheckAndUpdatePassword(tokenMailLabel, token, setModalLabelAndPassword, setUpdateModal);
+        closeModalUserUpdate(setModalIsOpen),
+            setShowUpdateScreen(false),
+            setUpdateModal(false),
+            setModalLabelAndPassword(false)
+
+    }
 
     return (
         <article className='article-settings-content'>
@@ -77,27 +74,27 @@ export const ProfileSettings = () => {
                 <div className="information-user-content">
                     <div>
                         <span>Username</span>
-                        <p>{userData.username}</p>
+                        <p>{userData.username || 'NaN'}</p>
                     </div>
                     <div>
                         <span>First name</span>
-                        <p>{userData.firstName}</p>
+                        <p>{userData.firstName || 'NaN'}</p>
                     </div>
                     <div>
                         <span>Last name</span>
-                        <p>{userData.lastName}</p>
+                        <p>{userData.lastName || 'NaN'}</p>
                     </div>
                     <div>
                         <span>Email</span>
-                        <p>{userData.email}</p>
+                        <p>{userData.email || 'NaN'}</p>
                     </div>
                     <div>
                         <span>Birth</span>
-                        <p>{userData.birth}</p>
+                        <p>{userData.birth || 'NaN'}</p>
                     </div>
                     <div>
                         <span>Creation Account</span>
-                        <p>{userData.creationAccount}</p>
+                        <p>{userData.creationAccount || 'NaN'}</p>
                     </div>
                     <div className="addBtn">
                         <button onClick={() => openModalUserUpdate(setModalIsOpen, setEditUser, userData)}>Update!</button>
@@ -115,83 +112,104 @@ export const ProfileSettings = () => {
             </div>
             <Modal isOpen={modalIsOpen} onClose={() => {
                 closeModalUserUpdate(setModalIsOpen),
-                    setShowUpdateScreen(false)
+                    setShowUpdateScreen(false),
+                    setUpdateModal(false),
+                    setModalLabelAndPassword(false)
             }}>
                 {loading && (
                     <div className="loading-container">
                         <div className="spinner"></div>
                     </div>
                 )}
-                {showUpdateScreen ? (
-                <div className="password-update-modal">
-                    <h5>Update Password</h5>
-                    <p>Enter the email where you want<br /> to receive the token</p>
 
-                    <InputField
-                        id="email"
-                        label="Email"
-                        value={editUser.email}
-                        onChange={(e) => setEditUser((prev) => ({ ...prev, email: e.target.value }))}
-                        onMouseEnter={() => handleInputFocus('emailLabel')}
-                        onMouseLeave={() => handleInputBlur('emailLabel')}
+                {updateModal && (
+                    <PasswordUpdateModal
+                        label="Enter token to update password"
+                        value={tokenMailLabel.token}
+                        onChange={(e) => setTokenMailLabel((prev) => ({ ...prev, token: e.target.value }))}
+                        onClick={() => { setUpdateModal(false), setModalLabelAndPassword(true) }}
                     />
+                )}
 
-                    <div className="btnSave">
-                        <button onClick={() => tokenMail({ email: editUser.email })}>Send!</button>
-                    </div>
-                </div>
-                ) : (
-                <>
+                {modalLabelAndPassword && (
+                    <PasswordUpdateWithNewPasswordModal
+                        label="Enter your new password"
+                        value={tokenMailLabel.newPassword}
+                        onChange={(e) => setTokenMailLabel((prev) => ({ ...prev, newPassword: e.target.value }))}
+                        onClick={() => handleTokenCheckAndUpdatePassword(tokenMailLabel)}
+                    />
+                )}
+                {showUpdateScreen && (
+                    <div className="password-update-modal">
+                        <h5>Update Password</h5>
+                        <p>Enter the email where you want<br /> to receive the token</p>
 
-                    <InputField
-                        id="username"
-                        label="Username"
-                        value={editUser.username}
-                        onChange={(e) => setEditUser((prev) => ({ ...prev, username: e.target.value }))}
-                        onMouseEnter={() => handleInputFocus('usernameLabel')}
-                        onMouseLeave={() => handleInputBlur('usernameLabel')}
-                    />
-                    <InputField
-                        id="firstName"
-                        label="First name"
-                        value={editUser.firstName}
-                        onChange={(e) => setEditUser((prev) => ({ ...prev, firstName: e.target.value }))}
-                        onMouseEnter={() => handleInputFocus('firstNameLabel')}
-                        onMouseLeave={() => handleInputBlur('firstNameLabel')}
-                    />
-                    <InputField
-                        id="lastName"
-                        label="Last name"
-                        value={editUser.lastName}
-                        onChange={(e) => setEditUser((prev) => ({ ...prev, lastName: e.target.value }))}
-                        onMouseEnter={() => handleInputFocus('lastNameLabel')}
-                        onMouseLeave={() => handleInputBlur('lastNameLabel')}
-                    />
-                    <InputField
-                        id="email"
-                        label="Email"
-                        value={editUser.email}
-                        onChange={(e) => setEditUser((prev) => ({ ...prev, email: e.target.value }))}
-                        onMouseEnter={() => handleInputFocus('emailLabel')}
-                        onMouseLeave={() => handleInputBlur('emailLabel')}
-                    />
-                    <InputField
-                        id="birth"
-                        label="Birth"
-                        value={editUser.birth}
-                        onChange={(e) => setEditUser((prev) => ({ ...prev, birth: e.target.value }))}
-                        onMouseEnter={() => handleInputFocus('birthLabel')}
-                        onMouseLeave={() => handleInputBlur('birthLabel')}
-                    />
-                    <div className="btnAlign">
+                        <InputField
+                            id="email"
+                            label="Email"
+                            value={editUser.email}
+                            onChange={(e) => setEditUser((prev) => ({ ...prev, email: e.target.value }))}
+                            onMouseEnter={() => handleInputFocus('emailLabel')}
+                            onMouseLeave={() => handleInputBlur('emailLabel')}
+                        />
+
                         <div className="btnSave">
-                            <button onClick={() => handleUpdateUserAction(editUser, token)}>Update!</button>
-                        </div>
-                        <div className="btnSave">
-                            <button onClick={() => setShowUpdateScreen(true)}>More!</button>
+                            <button onClick={() => sendToken({ email: editUser.email })}>Send!</button>
                         </div>
                     </div>
-                </>
+                )}
+                {!updateModal && !showUpdateScreen && !modalLabelAndPassword && (
+                    <>
+
+                        <InputField
+                            id="username"
+                            label="Username"
+                            value={editUser.username}
+                            onChange={(e) => setEditUser((prev) => ({ ...prev, username: e.target.value }))}
+                            onMouseEnter={() => handleInputFocus('usernameLabel')}
+                            onMouseLeave={() => handleInputBlur('usernameLabel')}
+                        />
+                        <InputField
+                            id="firstName"
+                            label="First name"
+                            value={editUser.firstName}
+                            onChange={(e) => setEditUser((prev) => ({ ...prev, firstName: e.target.value }))}
+                            onMouseEnter={() => handleInputFocus('firstNameLabel')}
+                            onMouseLeave={() => handleInputBlur('firstNameLabel')}
+                        />
+                        <InputField
+                            id="lastName"
+                            label="Last name"
+                            value={editUser.lastName}
+                            onChange={(e) => setEditUser((prev) => ({ ...prev, lastName: e.target.value }))}
+                            onMouseEnter={() => handleInputFocus('lastNameLabel')}
+                            onMouseLeave={() => handleInputBlur('lastNameLabel')}
+                        />
+                        <InputField
+                            id="email"
+                            label="Email"
+                            value={editUser.email}
+                            onChange={(e) => setEditUser((prev) => ({ ...prev, email: e.target.value }))}
+                            onMouseEnter={() => handleInputFocus('emailLabel')}
+                            onMouseLeave={() => handleInputBlur('emailLabel')}
+                        />
+                        <InputField
+                            id="birth"
+                            label="Birth"
+                            value={editUser.birth}
+                            onChange={(e) => setEditUser((prev) => ({ ...prev, birth: e.target.value }))}
+                            onMouseEnter={() => handleInputFocus('birthLabel')}
+                            onMouseLeave={() => handleInputBlur('birthLabel')}
+                        />
+                        <div className="btnAlign">
+                            <div className="btnSave">
+                                <button onClick={() => handleUpdateUserAction(editUser, token)}>Update!</button>
+                            </div>
+                            <div className="btnSave">
+                                <button onClick={() => setShowUpdateScreen(true)}>More!</button>
+                            </div>
+                        </div>
+                    </>
                 )}
             </Modal>
         </article>

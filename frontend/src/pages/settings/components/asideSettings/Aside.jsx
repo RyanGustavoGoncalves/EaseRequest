@@ -7,6 +7,11 @@ export const Aside = () => (
                     Profile
                 </Link>
             </li>
+            <li>
+                <Link className="noActive">
+                    Request Configurations
+                </Link>
+            </li>
         </ul>
     </aside>
 )

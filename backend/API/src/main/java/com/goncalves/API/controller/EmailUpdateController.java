@@ -55,7 +55,6 @@ public class EmailUpdateController {
                     String encryptedPassword = new BCryptPasswordEncoder().encode(dados.newPassword());
                     user.setPassword(encryptedPassword);
                     repository.save(user);
-//                    tokenService.removerToken(token);
                     return ResponseEntity.ok("Senha redefinida com sucesso.");
                 } else {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");

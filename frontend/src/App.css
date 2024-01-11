@@ -131,7 +131,7 @@ div.noActive {
 
 nav.show>ul>li a,
 nav.show a,
-a.active {
+.aside-ul-settings-content a {
     text-decoration: none;
     color: var(--text-color);
     position: relative;
@@ -139,6 +139,7 @@ a.active {
 }
 
 nav.show>ul>li a.noActive::after,
+.aside-ul-settings-content a.noActive::after,
 nav.show a::after,
 nav.show>ul>li a.active::after,
 a.active::after {
@@ -159,7 +160,8 @@ a.active::after {
 }
 
 nav>ul>li a.noActive:hover::after,
-nav.show a.noActive:hover::after {
+nav.show a.noActive:hover::after,
+.aside-ul-settings-content a.noActive:hover::after {
     width: 100%;
 }
 
@@ -635,12 +637,24 @@ div.page>button:hover {
 
 .article-settings-content {
     width: 100%;
+    overflow: auto;
 }
 
 /* === CSS Aside */
 
+.menuConfig{
+    display: flex;
+}
+
+.menuConfig img{
+    cursor: pointer;
+    background-color: var(--box-shadow-color);
+    width: 20px;
+    height: 20px;
+}
+
 .aside-settings-content {
-    width: 15%;
+    max-width: 100%;
     border-right: solid 1px var(--box-shadow-color);
 }
 
@@ -649,13 +663,12 @@ div.page>button:hover {
     gap: var(--gap-medium);
 }
 
-.aside-ul-settings-content li {
-    padding: 0.5rem;
+.aside-ul-settings-content a {
+    padding: 0;
 }
 
-.aside-ul-settings-content a {
-    color: var(--text-color);
-    text-decoration: none;
+.aside-ul-settings-content li {
+    padding: 0.5rem;
 }
 
 /* === CSS ProfileSettings === */
@@ -670,6 +683,7 @@ div.page>button:hover {
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
+    padding: var(--padding-small);
 }
 
 .information-user-content {
@@ -757,12 +771,12 @@ div.image {
 }
 
 .spinner {
-    border: 8px solid var(--box-shadow-color);
-    border-top: 8px solid var(--primary-color);
+    border: 5px solid var(--box-shadow-color);
+    border-top: 5px solid var(--primary-color);
     border-radius: 50%;
     width: 50px;
     height: 50px;
-    animation: spin 1s linear infinite;
+    animation: spin 1s ease-in-out infinite;
 }
 
 @keyframes spin {
@@ -772,5 +786,14 @@ div.image {
 
     100% {
         transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 420px) {
+    .information-user-content > div span{
+        font-size: 16px
+    }
+    .information-user-content > div p {
+        font-size: 14px;
     }
 }
