@@ -4,6 +4,11 @@
 
 EaseRequest é uma aplicação web construída com React (Vite), Java Spring (backend), e MongoDB para facilitar a gestão de solicitações de usuários. Permite que os usuários criem, atualizem e excluam solicitações, com atualizações em tempo real sobre o status das solicitações. A aplicação possui uma interface amigável com modais para interações simples.
 
+## Novas Funcionalidades 🌟
+✉️ **Notificações por E-mail**: Agora, EaseRequest oferece uma funcionalidade de envio de e-mail para a atualização de senha. Ao solicitar uma alteração de senha, os usuários recebem um e-mail com um token para confirmação.
+
+🐍 **Integração Python**: Adicionamos uma nova camada ao EaseRequest com um script em Python para pegar informações de solicitações da aplicação e jogar em planilhas de excel. Isso permite uma maior flexibilidade na manipulação de dados e relatórios.
+
 ## Recursos
 
 ✨ **Atualizações em Tempo Real**: Receba atualizações ao vivo sobre o status das suas solicitações.
