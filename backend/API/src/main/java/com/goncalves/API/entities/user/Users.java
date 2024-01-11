@@ -1,6 +1,8 @@
 package com.goncalves.API.entities.user;
 
 import com.goncalves.API.DTO.DadosAtualizarUser;
+import com.goncalves.API.infra.security.RegistrationException;
+import io.micrometer.common.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -63,13 +65,14 @@ public class Users implements UserDetails {
         if (dados.email() != null && !dados.email().isEmpty()) {
             this.email = dados.email();
         }
-      /*  if (dados.password() != null && !dados.password().isEmpty()) {
-            // Somente atualize a senha se ela não estiver em branco
-            String encryptedPassword = new BCryptPasswordEncoder().encode(dados.password());
-            this.password = encryptedPassword;
-        }*/
         if (dados.birth() != null && !dados.birth().isEmpty()) {
             this.birth = dados.birth();
+        }
+    }
+
+    public void validateField(String value, String fieldName, String errorMessage) throws RegistrationException {
+        if (StringUtils.isBlank(value) || value.length() < 3) {
+            throw new RegistrationException(fieldName, errorMessage);
         }
     }
 

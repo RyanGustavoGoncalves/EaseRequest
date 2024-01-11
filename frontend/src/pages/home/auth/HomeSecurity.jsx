@@ -129,7 +129,7 @@ const HomeSecurity = () => {
             return nextPage;
         });
     };
-    
+
     const handlePreviousPage = () => {
         setCurrentPage(prevPage => {
             // Chama a função fetchRequests imediatamente após a mudança da página
