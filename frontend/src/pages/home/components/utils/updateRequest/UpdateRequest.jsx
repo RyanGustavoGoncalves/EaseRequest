@@ -1,3 +1,6 @@
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+
 // Function to update a request
 export const updateRequest = async (token, editedRequest, setSingleRequest) => {
     try {
@@ -12,7 +15,18 @@ export const updateRequest = async (token, editedRequest, setSingleRequest) => {
 
         if (response.ok) {
             // Successful update
-            console.log('Request updated successfully!');
+            Swal.fire({
+                text: 'Request updated successfully!',
+                icon: 'success',
+                customClass: {
+                    popup: 'custom-popup-class',
+                },
+                didOpen: () => {
+                    const modal = Swal.getPopup();
+                    modal.style.zIndex = 99999;
+                    // Adicione outras personalizações de estilo conforme necessário
+                },
+            });
 
             setSingleRequest({ ...editedRequest });
         } else {
@@ -22,6 +36,12 @@ export const updateRequest = async (token, editedRequest, setSingleRequest) => {
     } catch (error) {
         // Handle network or other errors
         console.error('Error making update request:', error);
-        // alert("Error fetching requests. Please try again later.");
+        Swal.fire({
+            text: 'Error making update request. Please try again later.',
+            icon: 'error',
+            customClass: {
+                popup: 'custom-popup-class',
+            },
+        });
     }
 };

@@ -21,8 +21,8 @@ public class EmailService {
     private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
     public void enviarEmailRedefinirSenha(String destinatario, String token) {
-        String assunto = "Redefinição de Senha";
-        String corpo = "Utilize esse token para fazer a alteração da sua senha:\n" + token;
+        String assunto = "Password Reset";
+        String corpo = "Use this token to change your password:\n" + token;
 
         logger.info("Enviando e-mail para: {}", destinatario);
         logger.debug("Assunto: {}", assunto);
@@ -30,7 +30,7 @@ public class EmailService {
 
         try {
             enviarEmail(destinatario, assunto, corpo);
-            logger.info("E-mail enviado com sucesso.");
+            logger.info("Email successfully sent.");
         } catch (Exception e) {
             logger.error("Erro ao enviar e-mail:", e);
             new EmailException("Erro ao enviar e-mail", e);

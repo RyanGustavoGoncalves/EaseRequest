@@ -1,6 +1,7 @@
 package com.goncalves.API.controller;
 
 import com.goncalves.API.DTO.DadosAtualizarRequest;
+import com.goncalves.API.DTO.DadosFinishRequest;
 import com.goncalves.API.DTO.DadosListagemRequest;
 import com.goncalves.API.DTO.DadosNewRequest;
 import com.goncalves.API.entities.request.Request;
@@ -11,6 +12,7 @@ import com.goncalves.API.infra.security.ErrorNotFoundId;
 import com.goncalves.API.infra.security.ErrorResponse;
 import com.goncalves.API.infra.security.NotFoundException;
 import com.goncalves.API.infra.security.UnauthorizedException;
+import com.goncalves.API.service.EmailService;
 import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,6 +36,9 @@ public class RequestController {
     private RequestRepository repository;
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping
     public ResponseEntity<Page<DadosListagemRequest>> getRequest(@PageableDefault(size = 10, sort = {"creationRequest"}) Pageable paginacao){
@@ -65,7 +70,6 @@ public class RequestController {
         }
     }
 
-
     @GetMapping("/{idRequest}")
     public ResponseEntity selectRequest(@PathVariable String idRequest) {
         try {
@@ -85,9 +89,6 @@ public class RequestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Erro interno do servidor"));
         }
     }
-
-
-
 
     @PostMapping
     @Transactional
@@ -119,7 +120,6 @@ public class RequestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Erro interno do servidor"));
         }
     }
-
 
     @PutMapping("/{idRequest}")
     @Transactional
@@ -154,4 +154,13 @@ public class RequestController {
         }
     }
 
+    @PostMapping("finish-request")
+    public ResponseEntity finishRequest (@RequestBody @Validated DadosFinishRequest dados) {
+        try {
+            emailService.enviarEmail(dados.email(), "Request completed", "Hello " + dados.username() + "! Your ID request " + dados.id() + " has been completed successfully!");
+            return ResponseEntity.ok("Email enviado! para o email:" + dados.email());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao enviar email.");
+        }
+    }
 }

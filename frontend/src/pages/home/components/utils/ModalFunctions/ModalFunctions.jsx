@@ -1,5 +1,3 @@
-import { FetchUser } from "../getInfoUser/FetchUser";
-
  // Modal Functions
  export const openModal = (setModalIsOpen) => {
     document.body.style.overflow = "hidden";

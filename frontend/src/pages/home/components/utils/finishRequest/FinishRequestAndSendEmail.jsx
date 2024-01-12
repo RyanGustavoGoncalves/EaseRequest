@@ -1,27 +1,34 @@
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
-export const tokenCheckAndUpdatePassword = async (tokenMailLabel, token, setModalLabelAndPassword, setUpdateModal) => {
-    console.log(tokenMailLabel)
+export const FinishRequestAndSendEmail = async (token, email, problem, username, id) => {
     try {
-        const response = await fetch("http://localhost:8080/update-password/confirm-reset", {
+        const data = {
+            email: email,
+            problem: problem,
+            username: username,
+            id: id
+        };
+        console.log(data)
+
+        const response = await fetch("http://localhost:8080/request/finish-request", {
             method: 'POST',
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${token}`,
             },
-            body: JSON.stringify(tokenMailLabel),
+            body: JSON.stringify(data),
         });
 
         if (response.ok) {
             Swal.fire({
-                text: 'Password updated successfully!',
+                text: 'Finished!',
                 icon: 'success',
             });
         } else {
             console.log("Ocorreu um erro ao gerar o token:", response.status);
-            const errorMessage = await response.text(); // Obtém o corpo da resposta em caso de erro
+            const errorMessage = await response.text();
             Swal.fire({
                 text: `Erro ao gerar o token: ${errorMessage}`,
                 icon: 'error',
@@ -29,8 +36,6 @@ export const tokenCheckAndUpdatePassword = async (tokenMailLabel, token, setModa
                     popup: 'custom-popup-class',
                 },
             });
-            setModalLabelAndPassword(false);
-            setUpdateModal(true);
         }
     } catch (error) {
         console.log("Erro ao gerar o token:", error);

@@ -12,9 +12,6 @@ export const fetchRequestById = async (id, token ,setSingleRequest) => {
         if (response.status === 200) {
             const responseData = await response.json();
 
-            // Log the response for analysis
-            console.log("API response:", responseData);
-
             if (responseData && typeof responseData === 'object') {
 
                 // Extract user data and add it to the single request

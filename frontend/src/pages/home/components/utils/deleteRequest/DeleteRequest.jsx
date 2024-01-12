@@ -1,5 +1,8 @@
- // Function to delete a request
- export const deleteRequest = async (token, editedRequest) => {
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+
+// Function to delete a request
+export const deleteRequest = async (token, editedRequest) => {
     try {
         const response = await fetch(`http://localhost:8080/request/${editedRequest.id}`, {
             method: 'DELETE',
@@ -10,14 +13,29 @@
         });
 
         if (response.ok) {
-            console.log('Request deleted successfully!');
+            Swal.fire({
+                text: 'Request deleted successfully!',
+                icon: 'success',
+                customClass: {
+                    popup: 'custom-popup-class',
+                },
+                didOpen: () => {
+                    const modal = Swal.getPopup();
+                    modal.style.zIndex = 99999;
+                    // Adicione outras personalizações de estilo conforme necessário
+                },
+            });
         } else {
-
             console.error('Error deleting the request:', response.status);
         }
     } catch (error) {
-        // Handle network or other errors
         console.error('Error making delete request:', error);
-        // alert("Error fetching requests. Please try again later.");
+        Swal.fire({
+            text: 'Error making delete request. Please try again later.',
+            icon: 'error',
+            customClass: {
+                popup: 'custom-popup-class',
+            },
+        });
     }
 };

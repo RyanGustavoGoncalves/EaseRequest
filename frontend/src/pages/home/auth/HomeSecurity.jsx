@@ -16,6 +16,7 @@ import { CreateNewRequest } from "../components/utils/createNewRequest/CreateNew
 import { handleInputBlur, handleInputFocus } from "../components/utils/handleInput/HandleInput";
 import { closeModal, closeModalConfirm, closeModalDelete, closeModalFilter, closeModalUpdate, openModal, openModalConfirm, openModalDelete, openModalFilter, openModalUpdate } from "../components/utils/ModalFunctions/ModalFunctions";
 import { fetchRequestsPage } from "../components/utils/fetchRequestsPagination/FetchRequestPage";
+import { FinishRequestAndSendEmail } from "../components/utils/finishRequest/FinishRequestAndSendEmail";
 
 const HomeSecurity = () => {
     // Retrieve token from local storage
@@ -24,6 +25,7 @@ const HomeSecurity = () => {
     // State variables
     const [toolBoxes, setToolBoxes] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [loadingFinish, setLoadingFinish] = useState(false);
     const [formData, setFormData] = useState({
         id: "",
         problem: "",
@@ -40,7 +42,8 @@ const HomeSecurity = () => {
             role: "",
         }]
     });
-
+    const [finishRequest, setFinishRequest] = useState(false);
+    const [showId, setShowId] = useState(true);
     const [isExpanded, setExpanded] = useState(false);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalConfirmIsOpen, setModalConfirmIsOpen] = useState(false);
@@ -150,24 +153,37 @@ const HomeSecurity = () => {
 
     const createNewRequest = async () => {
         await CreateNewRequest(formData, token);
-        closeModal(setModalIsOpen);
+        setModalIsOpen(false);
     }
 
     const handleUpdateAction = async () => {
         await updateRequest(token, editedRequest, setSingleRequest);
-        closeModalUpdate(setModalUpdateIsOpen);
+        setModalUpdateIsOpen(false);
+        setModalConfirmIsOpen(false);
     }
 
     const handleDeleteAction = async () => {
         await deleteRequest(token, editedRequest);
-        closeModalConfirm(setModalConfirmIsOpen);
-        closeModalUpdate(setModalUpdateIsOpen);
-        closeModalDelete(setModalDeleteIsOpen);
+        setModalConfirmIsOpen(false);
+        setModalUpdateIsOpen(false);
+        setModalDeleteIsOpen(false);
     };
 
     const handleSomeAction = async (id) => {
         await fetchRequestById(id, token, setSingleRequest);
     };
+
+    const handleFinishAction = async (editedRequest) => {
+        setLoadingFinish(true);
+        await FinishRequestAndSendEmail(token, editedRequest.user.email, editedRequest.problem, editedRequest.user.username, editedRequest.id);
+        editedRequest.status = "FINISH";
+        setEditedRequest(editedRequest)
+        await updateRequest(token, editedRequest, setSingleRequest)
+        setModalUpdateIsOpen(false);
+        setModalConfirmIsOpen(false);
+        setFinishRequest(false);
+        setLoadingFinish(false);
+    }
 
     // Move the declaration to the appropriate location
     const filteredAndSortedToolBoxes = Array.isArray(toolBoxes)
@@ -203,6 +219,15 @@ const HomeSecurity = () => {
         return counts;
     }, {});
 
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setShowId((prevShowId) => !prevShowId);
+        }, 4000);
+
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, []);
     return (
         <section className="homeSection">
             <div className="wave">
@@ -236,7 +261,9 @@ const HomeSecurity = () => {
                         (filterCriteria === '' || box.priority === filterCriteria) && (
                             <div key={index} className="tool" onClick={() => openModalConfirm(box.id, handleSomeAction, setModalConfirmIsOpen)}>
                                 {loading ? (
-                                    <div className="loading-overlay">Carregando...</div>
+                                    <div className="align-loading">
+                                        <div className="spinner"></div>
+                                    </div>
                                 ) : (
                                     <>
                                         <div className="txtAlignTool">
@@ -247,11 +274,15 @@ const HomeSecurity = () => {
                                             </div>
                                             <div className="dateStatusTool">
                                                 <p className={box.status}></p>
-                                                <p>{box.priority}</p>
-                                                <p>User ID: {box.user ? box.user.idUsers : 'N/A'}</p>
+                                                <div className="user-info">
+                                                    <p>
+                                                        {showId ? 'ID' : 'Username'}: {box.user ? (showId ? box.user.idUsers : box.user.username) : 'N/A'}
+                                                    </p>
+                                                </div>
                                                 <p className={`status ${getStatusClass(box.status)}`}>
                                                     &#x25CF;
                                                     <span>{box.status}</span>
+                                                    <p>{box.priority}</p>
                                                 </p>
                                             </div>
                                         </div>
@@ -369,59 +400,81 @@ const HomeSecurity = () => {
                 </div>
             </Modal>
 
-            <Modal isOpen={modalUpdateIsOpen} onClose={() => closeModalUpdate(setModalUpdateIsOpen)}>
-                <div className="singleRequest">
-                    <span>ID:</span> {singleRequest.id}
-                </div>
+            <Modal isOpen={modalUpdateIsOpen} onClose={() => { closeModalUpdate(setModalUpdateIsOpen), setFinishRequest(false) }}>
+                {loadingFinish && (
+                    <div className="loading-container">
+                        <div className="spinner"></div>
+                    </div>
+                )}
 
-                <InputField
-                    id="problem"
-                    label="Updated Problem"
-                    value={editedRequest.problem}
-                    onChange={(e) => setEditedRequest((prev) => ({ ...prev, problem: e.target.value }))}
-                    onMouseEnter={() => handleInputFocus('problemLabel')}
-                    onMouseLeave={() => handleInputBlur('problemLabel')}
-                />
+                {!finishRequest ? (
+                    <>
+                        <div className="singleRequest">
+                            <span>ID:</span> {singleRequest.id}
+                        </div>
 
-                <InputField
-                    id="description"
-                    label="description"
-                    value={editedRequest.description}
-                    onChange={(e) => setEditedRequest((prev) => ({ ...prev, description: e.target.value }))}
-                    onMouseEnter={() => handleInputFocus('descriptionLabel')}
-                    onMouseLeave={() => handleInputBlur('descriptionLabel')}
-                />
+                        <InputField
+                            id="problem"
+                            label="Updated Problem"
+                            value={editedRequest.problem}
+                            onChange={(e) => setEditedRequest((prev) => ({ ...prev, problem: e.target.value }))}
+                            onMouseEnter={() => handleInputFocus('problemLabel')}
+                            onMouseLeave={() => handleInputBlur('problemLabel')}
+                        />
 
-                <InputField
-                    id="priority"
-                    value={editedRequest.priority}
-                    onChange={(e) => setEditedRequest((prev) => ({ ...prev, priority: e.target.value }))}
-                    type="select"
-                    options={[
-                        { label: 'Priority', value: '' },
-                        { label: 'HIGH', value: 'HIGH' },
-                        { label: 'MEDIUM', value: 'MEDIUM' },
-                        { label: 'LOW', value: 'LOW' },
-                    ]}
-                    required
-                />
+                        <InputField
+                            id="description"
+                            label="description"
+                            value={editedRequest.description}
+                            onChange={(e) => setEditedRequest((prev) => ({ ...prev, description: e.target.value }))}
+                            onMouseEnter={() => handleInputFocus('descriptionLabel')}
+                            onMouseLeave={() => handleInputBlur('descriptionLabel')}
+                        />
 
-                <InputField
-                    id="status"
-                    value={editedRequest.status}
-                    onChange={(e) => setEditedRequest((prev) => ({ ...prev, status: e.target.value }))}
-                    type="select"
-                    options={[
-                        { label: 'Status', value: '' },
-                        { label: 'FINISH', value: 'FINISH' },
-                        { label: 'PROCESSING', value: 'PROCESSING' },
-                    ]}
-                    required
-                />
-                <div className="btnSave">
-                    <button className="deleteBtn" onClick={() => openModalDelete(singleRequest.id, handleSomeAction, setModalDeleteIsOpen)}>Delete!</button>
-                    <button onClick={() => handleUpdateAction(editedRequest, singleRequest.id)}>Update!</button>
-                </div>
+                        <InputField
+                            id="priority"
+                            value={editedRequest.priority}
+                            onChange={(e) => setEditedRequest((prev) => ({ ...prev, priority: e.target.value }))}
+                            type="select"
+                            options={[
+                                { label: 'Priority', value: '' },
+                                { label: 'HIGH', value: 'HIGH' },
+                                { label: 'MEDIUM', value: 'MEDIUM' },
+                                { label: 'LOW', value: 'LOW' },
+                            ]}
+                            required
+                        />
+
+                        <InputField
+                            id="status"
+                            value={editedRequest.status}
+                            onChange={(e) => setEditedRequest((prev) => ({ ...prev, status: e.target.value }))}
+                            type="select"
+                            options={[
+                                { label: 'Status', value: '' },
+                                { label: 'FINISH', value: 'FINISH' },
+                                { label: 'PROCESSING', value: 'PROCESSING' },
+                            ]}
+                            required
+                        />
+                        <div className="btnSave">
+                            <button className="deleteBtn" onClick={() => openModalDelete(singleRequest.id, handleSomeAction, setModalDeleteIsOpen)}>Delete!</button>
+                            <button onClick={() => handleUpdateAction(editedRequest, singleRequest.id)}>Update!</button>
+                        </div>
+                        <div className="btnFinish"><button onClick={() => setFinishRequest(true)}>Finish!</button></div>
+                    </>
+                ) : (
+                    <>
+                        <div className="singleRequest">
+                            <span>Deseja finalizar a request com o ID:</span> {singleRequest.id}
+                        </div>
+
+
+                        <div className="btnSave">
+                            <button onClick={() => handleFinishAction(editedRequest)}>Finish!</button>
+                        </div>
+                    </>
+                )}
             </Modal>
 
             <Modal isOpen={modalDeleteIsOpen} onClose={() => closeModalDelete(setModalDeleteIsOpen)}>

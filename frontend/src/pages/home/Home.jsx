@@ -123,14 +123,14 @@ const Home = () => {
 
     const handleUpdateAction = async () => {
         await updateRequest(token, editedRequest, setSingleRequest);
-        closeModalUpdate(setModalUpdateIsOpen);
+        setModalUpdateIsOpen(false);
     }
 
     const handleDeleteAction = async () => {
         await deleteRequest(token, editedRequest);
-        closeModalConfirm(setModalConfirmIsOpen);
-        closeModalUpdate(setModalUpdateIsOpen);
-        closeModalDelete(setModalDeleteIsOpen);
+        setModalConfirmIsOpen(false);
+        setModalUpdateIsOpen(false);
+        setModalDeleteIsOpen(false);
     };
 
     const handleSomeAction = async (id) => {
@@ -175,7 +175,9 @@ const Home = () => {
                     {filteredToolBoxes.map((box, index) => (
                         <div key={index} className="tool" onClick={() => openModalConfirm(box.id, handleSomeAction, setModalConfirmIsOpen)}>
                             {loading ? (
-                                <div className="loading-overlay">Carregando...</div>
+                                <div className="align-loading">
+                                    <div className="spinner"></div>
+                                </div>
                             ) : (
                                 <>
                                     <div className="txtAlignTool">
@@ -243,7 +245,7 @@ const Home = () => {
                     </div>
                 </div>
                 <div className="btnSave">
-                    <button onClick={() => openModalUpdate(singleRequest.id, handleSomeAction, setEditedRequest, singleRequest, setModalUpdateIsOpen)}>Update!</button>
+                    <button onClick={() => openModalUpdate(singleRequest.id, handleSomeAction, setEditedRequest, editedRequest, singleRequest, setModalUpdateIsOpen)}>Update!</button>
                 </div>
             </Modal>
 
