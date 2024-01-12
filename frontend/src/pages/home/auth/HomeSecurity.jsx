@@ -263,11 +263,11 @@ const HomeSecurity = () => {
                 </div>
                 <div className="page">
                     <button onClick={handlePreviousPage} disabled={currentPage === 0}>
-                        Anterior
+                        Back
                     </button>
                     <span>Página {currentPage + 1}</span>
                     <button onClick={handleNextPage}>
-                        Próxima
+                        Next
                     </button>
                 </div>
             </div>
