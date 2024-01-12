@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import '../components/style.css'
+import { handleInputFocus, handleInputBlur } from '../../home/components/utils/handleInput/HandleInput'
+
 import imgError from '../assets/icons8-erro-48 (1).png';
 import img from '../assets/aboutImg.png';
 import wave from '../assets/wave.svg';
 import openEye from '../assets/openEye.png';
 import closeEye from '../assets/closeEye.png';
+import user from '../assets/user.png'
 
 const Register = ({ toggleForm }) => {
+
     const [username, setUsername] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -16,6 +20,7 @@ const Register = ({ toggleForm }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [birth, setBirth] = useState("");
     const [role, setRole] = useState("USER");
+    const [profileImage, setProfileImage] = useState(null);
 
     const [errors, setErrors] = useState([]);
 
@@ -25,6 +30,13 @@ const Register = ({ toggleForm }) => {
     const handleTogglePassword = () => {
         setShowPassword(!showPassword);
     };
+
+    const inputRef = useRef(null);
+
+    const handleImageClick = () => {
+        inputRef.current.click();
+    };
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -55,7 +67,7 @@ const Register = ({ toggleForm }) => {
     };
 
     const cadastrar = async () => {
-        const data = {
+        const userData = {
             username: username,
             firstName: firstName,
             lastName: lastName,
@@ -65,14 +77,18 @@ const Register = ({ toggleForm }) => {
             role: role,
         };
 
+        console.log(userData)
+
+        const formData = new FormData();
+        formData.append("profileImage", profileImage);
+
+        formData.append("userData", new Blob([JSON.stringify(userData)], { type: "application/json" }));
+
+
         try {
             const response = await fetch("http://localhost:8080/auth/register", {
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
                 method: "POST",
-                body: JSON.stringify(data),
+                body: formData,
             });
 
             if (response.status === 201) {
@@ -96,7 +112,6 @@ const Register = ({ toggleForm }) => {
             }
         } catch (error) {
             console.log("Erro ao enviar a solicitação:", error);
-            // Tratamento adicional de erro aqui, se necessário
         }
     };
 
@@ -113,23 +128,14 @@ const Register = ({ toggleForm }) => {
         setPassword("");
         setConfirmPassword("");
         setBirth("");
+        setProfileImage(null);
     };
 
-    const handleInputFocus = (labelId) => {
-        const label = document.getElementById(labelId);
-        label.classList.add('active');
-    };
-
-    const handleInputBlur = (labelId) => {
-        const label = document.getElementById(labelId);
-        const input = document.getElementById(labelId.replace('Label', '')); // Obtém o input associado ao label
-
-        if (input && input.value.trim() !== '') {
-            label.classList.add('active');
-            return;
+    const handleImagePreview = () => {
+        if (profileImage) {
+            return URL.createObjectURL(profileImage);
         }
-
-        label.classList.remove('active');
+        return null;
     };
 
     return (
@@ -138,6 +144,20 @@ const Register = ({ toggleForm }) => {
                 <fieldset className="authFieldset">
                     <div className="imgFront"><img src={img} alt="authentication" /></div>
                     <form onSubmit={handleSubmit} className="authForm">
+                        <fieldset className="authFieldImage">
+                            <span>Select your profile image</span>
+                            <div className="imagePreview" onClick={handleImageClick}>
+                                <img src={handleImagePreview() || user} alt="userImage" />
+                            </div>
+                            <input
+                                ref={inputRef}
+                                id="profileImage"
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => setProfileImage(e.target.files[0])}
+                                style={{ display: "none" }}
+                            />
+                        </fieldset>
                         <div className="authField">
                             <label id="usernameLabel" className={username ? 'active' : ''} htmlFor="username">
                                 Username

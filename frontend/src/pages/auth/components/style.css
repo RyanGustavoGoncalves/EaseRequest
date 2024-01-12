@@ -137,7 +137,7 @@ div.authFieldLogin>input:not(:focus):not(:placeholder-shown)+label {
   color: #5EC57E;
 }
 
-.togglePassword{
+.togglePassword {
   position: absolute;
   color: white;
   left: 11.9rem;
@@ -226,6 +226,28 @@ strong::after {
   content: ":";
 }
 
+.authFieldImage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  color: white;
+  border: dotted 1px grey;
+  border-radius: 5px;
+  width: 8rem;
+  height: 8rem;
+}
+
+.imagePreview>img {
+  padding: 5px;
+  width: 100%;
+}
+
+.authFieldImage>span {
+  position: absolute;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.515);
+}
+
 @media (max-width: 765px) {
 
   main.authMain>div.WelcomeDescWave {
@@ -270,4 +292,5 @@ strong::after {
     padding: 0;
     margin: 3rem 0 3rem 0;
   }
+
 }

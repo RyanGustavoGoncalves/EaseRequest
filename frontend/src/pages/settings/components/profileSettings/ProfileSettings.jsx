@@ -1,17 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FetchUser } from "../../../home/components/utils/getInfoUser/FetchUser";
 import { closeModalUserUpdate, openModalUserUpdate } from "../../../home/components/utils/ModalFunctions/ModalFunctions";
 import { handleInputBlur, handleInputFocus } from "../../../home/components/utils/handleInput/HandleInput";
 import { PasswordUpdateWithNewPasswordModal } from "./components/PasswordUpdateWithNewPasswordModal ";
 import { updateUser } from '../../../home/components/utils/updateUser/UpdateUser'
 import { PasswordUpdateModal } from "./components/PasswordUpdateModal ";
+import { tokenMail } from "../../../home/components/utils/getTokenFromEmail/tokenMail";
+import { tokenCheckAndUpdatePassword } from "../../../home/components/utils/tokenCheckUpdate/TokenCheckAndUpdatePassword";
+import { FileChange } from "../../../home/components/utils/updateImageUser/FileChange";
 import InputField from "../../../home/components/inputField/InputField";
 import Modal from '../../../components/Modal';
 
-import user from '../../assets/perfil.png';
-import edit from '../../assets/edit.png'
-import { tokenMail } from "../../../home/components/utils/getTokenFromEmail/tokenMail";
-import { tokenCheckAndUpdatePassword } from "../../../home/components/utils/tokenCheckUpdate/TokenCheckAndUpdatePassword";
+import user from '../../assets/user.png';
 
 export const ProfileSettings = () => {
 
@@ -24,13 +24,7 @@ export const ProfileSettings = () => {
         token: "",
         newPassword: ""
     });
-    const [userData, setUserData] = useState({
-        username: "",
-        firstName: "",
-        lastName: "",
-        email: "",
-        birth: "",
-    });
+    const [userData, setUserData] = useState({});
     const [editUser, setEditUser] = useState({
         username: "",
         firstName: "",
@@ -39,6 +33,11 @@ export const ProfileSettings = () => {
         birth: "",
     });
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [modalImageIsOpen, setModalImageIsOpen] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const fileInputRef = useRef(null);
+    const [selectedFile, setSelectedFile] = useState(null);
+
 
     useEffect(() => {
         FetchUser(token, setUserData);
@@ -60,52 +59,83 @@ export const ProfileSettings = () => {
 
     const handleTokenCheckAndUpdatePassword = async (tokenMailLabel) => {
         await tokenCheckAndUpdatePassword(tokenMailLabel, token, setModalLabelAndPassword, setUpdateModal);
-        closeModalUserUpdate(setModalIsOpen),
-            setShowUpdateScreen(false),
-            setUpdateModal(false),
-            setModalLabelAndPassword(false)
-
+        closeModalUserUpdate(setModalIsOpen);
+        setShowUpdateScreen(false);
+        setUpdateModal(false);
+        setModalLabelAndPassword(false);
     }
+
+    const handleUpdateImage = async () => {
+        const fakeEvent = {
+            target: {
+                files: [selectedFile],
+            },
+        };
+        await FileChange(fakeEvent, token);
+        setModalImageIsOpen(false)
+        FetchUser(token, setUserData)
+    }
+
+    const handleImageClick = () => {
+        if (!isEditing) {
+            fileInputRef.current.click();
+        }
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setSelectedFile(file);
+            setIsEditing(false);
+        }
+    };
+
+    const openModalUpdateImage = () => {
+        setModalImageIsOpen(true);
+    }
+    const closeModalUpdateImage = () => {
+        setModalImageIsOpen(false);
+    }
+
 
     return (
         <article className='article-settings-content'>
-            <h1>Profile</h1>
-            <div className="user-info-image-content">
-                <div className="information-user-content">
-                    <div>
-                        <span>Username</span>
-                        <p>{userData.username || 'NaN'}</p>
+            <div className="div-user-content">
+                <h1>Profile</h1>
+                <div className="user-info-image-content">
+                    <div className="information-user-content">
+                        <div>
+                            <span>Username</span>
+                            <p>{userData.username || 'NaN'}</p>
+                        </div>
+                        <div>
+                            <span>First name</span>
+                            <p>{userData.firstName || 'NaN'}</p>
+                        </div>
+                        <div>
+                            <span>Last name</span>
+                            <p>{userData.lastName || 'NaN'}</p>
+                        </div>
+                        <div>
+                            <span>Email</span>
+                            <p>{userData.email || 'NaN'}</p>
+                        </div>
+                        <div>
+                            <span>Birth</span>
+                            <p>{userData.birth || 'NaN'}</p>
+                        </div>
+                        <div>
+                            <span>Creation Account</span>
+                            <p>{userData.creationAccount || 'NaN'}</p>
+                        </div>
+                        <div className="addBtn">
+                            <button onClick={() => openModalUserUpdate(setModalIsOpen, setEditUser, userData)}>Update!</button>
+                        </div>
                     </div>
-                    <div>
-                        <span>First name</span>
-                        <p>{userData.firstName || 'NaN'}</p>
-                    </div>
-                    <div>
-                        <span>Last name</span>
-                        <p>{userData.lastName || 'NaN'}</p>
-                    </div>
-                    <div>
-                        <span>Email</span>
-                        <p>{userData.email || 'NaN'}</p>
-                    </div>
-                    <div>
-                        <span>Birth</span>
-                        <p>{userData.birth || 'NaN'}</p>
-                    </div>
-                    <div>
-                        <span>Creation Account</span>
-                        <p>{userData.creationAccount || 'NaN'}</p>
-                    </div>
-                    <div className="addBtn">
-                        <button onClick={() => openModalUserUpdate(setModalIsOpen, setEditUser, userData)}>Update!</button>
-                    </div>
-                </div>
-                <div className="userImage">
-                    <h2>Profile picture</h2>
-                    <div className="image">
-                        <img src={user} alt="user" />
-                        <div className="editIcon">
-                            <img src={edit} alt="edit" />
+                    <div className="userImage">
+                        <h2>Profile picture</h2>
+                        <div className="image" onClick={() => openModalUpdateImage()}>
+                            <img src={userData.profileImage ? `data:image/png;base64,${userData.profileImage}` : user} />
                         </div>
                     </div>
                 </div>
@@ -169,6 +199,7 @@ export const ProfileSettings = () => {
                             onMouseEnter={() => handleInputFocus('usernameLabel')}
                             onMouseLeave={() => handleInputBlur('usernameLabel')}
                         />
+
                         <InputField
                             id="firstName"
                             label="First name"
@@ -177,6 +208,7 @@ export const ProfileSettings = () => {
                             onMouseEnter={() => handleInputFocus('firstNameLabel')}
                             onMouseLeave={() => handleInputBlur('firstNameLabel')}
                         />
+
                         <InputField
                             id="lastName"
                             label="Last name"
@@ -185,6 +217,7 @@ export const ProfileSettings = () => {
                             onMouseEnter={() => handleInputFocus('lastNameLabel')}
                             onMouseLeave={() => handleInputBlur('lastNameLabel')}
                         />
+
                         <InputField
                             id="email"
                             label="Email"
@@ -193,6 +226,7 @@ export const ProfileSettings = () => {
                             onMouseEnter={() => handleInputFocus('emailLabel')}
                             onMouseLeave={() => handleInputBlur('emailLabel')}
                         />
+
                         <InputField
                             id="birth"
                             label="Birth"
@@ -201,6 +235,7 @@ export const ProfileSettings = () => {
                             onMouseEnter={() => handleInputFocus('birthLabel')}
                             onMouseLeave={() => handleInputBlur('birthLabel')}
                         />
+
                         <div className="btnAlign">
                             <div className="btnSave">
                                 <button onClick={() => handleUpdateUserAction(editUser, token)}>Update!</button>
@@ -211,6 +246,29 @@ export const ProfileSettings = () => {
                         </div>
                     </>
                 )}
+            </Modal>
+
+            <Modal isOpen={modalImageIsOpen} onClose={closeModalUpdateImage}>
+                <div className="password-update-modal">
+                    <h5>Update image profile</h5>
+                    <p>Select a new image profile.</p>
+
+                    <div className="user-image-update">
+                        <div className="image" onClick={handleImageClick}>
+                            <img src={selectedFile ? URL.createObjectURL(selectedFile) : (userData.profileImage ? `data:image/png;base64,${userData.profileImage}` : user)} alt="userImage" />
+                        </div>
+                        <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept="image/*"
+                            style={{ display: 'none' }}
+                            onChange={handleFileChange}
+                        />
+                    </div>
+                    <div className="btnSave">
+                        <button onClick={() => handleUpdateImage()}>Update!</button>
+                    </div>
+                </div>
             </Modal>
         </article>
     )

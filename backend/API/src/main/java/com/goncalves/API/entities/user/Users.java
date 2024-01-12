@@ -39,9 +39,10 @@ public class Users implements UserDetails {
     private String birth;
     private LocalDateTime creationAccount;
     private UserRole role;
+    private byte[] profileImage;
 
 
-    public Users(String username,String firstName, String lastName, String email,String password, String birth, LocalDateTime creationAccount, UserRole role) {
+    public Users(String username,String firstName, String lastName, String email,String password, String birth, LocalDateTime creationAccount, UserRole role, byte[] profileImage) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -50,6 +51,7 @@ public class Users implements UserDetails {
         this.birth = birth;
         this.creationAccount = creationAccount;
         this.role = role;
+        this.profileImage = profileImage;
     }
 
     public void atualizarUser(DadosAtualizarUser dados) {

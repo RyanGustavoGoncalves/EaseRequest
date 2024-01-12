@@ -11,5 +11,6 @@ public record AutenticarDados(String username,
                               String password,
                               String birth,
                               LocalDateTime creationAccount,
-                              UserRole role) {
+                              UserRole role,
+                              byte[] profileImage) {
 }

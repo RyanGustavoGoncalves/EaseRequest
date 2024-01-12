@@ -16,6 +16,9 @@ const Navbar = () => {
         FetchUser(token, setUserData);
     }, [token]);
 
+    useEffect(() => {
+    }, [userData.profileImage]);
+
     return (
         <header>
             <nav className="navSup">
@@ -25,7 +28,11 @@ const Navbar = () => {
                     </Link>
                     <div className="userPerfil">
                         <Link to={"/Settings"}>
-                            <img src={user} alt="userImage" width={30} style={{ filter: "invert(1)" }} />
+                            <img
+                                src={userData.profileImage ? `data:image/png;base64,${userData.profileImage}` : user}
+                                alt="userImage"
+                                width={30}
+                            />
                             <h1>{userData.username}</h1>
                         </Link>
                     </div>

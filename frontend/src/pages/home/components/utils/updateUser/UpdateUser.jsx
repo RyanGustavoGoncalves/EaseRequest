@@ -13,28 +13,31 @@ export const updateUser = async (editUser, token, setUserData) => {
             body: JSON.stringify(editUser),
         });
 
-        if (response.status === 200) {
+        if (response.ok) {
             const responseData = await response.json();
-            if (responseData && responseData) {
-                setUserData(responseData);
+            if (responseData && responseData.success) {
+                setUserData(responseData.data);
                 Swal.fire({
-                    text: 'Update carried out successfully!',
+                    text: responseData.message || 'Update carried out successfully!',
                     icon: 'success',
                 });
             } else {
-                console.error("A resposta não contém um nome de usuário válido:", responseData);
+                Swal.fire({
+                    text: 'Unexpected response from server. Please try again later.',
+                    icon: 'error',
+                });
             }
         } else {
-            console.log("Ocorreu um erro inesperado ao buscar as informações do usuário: " + response.status);
+            Swal.fire({
+                text: 'Unexpected error. Please try again later.',
+                icon: 'error',
+            });
         }
     } catch (error) {
-        console.log("Erro ao buscar as informações do usuário:", error);
+        console.error("Error updating user information:", error);
         Swal.fire({
-            text: 'Erro ao buscar as informações do usuário. Por favor, tente novamente mais tarde.',
+            text: 'Error updating user information. Please try again later.',
             icon: 'error',
-            customClass: {
-                popup: 'custom-popup-class',
-            },
         });
     }
 };

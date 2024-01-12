@@ -16,7 +16,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 
@@ -96,6 +98,26 @@ public class UserController {
         }
     }
 
+    @PutMapping("/updateUserImage")
+    @Transactional
+    public ResponseEntity updateUserImage(@RequestParam("file") MultipartFile file) {
+        try {
+            var user = (Users) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if (user == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            // Lógica para salvar a imagem (por exemplo, em um diretório ou no banco de dados)
+            byte[] imageData = file.getBytes();
+            user.setProfileImage(imageData);
+
+            repository.save(user);
+            return ResponseEntity.ok(user);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Erro ao processar a imagem"));
+        }
+    }
+    
     @DeleteMapping("/{idUser}")
     @Transactional
     public ResponseEntity deleteUser(@PathVariable String idUser) {

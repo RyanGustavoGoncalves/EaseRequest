@@ -13,12 +13,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 @RestController
@@ -37,14 +36,20 @@ public class AuthenticationController {
     private ErrorHandling errorHandling;
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid AutenticarDados dados, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity register(@RequestPart("profileImage") MultipartFile profileImage,
+                                   @RequestPart("userData") @Valid AutenticarDados dados,
+                                   UriComponentsBuilder uriComponentsBuilder) {
         try {
             validateRegistrationData(dados);
 
             // Criar um novo usuário com a senha criptografada
             String encryptedPassword = new BCryptPasswordEncoder().encode(dados.password());
+
+            // Converta o MultipartFile para byte[]
+            byte[] profileImageBytes = profileImage.getBytes();
+
             Users newUser = new Users(dados.username(), dados.firstName(), dados.lastName(), dados.email(),
-                    encryptedPassword, dados.birth(), LocalDateTime.now(), dados.role());
+                    encryptedPassword, dados.birth(), LocalDateTime.now(), dados.role(), profileImageBytes);
             repository.save(newUser);
 
             // Construir a URI para o novo usuário
@@ -54,6 +59,8 @@ public class AuthenticationController {
             return ResponseEntity.created(uri).body(newUser);
         } catch (RegistrationException e) {
             return ResponseEntity.badRequest().body(new StandardError(e.getField(), e.getMessage()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
