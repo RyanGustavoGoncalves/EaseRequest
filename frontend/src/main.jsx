@@ -24,8 +24,8 @@ import Settings from './pages/settings/settings.jsx';
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <ProtectedRoute element={App} />,
-    // element: <App />,
+    // element: <ProtectedRoute element={App} />,
+    element: <App />,
     errorElement: <ErrorPage />,
     children: [
       {
