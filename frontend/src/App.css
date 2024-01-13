@@ -98,6 +98,8 @@ div.headerLogoName>div.userPerfil a {
 }
 
 div.userPerfil>a>img {
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
 }
 
@@ -370,6 +372,37 @@ div.tool {
     box-shadow: 0 0 10px rgba(0, 0, 0, 1);
 }
 
+.userImageModal {
+    display: flex;
+    justify-content: center;
+}
+
+.userImageModal img {
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+}
+
+.userPreview {
+    display: grid;
+    gap: var(--gap-medium);
+}
+
+.userPreview span {
+    color: var(--primary-color);
+}
+
+.box-status-priority-image-content {
+    display: flex;
+    max-width: 100%;
+    justify-content: space-between;
+}
+
+.box-status-priority-image-content img {
+    width: 3rem;
+    border-radius: 50%;
+}
+
 div.txtAlignTool {
     height: 100%;
     display: grid;
@@ -601,6 +634,14 @@ div.page>button:hover {
         padding: 1px;
     }
 
+    .box-status-priority-image-content {
+        justify-content: center;
+    }
+
+    .box-status-priority-image-content img {
+        display: none;
+    }
+
     div.toolTitle>h2 {
         font-size: 15px;
         padding: 1rem;
@@ -719,8 +760,9 @@ div.page>button:hover {
     font-size: 16px;
     color: var(--text-color);
 }
-.div-user-content{
-   width: 80%;
+
+.div-user-content {
+    width: 80%;
 }
 
 .userImage {
@@ -743,7 +785,8 @@ div.image {
 
 .userImage>div.image>img,
 .user-image-update>div.image>img {
-    width: 100%;
+    width: 30vh;
+    height: 30vh;
     border-radius: 50%;
     border: dotted 2px var(--text-color);
     cursor: pointer;
@@ -751,7 +794,7 @@ div.image {
 
 .user-image-update {
     padding: 0.5rem;
-    width: 100%;
+    width: 50%;
 }
 
 .btnAlign {
@@ -814,5 +857,11 @@ div.image {
 
     .information-user-content>div p {
         font-size: 14px;
+    }
+
+    .userImage>div.image>img,
+    .user-image-update>div.image>img {
+        width: 15vh;
+        height: 15vh;
     }
 }

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import wave from '../assets/wave.svg';
+import user from '../assets/user.png';
 import filtro from '../assets/filtro.png';
 import mais from '../assets/iconMais.png';
 import lupa from '../assets/lupa.png';
@@ -279,11 +280,14 @@ const HomeSecurity = () => {
                                                         {showId ? 'ID' : 'Username'}: {box.user ? (showId ? box.user.idUsers : box.user.username) : 'N/A'}
                                                     </p>
                                                 </div>
-                                                <p className={`status ${getStatusClass(box.status)}`}>
-                                                    &#x25CF;
-                                                    <span>{box.status}</span>
-                                                    <p>{box.priority}</p>
-                                                </p>
+                                                <div className="box-status-priority-image-content">
+                                                    <div className={`status ${getStatusClass(box.status)}`}>
+                                                        &#x25CF;
+                                                        <span>{box.status}</span>
+                                                        <p>{box.priority}</p>
+                                                    </div>
+                                                    <img src={singleRequest.user ? `data:image/png;base64,${box.user.profileImage}` : user} />
+                                                </div>
                                             </div>
                                         </div>
                                     </>
@@ -373,25 +377,22 @@ const HomeSecurity = () => {
                         <span>Date request:</span> {singleRequest.creationRequest}
                     </div>
 
-                    <div>
-                        <span>User ID:</span> {singleRequest.user ? singleRequest.user.idUsers : 'N/A'}
-
-                    </div>
-
-                    <div>
-                        <span>Username:</span> {singleRequest.user ? singleRequest.user.username : 'N/A'}
-                    </div>
-
-                    <div>
-                        <span>First Name:</span> {singleRequest.user ? singleRequest.user.firstName : 'N/A'}
-                    </div>
-
-                    <div>
-                        <span>Last Name:</span> {singleRequest.user ? singleRequest.user.lastName : 'N/A'}
-                    </div>
-
-                    <div>
-                        <span>Email:</span> {singleRequest.user ? singleRequest.user.email : 'N/A'}
+                    <div className="userPreview">
+                        <div className="userImageModal">
+                            <img src={singleRequest.user ? `data:image/png;base64,${singleRequest.user.profileImage}` : user} />
+                        </div>
+                        <div>
+                            <span>User ID:</span> {singleRequest.user ? singleRequest.user.idUsers : 'N/A'}
+                        </div>
+                        <div>
+                            <span>Username:</span> {singleRequest.user ? singleRequest.user.username : 'N/A'}
+                        </div>
+                        <div>
+                            <span>Name:</span> {singleRequest.user ? singleRequest.user.firstName : 'N/A'} {singleRequest.user ? singleRequest.user.lastName : 'N/A'}
+                        </div>
+                        <div>
+                            <span>Email:</span> {singleRequest.user ? singleRequest.user.email : 'N/A'}
+                        </div>
                     </div>
 
                 </div>

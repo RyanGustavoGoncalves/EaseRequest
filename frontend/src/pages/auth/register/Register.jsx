@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import Swal from 'sweetalert2';
 import '../components/style.css'
 import { handleInputFocus, handleInputBlur } from '../../home/components/utils/handleInput/HandleInput'
 
@@ -77,22 +78,24 @@ const Register = ({ toggleForm }) => {
             role: role,
         };
 
-        console.log(userData)
+        console.log(userData);
 
         const formData = new FormData();
-        formData.append("profileImage", profileImage);
-
-        formData.append("userData", new Blob([JSON.stringify(userData)], { type: "application/json" }));
-
+        formData.append('profileImage', profileImage);
+        formData.append('userData', new Blob([JSON.stringify(userData)], { type: 'application/json' }));
 
         try {
-            const response = await fetch("http://localhost:8080/auth/register", {
-                method: "POST",
+            const response = await fetch('http://localhost:8080/auth/register', {
+                method: 'POST',
                 body: formData,
             });
 
             if (response.status === 201) {
-                alert("Cadastro bem-sucedido!");
+                // Exibir alerta de sucesso
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Successful registration!',
+                });
             } else if (response.status === 400) {
                 const errorData = await response.json();
                 const errorArray = [];
@@ -104,14 +107,28 @@ const Register = ({ toggleForm }) => {
                 }
 
                 // Exibe o modal de erro
-                setModalOpacity({ display: "block" });
+                setModalOpacity({ display: 'block' });
                 setErrors(errorArray);
-                setModal({ display: "block" });
+                setModal({ display: 'block' });
+
+                // Exibir alerta de erro
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro',
+                    text: 'Erro ao cadastrar usuário.',
+                });
             } else {
-                console.log("Ocorreu um erro inesperado: " + response.status);
+                console.log('Ocorreu um erro inesperado: ' + response.status);
             }
         } catch (error) {
-            console.log("Erro ao enviar a solicitação:", error);
+            console.log('Erro ao enviar a solicitação:', error);
+
+            // Exibir alerta de erro
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro',
+                text: 'Erro ao enviar a solicitação.',
+            });
         }
     };
 
@@ -144,7 +161,7 @@ const Register = ({ toggleForm }) => {
                 <fieldset className="authFieldset">
                     <div className="imgFront"><img src={img} alt="authentication" /></div>
                     <form onSubmit={handleSubmit} className="authForm">
-                        <fieldset className="authFieldImage">
+                        <div className="authFieldImage">
                             <span>Select your profile image</span>
                             <div className="imagePreview" onClick={handleImageClick}>
                                 <img src={handleImagePreview() || user} alt="userImage" />
@@ -157,7 +174,7 @@ const Register = ({ toggleForm }) => {
                                 onChange={(e) => setProfileImage(e.target.files[0])}
                                 style={{ display: "none" }}
                             />
-                        </fieldset>
+                        </div>
                         <div className="authField">
                             <label id="usernameLabel" className={username ? 'active' : ''} htmlFor="username">
                                 Username

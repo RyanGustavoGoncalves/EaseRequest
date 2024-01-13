@@ -227,19 +227,22 @@ strong::after {
 }
 
 .authFieldImage {
-  position: relative;
   display: grid;
   place-items: center;
   color: white;
-  border: dotted 1px grey;
-  border-radius: 5px;
-  width: 8rem;
-  height: 8rem;
 }
 
-.imagePreview>img {
-  padding: 5px;
-  width: 100%;
+.imagePreview {
+  display: grid;
+  place-items: center;
+}
+
+.imagePreview img {
+  width: 9rem;
+  height: 9rem;
+  border: dotted 2px grey;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 .authFieldImage>span {

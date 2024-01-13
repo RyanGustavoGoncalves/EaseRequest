@@ -118,7 +118,7 @@ const Home = () => {
 
     const createNewRequest = async () => {
         await CreateNewRequest(formData, token);
-        closeModal(setModalIsOpen);
+        setModalIsOpen(false);
     }
 
     const handleUpdateAction = async () => {
