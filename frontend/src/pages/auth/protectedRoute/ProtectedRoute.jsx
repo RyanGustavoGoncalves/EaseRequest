@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const ProtectedRoute = ({ element: Element, ...rest }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const token = localStorage.getItem('token');
-  console.log(token)
-  // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IndlbGNvbWUiLCJpYXQiOjE1MTYyMzkwMjJ9.PxmS8bO1WyK99LDVfUfTEuWPH4WcG-I_JP68pB70vMo";
 
   useEffect(() => {
     const checkToken = async () => {
@@ -24,10 +23,22 @@ const ProtectedRoute = ({ element: Element, ...rest }) => {
             setIsAuthenticated(true);
           } else {
             setIsAuthenticated(false);
-            alert("Token Inválido ou expirado!")
+
+            // Exibir alerta de erro
+            Swal.fire({
+              icon: 'error',
+              title: 'Erro',
+              text: 'Invalid or expired token!',
+            });
           }
         } catch (error) {
-          alert("Erro ao buscar token!", error)
+          // Exibir alerta de erro
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'Error fetching token!',
+          });
+
           setIsAuthenticated(false);
         }
       } else {
@@ -36,7 +47,7 @@ const ProtectedRoute = ({ element: Element, ...rest }) => {
     };
 
     checkToken();
-  }, []);
+  }, [token, setIsAuthenticated]);
 
   if (isAuthenticated === null) {
     return null;
