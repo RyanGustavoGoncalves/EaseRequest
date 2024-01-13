@@ -1,3 +1,5 @@
+import Swal from 'sweetalert2';
+
 export const FetchUser = async (token, setUserData) => {
     try {
         const response = await fetch("http://localhost:8080/user/token", {
@@ -14,14 +16,28 @@ export const FetchUser = async (token, setUserData) => {
             if (responseData && responseData) {
                 setUserData(responseData);
             } else {
-                console.error("A resposta não contém um nome de usuário válido:", responseData);
+                // Utilize SweetAlert para mensagens de erro ou console.warn
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Aviso',
+                    text: 'A resposta não contém um nome de usuário válido.',
+                });
             }
         } else {
-            console.log("Ocorreu um erro inesperado ao buscar as informações do usuário: " + response.status);
+            // Utilize SweetAlert para mensagens de erro ou console.error
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro',
+                text: `Ocorreu um erro inesperado ao buscar as informações do usuário: ${response.status}`,
+            });
         }
     } catch (error) {
-        console.log("Erro ao buscar as informações do usuário:", error);
-        alert("Erro ao buscar as informações do usuário. Por favor, tente novamente mais tarde.");
+        // Utilize SweetAlert para mensagens de erro ou console.error
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'Erro ao buscar as informações do usuário. Por favor, tente novamente mais tarde.',
+        });
+        console.error("Erro ao buscar as informações do usuário:", error);
     }
 };
-
