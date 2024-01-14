@@ -713,6 +713,7 @@ div.page>button:hover {
 
 .aside-settings-content {
     max-width: 100%;
+    height: 50vh;
     border-right: solid 1px var(--box-shadow-color);
 }
 

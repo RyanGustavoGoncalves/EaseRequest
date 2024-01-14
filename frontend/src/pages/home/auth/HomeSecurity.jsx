@@ -286,7 +286,7 @@ const HomeSecurity = () => {
                                                         <span>{box.status}</span>
                                                         <p>{box.priority}</p>
                                                     </div>
-                                                    <img src={singleRequest.user ? `data:image/png;base64,${box.user.profileImage}` : user} />
+                                                    <img src={box.user ? `data:image/png;base64,${box.user.profileImage}` : user} />
                                                 </div>
                                             </div>
                                         </div>
@@ -466,14 +466,34 @@ const HomeSecurity = () => {
                     </>
                 ) : (
                     <>
-                        <div className="singleRequest">
-                            <span>Deseja finalizar a request com o ID:</span> {singleRequest.id}
+                        <div className="userPreview">
+
+                            <div className="password-update-modal">
+                                <h5>Deseja finalizar a request com o ID:</h5>
+                                <p>{singleRequest.id}</p>
+                            </div>
+
+                            <div className="userImageModal">
+                                <img src={singleRequest.user ? `data:image/png;base64,${singleRequest.user.profileImage}` : user} />
+                            </div>
+                            <div>
+                                <span>User ID:</span> {singleRequest.user ? singleRequest.user.idUsers : 'N/A'}
+                            </div>
+                            <div>
+                                <span>Username:</span> {singleRequest.user ? singleRequest.user.username : 'N/A'}
+                            </div>
+                            <div>
+                                <span>Name:</span> {singleRequest.user ? singleRequest.user.firstName : 'N/A'} {singleRequest.user ? singleRequest.user.lastName : 'N/A'}
+                            </div>
+                            <div>
+                                <span>Email:</span> {singleRequest.user ? singleRequest.user.email : 'N/A'}
+                            </div>
+                            <div className="btnSave">
+                                <button onClick={() => handleFinishAction(editedRequest)}>Finish!</button>
+                            </div>
                         </div>
 
 
-                        <div className="btnSave">
-                            <button onClick={() => handleFinishAction(editedRequest)}>Finish!</button>
-                        </div>
                     </>
                 )}
             </Modal>

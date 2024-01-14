@@ -60,7 +60,6 @@ const Login = ({ toggleForm }) => {
                 const responseJson = await response.json();
                 const token = responseJson.token;
                 localStorage.setItem('token', token);
-                alert("Login bem sucedido!");
                 navigate('/');
 
             } else if (response.status === 401) {

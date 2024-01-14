@@ -5,9 +5,11 @@ import { Aside } from './components/asideSettings/Aside';
 import { ProfileSettings } from './components/profileSettings/ProfileSettings';
 
 import seta from './assets/seta.png'
+import { RequestSettings } from './components/requestSettings/RequestSettings';
 
 const Settings = () => {
-  const [asideOpen, setAsideOpen] = useState(false);
+  const [asideOpen, setAsideOpen] = useState(true);
+  const [select, setSelect] = useState(0);
 
   const toggleAside = () => {
     setAsideOpen((prevAsideOpen) => !prevAsideOpen);
@@ -32,7 +34,7 @@ const Settings = () => {
       distance: calculateDistance(),
       reset: true,
     });
-    sr.reveal('.aside-settings-content', {
+    sr.reveal('.menuConfig', {
       origin: 'left',
       duration: 1000,
       distance: calculateDistance(),
@@ -48,13 +50,17 @@ const Settings = () => {
 
   return (
     <main className="main-settings-content">
-      <Navbar />
+      <Navbar/>
       <section className="section-settings-content">
         <div className='menuConfig'>
-            {asideOpen && <Aside />}
-            <img src={seta} alt="menu" onClick={toggleAside}/>
+          {asideOpen && <Aside select={select} setSelect={setSelect}/>}
+          <img src={seta} alt="menu" onClick={toggleAside} />
         </div>
-        <ProfileSettings />
+        {select === 0 ? (
+          <ProfileSettings />
+        ) : (
+          <RequestSettings />
+        )}
       </section>
     </main>
   );
