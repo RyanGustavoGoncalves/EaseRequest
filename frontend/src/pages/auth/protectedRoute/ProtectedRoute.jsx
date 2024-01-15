@@ -20,6 +20,7 @@ const ProtectedRoute = ({ element: Element, ...rest }) => {
           if (response.ok) {
             const responseBody = await response.json();
             const role = responseBody.role;
+            localStorage.setItem('role', role);
             setIsAuthenticated(true);
           } else {
             setIsAuthenticated(false);

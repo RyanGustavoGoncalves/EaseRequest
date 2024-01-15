@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { ButtonGenerate } from './components/buttonGenerate/buttonGenerate';
+import { ButtonGenerate } from './components/buttonGenerate/ButtonGenerate';
 import { GenerateExcelFile } from '../../../home/components/utils/generateExcelFile/GenerateExcelFile';
 
 export const RequestSettings = () => {
     const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
     const [fileUrl, setFileUrl] = useState('');
     const [isDownloadButtonDisabled, setDownloadButtonDisabled] = useState(true);
     const [isDownloadAllButtonDisabled, setDownloadAllButtonDisabled] = useState(true);
@@ -55,26 +56,30 @@ export const RequestSettings = () => {
                     </button>
                 </div>
             </div>
+            {
+                role === "ADMIN" && (
+                    <>
+                        <hr />
 
-            <hr />
+                        <div className="excel-file-generator">
+                            <h3>Generate excel file from all users</h3>
+                            <span>When you click on the button, an excel file will be generated with the requests from all users!</span>
 
-            <div className="excel-file-generator">
-                <h3>Generate excel file from all users</h3>
-                <span>When you click on the button, an excel file will be generated with the requests from all users!</span>
+                            <ButtonGenerate
+                                loading={loading}
+                                handleGenerateClick={() => handleGenerateClick(true)}
+                                buttonText="Generate!"
+                            />
+                            <div className={isDownloadAllButtonDisabled ? 'desactiveBtn' : 'downloadBtn'}>
+                                <button onClick={() => handleDownloadClick(true)} disabled={isDownloadAllButtonDisabled}>
+                                    Download Excel
+                                </button>
+                            </div>
 
-                <ButtonGenerate
-                    loading={loading}
-                    handleGenerateClick={() => handleGenerateClick(true)}
-                    buttonText="Generate!"
-                />
-
-                <div className={isDownloadAllButtonDisabled ? 'desactiveBtn' : 'downloadBtn'}>
-                    <button onClick={() => handleDownloadClick(true)} disabled={isDownloadAllButtonDisabled}>
-                        Download Excel
-                    </button>
-                </div>
-
-            </div>
+                        </div>
+                    </>
+                )
+            }
         </article>
     );
 };
