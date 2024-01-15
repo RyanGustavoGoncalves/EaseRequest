@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import ScrollReveal from 'scrollreveal';
 import Navbar from '../components/Navbar';
 import { Aside } from './components/asideSettings/Aside';

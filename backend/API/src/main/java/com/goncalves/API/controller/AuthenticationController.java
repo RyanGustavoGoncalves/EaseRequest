@@ -83,7 +83,6 @@ public class AuthenticationController {
         }
     }
 
-
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AutenticarDados dados) {
         try {

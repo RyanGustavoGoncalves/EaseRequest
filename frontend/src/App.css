@@ -419,7 +419,7 @@ div.toolTitle>h2 {
 }
 
 div.toolTitle>p>span {
-    color: var(--text-color-light);
+    color: var(--text-color);
 }
 
 div.toolTitle>p {
@@ -450,7 +450,7 @@ div.tool>p {
 }
 
 div.homeDescript>div.more {
-    padding: var(--padding-tiny);
+    padding: var(--gap-tiny);
 }
 
 div.boxTools>a {
@@ -461,7 +461,7 @@ div.boxTools>a {
 
 div.btnSave,
 .btnFinish {
-    padding: var(--padding-tiny);
+    padding: var(--gap-tiny);
     gap: var(--gap-medium);
     display: flex;
     justify-content: center;
@@ -832,7 +832,7 @@ div.image {
     z-index: 9999;
 }
 
-.spinner {
+.spinner, .spinner-btn {
     border: 5px solid var(--box-shadow-color);
     border-top: 5px solid var(--primary-color);
     border-radius: 50%;
@@ -840,6 +840,13 @@ div.image {
     height: 50px;
     animation: spin 1s ease-in-out infinite;
 }
+
+.spinner-btn{
+    border-top: 5px solid white;
+    width: 20px;
+    height: 20px;
+}
+
 
 @keyframes spin {
     0% {
@@ -849,6 +856,11 @@ div.image {
     100% {
         transform: rotate(360deg);
     }
+}
+
+.idProfileSettings p {
+    color: rgba(255, 255, 255, 0.64);
+    font-size: 12px;
 }
 
 @media (max-width: 420px) {
@@ -865,4 +877,49 @@ div.image {
         width: 15vh;
         height: 15vh;
     }
+}
+
+/* === CSS RequestSettings */
+
+.excel-file-generator {
+    display: grid;
+    gap: var(--gap-tiny);
+    padding-top: var(--gap-large);
+    padding: var(--padding-large);
+}
+
+.excel-file-generator>h3 {
+    color: var(--primary-color);
+    font-weight: normal;
+}
+
+.excel-file-generator>span {
+    color: var(--text-color);
+}
+
+
+.downloadBtn>button,
+.desactiveBtn>button {
+    position: relative;
+    padding: var(--padding-small);
+    border-radius: var(--border-radius-small);
+    border: none;
+    background-color: var(--primary-color);
+    transition: all 0.5s ease-in-out;
+    cursor: pointer;
+    inline-size: 10rem;
+}
+
+.desactiveBtn>button {
+    background-color: #1fdf6588;
+}
+
+.downloadBtn>button:hover {
+    background-color: #1fdf65dc;
+    transform: scale(1.1);
+}
+hr{
+    border: none;
+    border-bottom: solid 1px var(--box-shadow-color);
+    width: 95%;
 }

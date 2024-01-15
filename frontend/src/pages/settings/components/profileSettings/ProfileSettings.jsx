@@ -104,6 +104,10 @@ export const ProfileSettings = () => {
                 <h1>Profile</h1>
                 <div className="user-info-image-content">
                     <div className="information-user-content">
+                        <div className="idProfileSettings">
+                            <span>Id</span>
+                            <p>{userData.idUsers || 'NaN'}</p>
+                        </div>
                         <div>
                             <span>Username</span>
                             <p>{userData.username || 'NaN'}</p>

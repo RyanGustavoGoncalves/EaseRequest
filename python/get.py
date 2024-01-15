@@ -48,11 +48,17 @@ def fetch_and_update_excel(api_url, headers):
             # Renomear o arquivo temporário para o arquivo final
             os.rename(temp_excel_file, excel_file_path)
             print(f"Data exported to {excel_file_path}")
+            
+            # Retorna a URL do arquivo Excel gerado
+            return excel_file_path
         else:
             print("No new data from API.")
+            return None
     else:
         print(f"Failed to fetch data from API. Status code: {response.status_code}")
+        return None
 
 api_url = 'http://localhost:8080/request?&size=100'
 headers = {'Authorization': f'Bearer {token}'}
-fetch_and_update_excel(api_url, headers)
+excel_url = fetch_and_update_excel(api_url, headers)
+print(f"URL of the generated Excel file: {excel_url}")
