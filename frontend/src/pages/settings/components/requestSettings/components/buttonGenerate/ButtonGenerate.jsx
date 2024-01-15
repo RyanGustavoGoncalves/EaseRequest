@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ButtonGenerate = ({ loading, handleGenerateClick, buttonText }) => (
+export const ButtonGenerate = ({ loading, handleGenerateClick, buttonText }) => (
     <div className="downloadBtn">
         <button onClick={() => handleGenerateClick()} disabled={loading}>
             {loading ? (
@@ -13,5 +13,3 @@ const ButtonGenerate = ({ loading, handleGenerateClick, buttonText }) => (
         </button>
     </div>
 );
-
-export default ButtonGenerate;

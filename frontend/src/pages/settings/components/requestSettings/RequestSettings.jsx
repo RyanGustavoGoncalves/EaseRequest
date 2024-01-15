@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { ButtonGenerate } from './components/buttonGenerate/ButtonGenerate';
 import { GenerateExcelFile } from '../../../home/components/utils/generateExcelFile/GenerateExcelFile';
+import { ButtonGenerate } from './components/buttonGenerate/buttonGenerate';
 
 export const RequestSettings = () => {
     const token = localStorage.getItem('token');
