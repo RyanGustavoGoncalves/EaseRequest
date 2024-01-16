@@ -9,15 +9,16 @@ export const RequestSettings = () => {
     const [isDownloadButtonDisabled, setDownloadButtonDisabled] = useState(true);
     const [isDownloadAllButtonDisabled, setDownloadAllButtonDisabled] = useState(true);
     const [loading, setLoading] = useState(false);
+    const [loadingAll, setLoadingAll] = useState(false);
 
     const handleGenerateClick = async (allUsers = false) => {
-        setLoading(true);
+        allUsers ? setLoadingAll(true) : setLoading(true);
         try {
             allUsers ? setDownloadButtonDisabled(true) : setDownloadAllButtonDisabled(true);
             await GenerateExcelFile({ allUsers, token, setFileUrl });
             allUsers ? setDownloadAllButtonDisabled(false) : setDownloadButtonDisabled(false);
         } finally {
-            setLoading(false);
+            allUsers ? setLoadingAll(false) : setLoading(false);
         }
     };
 
@@ -66,7 +67,7 @@ export const RequestSettings = () => {
                             <span>When you click on the button, an excel file will be generated with the requests from all users!</span>
 
                             <ButtonGenerate
-                                loading={loading}
+                                loading={loadingAll}
                                 handleGenerateClick={() => handleGenerateClick(true)}
                                 buttonText="Generate!"
                             />

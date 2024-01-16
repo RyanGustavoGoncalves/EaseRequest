@@ -229,6 +229,7 @@ const HomeSecurity = () => {
             clearInterval(intervalId);
         };
     }, []);
+
     return (
         <section className="homeSection">
             <div className="wave">
@@ -318,14 +319,20 @@ const HomeSecurity = () => {
                         onMouseLeave={() => handleInputBlur('problemLabel')}
                     />
 
-                    <InputField
-                        id="description"
-                        label="description"
-                        value={formData.description}
-                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                        onMouseEnter={() => handleInputFocus('descriptionLabel')}
-                        onMouseLeave={() => handleInputBlur('descriptionLabel')}
-                    />
+                    <div>
+                        <div className="authField">
+                            <label>Description</label>
+                        </div>
+                        <textarea
+                            className="textarea-field"
+                            title="Description"
+                            id="description"
+                            value={formData.description}
+                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                            cols="30"
+                            rows="10"
+                        />
+                    </div>
 
                     <div className="authField">
                         <select className="selectHome" id="priority" value={formData.priority} onChange={(e) => setFormData({ ...formData, priority: e.target.value })} required>
@@ -346,7 +353,7 @@ const HomeSecurity = () => {
                     </div>
 
                     <div className="btnSave">
-                        <button onClick={handleSave}>Salvar</button>
+                        <button onClick={handleSave}>Save</button>
                     </div>
                 </div>
             </Modal>

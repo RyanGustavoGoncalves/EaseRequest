@@ -39,6 +39,7 @@ const Home = () => {
     const [modalConfirmIsOpen, setModalConfirmIsOpen] = useState(false);
     const [modalUpdateIsOpen, setModalUpdateIsOpen] = useState(false);
     const [modalDeleteIsOpen, setModalDeleteIsOpen] = useState(false);
+    const [msgClean, setMsgClean] = useState(false);
 
     // State for search term
     const [searchTerm, setSearchTerm] = useState("");
@@ -97,7 +98,6 @@ const Home = () => {
 
     // Function to save a new request
     const handleSave = () => {
-        console.log(formData.status)
         setFormData({
             ...formData,
             problem: document.getElementById("problem").value,
@@ -124,6 +124,7 @@ const Home = () => {
     const handleUpdateAction = async () => {
         await updateRequest(token, editedRequest, setSingleRequest);
         setModalUpdateIsOpen(false);
+        setModalConfirmIsOpen(false);
     }
 
     const handleDeleteAction = async () => {
@@ -144,6 +145,19 @@ const Home = () => {
             box.problem.toLowerCase().includes(searchTerm.toLowerCase())
         )
         : [];
+
+    const cleanFormData = () => {
+        setFormData({
+            id: "",
+            problem: "",
+            description: "",
+            priority: "",
+            status: "PENDING",
+            creationRequest: "",
+        });
+        console.log(formData)
+        setMsgClean(false);
+    }
 
     return (
         <section className="homeSection">
@@ -211,17 +225,24 @@ const Home = () => {
                         onMouseLeave={() => handleInputBlur('problemLabel')}
                     />
 
-                    <InputField
-                        id="description"
-                        label="description"
-                        value={formData.description}
-                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                        onMouseEnter={() => handleInputFocus('descriptionLabel')}
-                        onMouseLeave={() => handleInputBlur('descriptionLabel')}
-                    />
+                    <div>
+                        <div className="authField">
+                            <label>Description</label>
+                        </div>
+                        <textarea
+                            className="textarea-field"
+                            title="Description"
+                            id="description"
+                            value={formData.description}
+                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                            cols="30"
+                            rows="10"
+                        />
+                    </div>
 
                     <div className="btnSave">
-                        <button onClick={handleSave}>Salvar</button>
+                        <button onClick={handleSave}>Save</button>
+                        <button onClick={() => setMsgClean(true)} onDoubleClick={cleanFormData}>{msgClean ? "Double Click" : "Clean"}</button>
                     </div>
                 </div>
             </Modal>
@@ -236,7 +257,7 @@ const Home = () => {
                         <span>Problem:</span> {singleRequest.problem}
                     </div>
 
-                    <div style={{ cursor: "pointer" }} onClick={focusDescription}>
+                    <div className="description-field" onClick={focusDescription}>
                         <span>Description:</span> {isExpanded ? <div className="focusDesc">{singleRequest.description}</div> : <>[EXTEND]</>}
                     </div>
 
@@ -245,7 +266,7 @@ const Home = () => {
                     </div>
                 </div>
                 <div className="btnSave">
-                    <button onClick={() => openModalUpdate(singleRequest.id, handleSomeAction, setEditedRequest, editedRequest, singleRequest, setModalUpdateIsOpen)}>Update!</button>
+                    <button onClick={() => openModalUpdate(singleRequest.id, handleSomeAction, setEditedRequest, singleRequest, editedRequest, setModalUpdateIsOpen)}>Update!</button>
                 </div>
             </Modal>
 

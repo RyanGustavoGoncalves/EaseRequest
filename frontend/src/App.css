@@ -6,6 +6,7 @@
     --secondary-color: #333;
     --box-shadow-color: #222;
     --accent-color: red;
+    --focus-color: white;
 }
 
 /* Font Variables */
@@ -205,6 +206,7 @@ div.btnModalClose {
     max-width: 80%;
     max-height: 80%;
     overflow: auto;
+    overflow-x: hidden;
     display: grid;
     grid-template-columns: repeat(1, minmax(120px, 1fr));
 }
@@ -507,7 +509,16 @@ select.selectHome {
     border-bottom: solid 2px grey;
 }
 
+.toolConfig {
+    display: grid;
+    place-items: center;
+}
+
 .singleRequest>div {
+    width: 20rem;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-all;
     padding: var(--padding-medium);
 }
 
@@ -519,8 +530,18 @@ select.selectHome {
     color: var(--primary-color);
 }
 
+
+.description-field {
+    cursor: pointer;
+}
+
 .focusDesc {
-    width: var(--inline-size-medium);
+    display: flex;
+    flex-wrap: wrap;
+    width: 20rem;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 .status {
@@ -612,6 +633,20 @@ div.page>button {
 div.page>button:hover {
     background-color: #0e9a41;
     transform: scale(1.1);
+}
+
+.textarea-field {
+    margin: 0.2rem;
+    padding: 0.2rem;
+    width: 100%;
+    color: var(--primary-color);
+    background-color: var(--background-color);
+    border: solid 1px var(--box-shadow-color);
+}
+
+.textarea-field:focus {
+    outline: 1px solid var(--focus-color);
+    /* Cor do contorno ao focar */
 }
 
 @media (max-width: 620px) {
@@ -832,7 +867,8 @@ div.image {
     z-index: 9999;
 }
 
-.spinner, .spinner-btn {
+.spinner,
+.spinner-btn {
     border: 5px solid var(--box-shadow-color);
     border-top: 5px solid var(--primary-color);
     border-radius: 50%;
@@ -841,7 +877,7 @@ div.image {
     animation: spin 1s ease-in-out infinite;
 }
 
-.spinner-btn{
+.spinner-btn {
     border-top: 5px solid white;
     width: 20px;
     height: 20px;
@@ -918,7 +954,8 @@ div.image {
     background-color: #1fdf65dc;
     transform: scale(1.1);
 }
-hr{
+
+hr {
     border: none;
     border-bottom: solid 1px var(--box-shadow-color);
     width: 95%;
