@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 
 const ProtectedRoute = ({ element: Element, ...rest }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
-  const token = localStorage.getItem('token');
+  // const token = localStorage.getItem('token');
 
   useEffect(() => {
     const checkToken = async () => {
