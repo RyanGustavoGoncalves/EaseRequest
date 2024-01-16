@@ -1,8 +1,9 @@
 // Function to fetch requests from the server
-export const fetchRequests = async (setLoading, token, setToolBoxes, getStatusClass, setRequestsLoaded) => {
+export const fetchRequests = async (currentPage, setLoading, token, setToolBoxes, getStatusClass, setRequestsLoaded) => {
+    const size = 15;
     try {
         setLoading(true);
-        const response = await fetch("http://localhost:8080/request/user", {
+        const response = await fetch(`http://localhost:8080/request/user?page=${currentPage}&size=${size}`, {
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",

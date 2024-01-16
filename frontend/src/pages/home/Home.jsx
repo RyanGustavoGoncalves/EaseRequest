@@ -1,86 +1,100 @@
-// Imports of other components and libraries";
+// Imports of other components and libraries
+
 import { useState, useEffect } from "react";
 import wave from './assets/wave.svg';
 import mais from './assets/iconMais.png';
-import lupa from './assets/lupa.png';
 import Modal from '../components/Modal';
-import InputField from './components/inputField/InputField';
 import { getStatusClass } from "./components/utils/getStatusClass/getStatusClass";
 import { fetchRequestById } from "./components/utils/fetchRequestById/fetchRequestById";
-import { calculateTimeDifference } from "./components/utils/calculateTimeDifference/CalculateTimeDifference";
 import { deleteRequest } from "./components/utils/deleteRequest/DeleteRequest";
 import { updateRequest } from "./components/utils/updateRequest/UpdateRequest";
 import { CreateNewRequest } from "./components/utils/createNewRequest/CreateNewRequest";
-import { handleInputBlur, handleInputFocus } from "./components/utils/handleInput/HandleInput";
-import { closeModal, closeModalConfirm, closeModalDelete, closeModalUpdate, openModal, openModalConfirm, openModalDelete, openModalUpdate } from "./components/utils/ModalFunctions/ModalFunctions";
+import { closeModal, closeModalConfirm, closeModalDelete, closeModalFilter, closeModalUpdate, openModal, openModalConfirm, openModalDelete, openModalFilter, openModalUpdate } from "./components/utils/ModalFunctions/ModalFunctions";
+import { fetchRequestsPage } from "./components/utils/fetchRequestsPagination/FetchRequestPage";
+import { FinishRequestAndSendEmail } from "./components/utils/finishRequest/FinishRequestAndSendEmail";
+import FilterBar from "./components/subNav/FilterBar";
+import { ToolBox } from "./components/toolBox/ToolBox";
+import { Pagination } from "./components/pagination/Pagination";
+import RequestForm from "./components/requestForm/RequestForm";
+import RequestDetails from "./components/requestDetails/RequestDetails";
+import UpdateRequest from "./components/updateRequest/UpdateRequest";
+import FinishRequest from "./components/finishRequest/FinishRequest";
+import DeleteRequestConfirmation from "./components/deleteRequestConfirmation/deleteRequestConfirmation";
+import FilterPriority from "./components/filterByPriority/FilterPriority";
+import FilterStatus from "./components/filterStatus/FilterStatus";
 import { fetchRequests } from "./components/utils/fetchRequests/FetchRequest";
 
-const Home = () => {
-    // State to store the user's token
+const HomeSecurity = () => {
+    // Retrieve token from local storage
     const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
 
-    // States to manage requests and loading
+    // State variables
     const [toolBoxes, setToolBoxes] = useState([]);
     const [loading, setLoading] = useState(false);
-
-    // State to store form data
+    const [loadingFinish, setLoadingFinish] = useState(false);
     const [formData, setFormData] = useState({
         id: "",
         problem: "",
         description: "",
         priority: "",
-        status: "PENDING",
+        status: "",
         creationRequest: "",
+        user: [{
+            idUsers: "",
+            username: "",
+            firstName: "",
+            lastName: "",
+            email: "",
+            role: "",
+        }]
     });
-
-    // States related to modals
+    const [finishRequest, setFinishRequest] = useState(false);
+    const [showId, setShowId] = useState(true);
     const [isExpanded, setExpanded] = useState(false);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalConfirmIsOpen, setModalConfirmIsOpen] = useState(false);
     const [modalUpdateIsOpen, setModalUpdateIsOpen] = useState(false);
     const [modalDeleteIsOpen, setModalDeleteIsOpen] = useState(false);
-    const [msgClean, setMsgClean] = useState(false);
-
-    // State for search term
+    const [modalFilterIsOpen, setModalFilterIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
-
-    // States related to a single request
     const [requestsLoaded, setRequestsLoaded] = useState(false);
     const [singleRequest, setSingleRequest] = useState({});
     const [editedRequest, setEditedRequest] = useState({
         id: "",
         problem: "",
         description: "",
+        priority: "",
+        status: "",
     });
+    const [filterCriteria, setFilterCriteria] = useState('');
+    const [selectedStatus, setSelectedStatus] = useState([]);
 
+    const [currentPage, setCurrentPage] = useState(0);
+
+    // Function to toggle the expansion of the description field
     const focusDescription = () => {
         setExpanded(!isExpanded);
     };
 
-    // Side effects to load requests and update status
+    // Fetch requests when the component mounts and requests are not loaded
     useEffect(() => {
         if (!requestsLoaded) {
-            fetch();
+            fetchData();
         }
     }, [requestsLoaded]);
 
+    // Fetch requests periodically (every 5 seconds)
     useEffect(() => {
         const intervalId = setInterval(() => {
-            fetch();
-        }, 5000); // Consulta a cada 5 segundos (ajuste conforme necessário)
+            console.log(token);
+            fetchData(currentPage);
+        }, 5000);
 
-        return () => clearInterval(intervalId); // Limpa o intervalo quando o componente é desmontado
+        // Clear the interval when the component is unmounted
+        return () => clearInterval(intervalId);
 
-    }, []);
-
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            getStatusClass();
-        }, 5000); // Consulta a cada 5 segundos (ajuste conforme necessário)
-
-        return () => clearInterval(intervalId); // Limpa o intervalo quando o componente é desmontado
-
-    }, []);
+    }, [currentPage, token]);
 
     // Function to add a new request
     const handleAddBox = () => {
@@ -92,28 +106,69 @@ const Home = () => {
             priority: "",
             status: "PENDING",
             creationRequest: "",
+            user: [{
+                idUsers: "",
+                username: "",
+                firstName: "",
+                lastName: "",
+                email: "",
+                role: "",
+            }]
         });
         closeModal(modalIsOpen);
     };
 
-    // Function to save a new request
+    // Function to save the form data and create a new request
     const handleSave = () => {
         setFormData({
             ...formData,
             problem: document.getElementById("problem").value,
             description: document.getElementById("description").value,
+            priority: document.getElementById("priority").value,
+            status: document.getElementById("status").value
         });
         createNewRequest();
         handleAddBox();
     };
 
+    const handleNextPage = () => {
+        setCurrentPage(prevPage => {
+            // Chama a função fetchRequests imediatamente após a mudança da página
+            const nextPage = prevPage + 1;
+            role === "ADMIN"
+                ?
+                fetchRequestsPage(nextPage, setLoading, token, setToolBoxes, getStatusClass, setRequestsLoaded)
+                :
+                fetchRequests(nextPage, setLoading, token, setToolBoxes, getStatusClass, setRequestsLoaded);
+            return nextPage;
+        });
+    };
 
+    const handlePreviousPage = () => {
+        setCurrentPage(prevPage => {
+            // Chama a função fetchRequests imediatamente após a mudança da página
+            const previousPage = prevPage - 1;
+            role === "ADMIN"
+                ?
+                fetchRequestsPage(previousPage, setLoading, token, setToolBoxes, getStatusClass, setRequestsLoaded)
+                :
+                fetchRequests(previousPage, setLoading, token, setToolBoxes, getStatusClass, setRequestsLoaded);
+
+            return previousPage;
+        });
+    };
+
+    // Function to handle search input
     const handleSearch = (e) => {
         setSearchTerm(e.target.value);
     };
 
-    const fetch = async () => {
-        await fetchRequests(setLoading, token, setToolBoxes, getStatusClass, setRequestsLoaded)
+    const fetchData = async () => {
+        role === "ADMIN"
+            ?
+            await fetchRequestsPage(currentPage, setLoading, token, setToolBoxes, getStatusClass, setRequestsLoaded)
+            :
+            await fetchRequests(currentPage, setLoading, token, setToolBoxes, getStatusClass, setRequestsLoaded);
     }
 
     const createNewRequest = async () => {
@@ -136,185 +191,265 @@ const Home = () => {
 
     const handleSomeAction = async (id) => {
         await fetchRequestById(id, token, setSingleRequest);
-
     };
 
-    // Function to filter requests based on the search term
-    const filteredToolBoxes = Array.isArray(toolBoxes)
-        ? toolBoxes.filter((box) =>
-            box.problem.toLowerCase().includes(searchTerm.toLowerCase())
-        )
+    const handleFinishAction = async (editedRequest) => {
+        setLoadingFinish(true);
+        await FinishRequestAndSendEmail(token, editedRequest.user.email, editedRequest.problem, editedRequest.user.username, editedRequest.id);
+        editedRequest.status = "FINISH";
+        setEditedRequest(editedRequest)
+        await updateRequest(token, editedRequest, setSingleRequest)
+        setModalUpdateIsOpen(false);
+        setModalConfirmIsOpen(false);
+        setFinishRequest(false);
+        setLoadingFinish(false);
+    }
+
+    // Move the declaration to the appropriate location
+    const filteredAndSortedToolBoxes = Array.isArray(toolBoxes)
+        ? toolBoxes
+            .filter(
+                (box) =>
+                    box.problem.toLowerCase().includes(searchTerm.toLowerCase()) &&
+                    (!filterCriteria || box.priority === filterCriteria) &&
+                    (selectedStatus.length === 0 || selectedStatus.includes(box.status))
+            )
+            .sort((a, b) => {
+                // Sort based on priority (HIGH, MEDIUM, LOW)
+                const priorityOrder = { HIGH: 1, MEDIUM: 2, LOW: 3 };
+                return priorityOrder[a.priority] - priorityOrder[b.priority];
+            })
         : [];
 
-    const cleanFormData = () => {
-        setFormData({
-            id: "",
-            problem: "",
-            description: "",
-            priority: "",
-            status: "PENDING",
-            creationRequest: "",
-        });
-        console.log(formData)
-        setMsgClean(false);
-    }
+    // Function to handle status change
+    const handleStatusChange = (status) => {
+        if (selectedStatus.includes(status)) {
+            setSelectedStatus((prevStatus) =>
+                prevStatus.filter((selected) => selected !== status)
+            );
+        } else {
+            setSelectedStatus((prevStatus) => [...prevStatus, status]);
+        }
+    };
+
+    // Count the occurrences of each priority
+    const priorityCounts = filteredAndSortedToolBoxes.reduce((counts, box) => {
+        // Increment the count for the current priority
+        counts[box.priority] = (counts[box.priority] || 0) + 1;
+        return counts;
+    }, {});
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setShowId((prevShowId) => !prevShowId);
+        }, 4000);
+
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, []);
 
     return (
         <section className="homeSection">
-            <div className="wave">
-                <img src={wave} alt="" />
-            </div>
-
-            <div className="alignCont">
-                <div className="subNav">
-                    <div className="lupaSearch">
-                        <div className="lupa"><img src={lupa} alt="Search" /></div>
-                        <input
-                            type="search"
-                            placeholder="Search.."
-                            onChange={handleSearch}
-                            value={searchTerm}
-                            title="Search"
-                        />
-                        <div className="addBtn">
-                            <button onClick={() => openModal(setModalIsOpen)} title="Add">Add</button>
-                        </div>
+            {role === "ADMIN" ? (
+                <>
+                    <div className="wave">
+                        <img src={wave} alt="" />
                     </div>
-                </div>
-                <div className="boxTools">
-                    <div className="tool" style={{ display: "grid", placeItems: "center" }} onClick={() => openModal(setModalIsOpen)}>
-                        <h2>Create new Request</h2>
-                        <img src={mais} alt="Add" width={40} />
-                    </div>
-                    {filteredToolBoxes.map((box, index) => (
-                        <div key={index} className="tool" onClick={() => openModalConfirm(box.id, handleSomeAction, setModalConfirmIsOpen)}>
-                            {loading ? (
-                                <div className="align-loading">
-                                    <div className="spinner"></div>
-                                </div>
-                            ) : (
-                                <>
-                                    <div className="txtAlignTool">
-                                        <div className="toolTitle">
-                                            <h2>{box.problem}</h2>
-                                            <p> {box.id}</p>
-                                            <p>{calculateTimeDifference(box.creationRequest)}</p>
-                                        </div>
-                                        <div className="dateStatusTool">
-                                            <p className={`status ${getStatusClass(box.status)}`}>
-                                                &#x25CF;
-                                                <span>{box.status}</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </>
-                            )}
+                    <div className="alignCont">
+                        <FilterBar handleSearch={handleSearch} searchTerm={searchTerm} setModalFilterIsOpen={setModalFilterIsOpen} role={role} />
+                        <div className="boxTools">
+                            <div className="tool" style={{ display: "grid", placeItems: "center" }} onClick={() => openModal(setModalIsOpen)}>
+                                <h2>Create new Request</h2>
+                                <img src={mais} alt="Add" width={40} />
+                            </div>
+                            {filteredAndSortedToolBoxes.map((box, index) => (
+                                // Verifica se o item atende aos critérios de filtro antes de renderizá-lo
+                                (filterCriteria === '' || box.priority === filterCriteria) && (
+                                    <ToolBox
+                                        key={index}
+                                        box={box}
+                                        loading={loading}
+                                        showId={showId}
+                                        handleSomeAction={handleSomeAction}
+                                        setModalConfirmIsOpen={setModalConfirmIsOpen}
+                                        role={role}
+                                    />
+                                )
+                            ))}
                         </div>
-                    ))}
-                </div>
-            </div>
-
-            <Modal isOpen={modalIsOpen} onClose={() => closeModal(setModalIsOpen)}>
-                <div className="toolConfig">
-                    <InputField
-                        id="problem"
-                        label="Problem"
-                        value={formData.problem}
-                        onChange={(e) => setFormData({ ...formData, problem: e.target.value })}
-                        onMouseEnter={() => handleInputFocus('problemLabel')}
-                        onMouseLeave={() => handleInputBlur('problemLabel')}
-                    />
-
-                    <div>
-                        <div className="authField">
-                            <label>Description</label>
-                        </div>
-                        <textarea
-                            className="textarea-field"
-                            title="Description"
-                            id="description"
-                            value={formData.description}
-                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                            cols="30"
-                            rows="10"
+                        <Pagination
+                            currentPage={currentPage}
+                            handlePreviousPage={handlePreviousPage}
+                            handleNextPage={handleNextPage}
+                            role={role}
                         />
                     </div>
 
-                    <div className="btnSave">
-                        <button onClick={handleSave}>Save</button>
-                        <button onClick={() => setMsgClean(true)} onDoubleClick={cleanFormData}>{msgClean ? "Double Click" : "Clean"}</button>
+                    <Modal isOpen={modalIsOpen} onClose={() => closeModal(setModalIsOpen)}>
+                        <RequestForm
+                            formData={formData}
+                            setFormData={setFormData}
+                            handleSave={handleSave}
+                            role={role}
+                        />
+                    </Modal>
+
+                    <Modal isOpen={modalConfirmIsOpen} onClose={() => closeModalConfirm(setModalConfirmIsOpen)}>
+                        <RequestDetails
+                            singleRequest={singleRequest}
+                            isExpanded={isExpanded}
+                            focusDescription={focusDescription}
+                            openModalUpdate={openModalUpdate}
+                            handleSomeAction={handleSomeAction}
+                            setEditedRequest={setEditedRequest}
+                            setModalUpdateIsOpen={setModalUpdateIsOpen}
+                            editedRequest={editedRequest}
+                            role={role}
+                        />
+
+                    </Modal>
+
+                    <Modal isOpen={modalUpdateIsOpen} onClose={() => { closeModalUpdate(setModalUpdateIsOpen), setFinishRequest(false) }}>
+                        {loadingFinish && (
+                            <div className="loading-container">
+                                <div className="spinner"></div>
+                            </div>
+                        )}
+
+                        {!finishRequest ? (
+
+                            <UpdateRequest
+                                editedRequest={editedRequest}
+                                singleRequest={singleRequest}
+                                setEditedRequest={setEditedRequest}
+                                handleSomeAction={handleSomeAction}
+                                handleUpdateAction={handleUpdateAction}
+                                setModalDeleteIsOpen={setModalDeleteIsOpen}
+                                setFinishRequest={setFinishRequest}
+                                role={role}
+                            />
+
+
+                        ) : (
+
+                            <FinishRequest
+                                singleRequest={singleRequest}
+                                handleFinishAction={handleFinishAction}
+                                editedRequest={editedRequest}
+                            />
+
+                        )}
+                    </Modal>
+
+                    <Modal isOpen={modalDeleteIsOpen} onClose={() => closeModalDelete(setModalDeleteIsOpen)}>
+
+                        <DeleteRequestConfirmation
+                            singleRequest={singleRequest}
+                            handleDeleteAction={handleDeleteAction}
+                            editedRequest={editedRequest}
+                            role={role}
+                        />
+
+                    </Modal>
+
+                    <Modal isOpen={modalFilterIsOpen} onClose={() => closeModalFilter(setModalFilterIsOpen)}>
+                        <FilterPriority filterCriteria={filterCriteria} setFilterCriteria={setFilterCriteria} priorityCounts={priorityCounts} />
+                        <FilterStatus selectedStatus={selectedStatus} handleStatusChange={handleStatusChange} />
+                    </Modal>
+                </>
+            ) : (
+                <>
+                    <div className="wave">
+                        <img src={wave} alt="" />
                     </div>
-                </div>
-            </Modal>
 
-            <Modal isOpen={modalConfirmIsOpen} onClose={() => closeModalConfirm(setModalConfirmIsOpen)}>
-                <div className="singleRequest">
-                    <div>
-                        <span>ID:</span> {singleRequest.id}
+                    <div className="alignCont">
+                        <FilterBar handleSearch={handleSearch} searchTerm={searchTerm} setModalFilterIsOpen={setModalFilterIsOpen} role={role} />
+                        <div className="boxTools">
+                            <div className="tool" style={{ display: "grid", placeItems: "center" }} onClick={() => openModal(setModalIsOpen)}>
+                                <h2>Create new Request</h2>
+                                <img src={mais} alt="Add" width={40} />
+                            </div>
+                            {filteredAndSortedToolBoxes.map((box, index) => (
+                                // Verifica se o item atende aos critérios de filtro antes de renderizá-lo
+                                (filterCriteria === '' || box.priority === filterCriteria) && (
+                                    <ToolBox
+                                        key={index}
+                                        box={box}
+                                        loading={loading}
+                                        showId={showId}
+                                        handleSomeAction={handleSomeAction}
+                                        setModalConfirmIsOpen={setModalConfirmIsOpen}
+                                        role={role}
+                                    />
+                                )
+                            ))}
+                        </div>
+                        <Pagination
+                            currentPage={currentPage}
+                            handlePreviousPage={handlePreviousPage}
+                            handleNextPage={handleNextPage}
+                            role={role}
+                        />
                     </div>
 
-                    <div>
-                        <span>Problem:</span> {singleRequest.problem}
-                    </div>
+                    <Modal isOpen={modalIsOpen} onClose={() => closeModal(setModalIsOpen)}>
+                        <RequestForm
+                            formData={formData}
+                            setFormData={setFormData}
+                            handleSave={handleSave}
+                            role={role}
+                        />
+                    </Modal>
 
-                    <div className="description-field" onClick={focusDescription}>
-                        <span>Description:</span> {isExpanded ? <div className="focusDesc">{singleRequest.description}</div> : <>[EXTEND]</>}
-                    </div>
+                    <Modal isOpen={modalConfirmIsOpen} onClose={() => closeModalConfirm(setModalConfirmIsOpen)}>
+                        <RequestDetails
+                            singleRequest={singleRequest}
+                            isExpanded={isExpanded}
+                            focusDescription={focusDescription}
+                            openModalUpdate={openModalUpdate}
+                            handleSomeAction={handleSomeAction}
+                            setEditedRequest={setEditedRequest}
+                            setModalUpdateIsOpen={setModalUpdateIsOpen}
+                            editedRequest={editedRequest}
+                            role={role}
+                        />
+                    </Modal>
 
-                    <div>
-                        <span>Date request:</span> {singleRequest.creationRequest}
-                    </div>
-                </div>
-                <div className="btnSave">
-                    <button onClick={() => openModalUpdate(singleRequest.id, handleSomeAction, setEditedRequest, singleRequest, editedRequest, setModalUpdateIsOpen)}>Update!</button>
-                </div>
-            </Modal>
+                    <Modal isOpen={modalUpdateIsOpen} onClose={() => closeModalUpdate(setModalUpdateIsOpen)}>
+                        {loadingFinish && (
+                            <div className="loading-container">
+                                <div className="spinner"></div>
+                            </div>
+                        )}
 
-            <Modal isOpen={modalUpdateIsOpen} onClose={() => closeModalUpdate(setModalUpdateIsOpen)}>
-                <div className="singleRequest">
-                    <p>
-                        <span>ID:</span> {singleRequest.id}
-                    </p>
-                </div>
+                        <UpdateRequest
+                            editedRequest={editedRequest}
+                            singleRequest={singleRequest}
+                            setEditedRequest={setEditedRequest}
+                            handleSomeAction={handleSomeAction}
+                            handleUpdateAction={handleUpdateAction}
+                            setModalDeleteIsOpen={setModalDeleteIsOpen}
+                            setFinishRequest={setFinishRequest}
+                            role={role}
+                        />
 
-                <InputField
-                    id="problem"
-                    label="Updated Problem"
-                    value={editedRequest.problem}
-                    onChange={(e) => setEditedRequest((prev) => ({ ...prev, problem: e.target.value }))}
-                    onMouseEnter={() => handleInputFocus('problemLabel')}
-                    onMouseLeave={() => handleInputBlur('problemLabel')}
-                />
+                    </Modal>
 
-                <InputField
-                    id="description"
-                    label="Update Description"
-                    value={editedRequest.description}
-                    onChange={(e) => setEditedRequest((prev) => ({ ...prev, description: e.target.value }))}
-                    onMouseEnter={() => handleInputFocus('descriptionLabel')}
-                    onMouseLeave={() => handleInputBlur('descriptionLabel')}
-                />
+                    <Modal isOpen={modalDeleteIsOpen} onClose={() => closeModalDelete(setModalDeleteIsOpen)}>
 
-                <div className="btnSave">
-                    <button className="deleteBtn" onClick={() => openModalDelete(singleRequest.id, handleSomeAction, setModalDeleteIsOpen)}>Delete!</button>
-                    <button onClick={() => handleUpdateAction(editedRequest, singleRequest.id)}>Update!</button>
-                </div>
-            </Modal>
-
-            <Modal isOpen={modalDeleteIsOpen} onClose={() => closeModalDelete(setModalDeleteIsOpen)}>
-
-                <div className="singleRequest">
-                    <span>Deseja deletar a request com o ID:</span> {singleRequest.id}
-                </div>
-
-
-                <div className="btnSave">
-                    <button className="deleteBtn" onClick={() => handleDeleteAction(editedRequest)}>Delete!</button>
-                </div>
-            </Modal>
-
+                        <DeleteRequestConfirmation
+                            singleRequest={singleRequest}
+                            handleDeleteAction={handleDeleteAction}
+                            editedRequest={editedRequest}
+                            role={role}
+                        />
+                    </Modal>
+                </>
+            )}
         </section>
     );
 }
 
-export default Home;
+export default HomeSecurity;

@@ -16,6 +16,7 @@ import com.goncalves.API.service.EmailService;
 import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,7 +49,8 @@ public class RequestController {
     }
 
     @GetMapping("user")
-    public ResponseEntity getUserRequest() {
+    public ResponseEntity getUserRequest(@RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "10") int size) {
         try {
             Users user = (Users) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -57,7 +60,15 @@ public class RequestController {
 
             List<Request> userRequests = repository.findByUser(user);
 
-            List<DadosListagemRequest> mappedRequests = userRequests.stream()
+            int start = page * size;
+            int end = Math.min((page + 1) * size, userRequests.size());
+
+            if (start >= userRequests.size()) {
+                // Se o índice de início estiver além do tamanho da lista, não há mais dados
+                return ResponseEntity.ok(Collections.emptyList()); // ou outra resposta apropriada
+            }
+
+            List<DadosListagemRequest> mappedRequests = userRequests.subList(start, end).stream()
                     .map(DadosListagemRequest::new)
                     .collect(Collectors.toList());
 

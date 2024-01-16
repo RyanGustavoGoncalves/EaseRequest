@@ -9,7 +9,6 @@ export const FinishRequestAndSendEmail = async (token, email, problem, username,
             username: username,
             id: id
         };
-        console.log(data)
 
         const response = await fetch("http://localhost:8080/request/finish-request", {
             method: 'POST',
