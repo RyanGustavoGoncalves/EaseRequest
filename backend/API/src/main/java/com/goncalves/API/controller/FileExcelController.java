@@ -109,6 +109,9 @@ public class FileExcelController {
             headerRow.createCell(1).setCellValue("Problem");
             headerRow.createCell(2).setCellValue("Description");
             headerRow.createCell(3).setCellValue("CreationRequest");
+            headerRow.createCell(4).setCellValue("ID_USER");
+            headerRow.createCell(5).setCellValue("Username");
+            headerRow.createCell(6).setCellValue("Email");
 
             int rowNum = 1;
             for (DadosListagemRequest requestItem : mappedRequests) {
@@ -117,6 +120,9 @@ public class FileExcelController {
                 dataRow.createCell(1).setCellValue(requestItem.problem());
                 dataRow.createCell(2).setCellValue(requestItem.description());
                 dataRow.createCell(3).setCellValue(requestItem.creationRequest().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+                dataRow.createCell(4).setCellValue(requestItem.user().getIdUsers());
+                dataRow.createCell(5).setCellValue(requestItem.user().getUsername());
+                dataRow.createCell(6).setCellValue(requestItem.user().getEmail());
             }
 
             // Salve o workbook em um ByteArrayOutputStream

@@ -33,7 +33,7 @@ export const RequestSettings = () => {
             document.body.removeChild(a);
 
             // Desativa o botão após o download ser concluído
-            value ? setDownloadButtonDisabled(true) : setDownloadAllButtonDisabled(true);
+            value ? setDownloadAllButtonDisabled(true) : setDownloadButtonDisabled(true);
         }
     };
 
