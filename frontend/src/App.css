@@ -319,6 +319,10 @@ div.lupaSearch>input {
     text-indent: var(--padding-large);
 }
 
+.lupaSearch>input:focus{
+    border: solid 1px var(--focus-color);
+}
+
 div.lupa {
     display: flex;
     align-items: center;
@@ -515,7 +519,7 @@ select.selectHome {
 }
 
 .singleRequest>div {
-    width: 20rem;
+    width: 21rem;
     overflow-wrap: break-word;
     word-wrap: break-word;
     word-break: break-all;
@@ -538,7 +542,7 @@ select.selectHome {
 .focusDesc {
     display: flex;
     flex-wrap: wrap;
-    width: 20rem;
+    width: 21rem;
     overflow-wrap: break-word;
     word-wrap: break-word;
     word-break: break-all;
