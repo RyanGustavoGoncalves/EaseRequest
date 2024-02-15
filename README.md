@@ -11,6 +11,8 @@ EaseRequest é uma aplicação web construída com React (Vite), Java Spring (ba
 
 📊  **Excel File Generator**: Desenvolvemos um endpoint em Java que permite a geração de arquivos Excel personalizados com base nas suas solicitações! Para os administradores, implementamos uma funcionalidade extra: a criação de um arquivo Excel abrangendo todas as solicitações.
 
+🔐 **Recuperação de Senha**: Apresentamos um novo recurso que permite a recuperação de senha usando o nome de usuário. Basta preencher o campo com o seu nome de usuário e enviaremos um e-mail de recuperação associado a esse nome de usuário, reforçando a segurança da sua conta.
+
 ## Recursos
 
 ✨ **Atualizações em Tempo Real**: Receba atualizações ao vivo sobre o status das suas solicitações.
@@ -20,6 +22,7 @@ EaseRequest é uma aplicação web construída com React (Vite), Java Spring (ba
 🔍 **Funcionalidade de Busca**: Encontre rapidamente solicitações específicas com a função de busca.
 
 📆 **Acompanhamento de Tempo**: Veja quanto tempo atrás uma solicitação foi criada.
+
 
 ## Tecnologias Utilizadas
 
