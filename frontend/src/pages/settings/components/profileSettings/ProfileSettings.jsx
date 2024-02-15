@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2';
 import { useState, useEffect, useRef } from "react";
 import { FetchUser } from "../../../home/components/utils/getInfoUser/FetchUser";
 import { closeModalUserUpdate, openModalUserUpdate } from "../../../home/components/utils/ModalFunctions/ModalFunctions";
@@ -12,8 +13,11 @@ import InputField from "../../../home/components/inputField/InputField";
 import Modal from '../../../components/Modal';
 
 import user from '../../assets/user.png';
+import { useNavigate } from 'react-router-dom';
 
 export const ProfileSettings = () => {
+
+    const navigate = useNavigate();
 
     const token = localStorage.getItem('token');
     const [showUpdateScreen, setShowUpdateScreen] = useState(false);
@@ -97,6 +101,18 @@ export const ProfileSettings = () => {
         setModalImageIsOpen(false);
     }
 
+    const handleLogouUser = () => {
+        Swal.fire({
+            text: `Logout! `,
+            icon: 'success',
+            customClass: {
+                popup: 'custom-popup-class',
+            },
+        });
+        localStorage.clear();
+        navigate('/');
+    }
+
 
     return (
         <article className='article-settings-content'>
@@ -132,8 +148,13 @@ export const ProfileSettings = () => {
                             <span>Creation Account</span>
                             <p>{userData.creationAccount || 'NaN'}</p>
                         </div>
-                        <div className="addBtn">
-                            <button onClick={() => openModalUserUpdate(setModalIsOpen, setEditUser, userData)}>Update!</button>
+                        <div className="btnAlign-profile">
+                            <div className="addBtn">
+                                <button onClick={() => openModalUserUpdate(setModalIsOpen, setEditUser, userData)}>Update!</button>
+                            </div>
+                            <div className="addBtn">
+                                <button onClick={() => handleLogouUser()}>Logout!</button>
+                            </div>
                         </div>
                     </div>
                     <div className="userImage">

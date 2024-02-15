@@ -13,20 +13,16 @@ export const updateUser = async (editUser, token, setUserData) => {
             body: JSON.stringify(editUser),
         });
 
+
         if (response.ok) {
             const responseData = await response.json();
-            if (responseData && responseData.success) {
-                setUserData(responseData.data);
-                Swal.fire({
-                    text: responseData.message || 'Update carried out successfully!',
-                    icon: 'success',
-                });
-            } else {
-                Swal.fire({
-                    text: 'Unexpected response from server. Please try again later.',
-                    icon: 'error',
-                });
-            }
+
+            setUserData(responseData);
+            Swal.fire({
+                text: responseData.message || 'Update carried out successfully!',
+                icon: 'success',
+            });
+
         } else {
             Swal.fire({
                 text: 'Unexpected error. Please try again later.',

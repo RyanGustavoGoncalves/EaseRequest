@@ -162,15 +162,13 @@ form.authForm>div.btn>button {
   border-radius: 50px;
   border: none;
   inline-size: 200px;
-  /* background-color: #1fdf64; */
-  background-image: linear-gradient(to right, #1fdf64, #1fdf64, #6cff00c4, #1fdf64);
+  background-color: #1fdf64;
   transition: all 0.5s ease-in-out;
 }
 
 form.authForm>div.btn>button:hover {
-  transform: scale(1.1);
   border: solid 1px white;
-  filter: drop-shadow(0px 0px 10px green);
+  background-color: #1fdf65d8;
 }
 
 form.authForm>div.btn>a>span {

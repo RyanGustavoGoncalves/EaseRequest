@@ -1,7 +1,9 @@
 package com.goncalves.API.controller;
 
+import com.goncalves.API.DTO.DadosAtualizarSenha;
 import com.goncalves.API.DTO.DadosTokenEmailValidation;
 import com.goncalves.API.entities.user.UserRepository;
+import com.goncalves.API.infra.security.NotFoundException;
 import com.goncalves.API.service.EmailService;
 import com.goncalves.API.service.EmailTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,12 @@ public class EmailUpdateController {
     @Autowired
     private EmailTokenService tokenService;
 
+    /**
+     * Endpoint para gerar um token de redefinição de senha e enviá-lo por e-mail.
+     *
+     * @param requestBody Um mapa contendo os dados da solicitação, incluindo o e-mail do destinatário.
+     * @return ResponseEntity Uma resposta HTTP indicando o sucesso ou falha da operação.
+     */
     @PutMapping("/generate-token")
     public ResponseEntity<String> gerarTokenRedefinicaoSenha(@RequestBody Map<String, String> requestBody) {
         try {
@@ -41,6 +49,46 @@ public class EmailUpdateController {
         }
     }
 
+    /**
+     * Endpoint para gerar um token de redefinição de senha e enviá-lo por e-mail.
+     *
+     * @param dados Os dados necessários para encontrar o usuário e gerar o token.
+     * @return ResponseEntity Uma resposta HTTP indicando o sucesso ou falha da operação.
+     */
+    @PutMapping("/generate-token/forgot-password")
+    public ResponseEntity gerarTokenRedefinicaoSenhaEsquecida(@RequestBody DadosAtualizarSenha dados) {
+        try {
+            // Encontrar o usuário pelo nome de usuário
+            var user = repository.findByUsernameForgot(dados.usernameEdit());
+
+            // Verificar se o usuário existe
+            if (user == null) {
+                // Se o usuário não for encontrado, retornar uma resposta de erro
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new NotFoundException("Usuário não encontrado!", dados.usernameEdit()));
+            }
+
+            // Gerar um token exclusivo para o usuário
+            String destinatario = user.getEmail();
+            String token = tokenService.gerarToken(destinatario);
+
+            // Enviar o token por e-mail
+            emailService.enviarEmailRedefinirSenha(destinatario, token);
+
+            // Retornar uma resposta de sucesso
+            return ResponseEntity.ok("Token gerado com sucesso. Verifique seu e-mail.");
+        } catch (Exception e) {
+            // Se ocorrer um erro inesperado, retornar uma resposta de erro interno do servidor
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao gerar o token.");
+        }
+    }
+
+    /**
+     * Endpoint para confirmar a redefinição de senha com um token válido.
+     *
+     * @param dados Objeto contendo o token e a nova senha.
+     * @return ResponseEntity Uma resposta HTTP indicando o sucesso ou falha da operação.
+     */
     @PostMapping("/confirm-reset")
     public ResponseEntity<String> confirmarRedefinicaoSenha(@RequestBody @Validated DadosTokenEmailValidation dados) {
         try {

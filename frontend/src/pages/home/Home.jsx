@@ -87,7 +87,6 @@ const HomeSecurity = () => {
     // Fetch requests periodically (every 5 seconds)
     useEffect(() => {
         const intervalId = setInterval(() => {
-            console.log(token);
             fetchData(currentPage);
         }, 5000);
 

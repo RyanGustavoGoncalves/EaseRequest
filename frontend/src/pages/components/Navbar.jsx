@@ -44,11 +44,11 @@ const Navbar = () => {
                                     Overview
                                 </Link>
                             </li>
-                            <li key="welcome">
+                            {/* <li key="welcome">
                                 <Link to={"/Welcome"} className={isActive("/Welcome") ? "active" : "noActive"}>
                                     Welcome
                                 </Link>
-                            </li>
+                            </li> */}
 
                         </ul>
                         <ul>

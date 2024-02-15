@@ -30,7 +30,7 @@ public class Request {
     private Users user;
 
 
-    public Request(String problem, String priority,String description ,String status, LocalDateTime creationRequest ,Users user) {
+    public Request(String problem, String priority,String description ,String status, LocalDateTime creationRequest ,Users user){
         this.problem = problem;
         this.priority = priority;
         this.description = description;

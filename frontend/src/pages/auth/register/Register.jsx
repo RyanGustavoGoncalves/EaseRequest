@@ -78,8 +78,6 @@ const Register = ({ toggleForm }) => {
             role: role,
         };
 
-        console.log(userData);
-
         const formData = new FormData();
         formData.append('profileImage', profileImage);
         formData.append('userData', new Blob([JSON.stringify(userData)], { type: 'application/json' }));

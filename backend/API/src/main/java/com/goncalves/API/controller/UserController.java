@@ -31,13 +31,13 @@ public class UserController {
 
 
     @GetMapping
-    public ResponseEntity<Page<DadosListagemUser>> getUsers(@PageableDefault(size = 10, sort = {"creationAccount"})Pageable paginacao){
+    public ResponseEntity<Page<DadosListagemUser>> getUsers(@PageableDefault(size = 10, sort = {"creationAccount"}) Pageable paginacao) {
         var page = repository.findAll(paginacao).map(DadosListagemUser::new);
         return ResponseEntity.ok(page);
     }
 
     @GetMapping("/user/token")
-    public ResponseEntity getUserFromToken (){
+    public ResponseEntity getUserFromToken() {
         Users user = (Users) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity.ok().body(repository.findById(user.getIdUsers()));
     }
@@ -82,7 +82,7 @@ public class UserController {
     public ResponseEntity updateUserForToken(@RequestBody @Validated DadosAtualizarUser dados) {
         try {
             var user = (Users) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            if (user == null){
+            if (user == null) {
                 return ResponseEntity.notFound().build();
             }
 
@@ -117,7 +117,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Erro ao processar a imagem"));
         }
     }
-    
+
     @DeleteMapping("/{idUser}")
     @Transactional
     public ResponseEntity deleteUser(@PathVariable String idUser) {
