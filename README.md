@@ -44,7 +44,7 @@ git clone https://github.com/RyanGustavoGoncalves/EaseRequest.git
 2. Navegue até o diretório do projeto:
 
 ```bash
-cd EaseRequest
+cd frontend
 ```
 
 3. Instale as dependências:
