@@ -835,12 +835,13 @@ div.image {
     width: 50%;
 }
 
-.btnAlign, .btnAlign-profile {
+.btnAlign,
+.btnAlign-profile {
     display: flex;
     justify-content: space-around;
 }
 
-.btnAlign-profile{
+.btnAlign-profile {
     justify-content: space-between;
 }
 
@@ -956,8 +957,7 @@ div.image {
 }
 
 .downloadBtn>button:hover {
-    background-color: #1fdf65dc;
-    transform: scale(1.1);
+    background-color: #1fdf65d8;
 }
 
 hr {
