@@ -33,38 +33,38 @@ EaseRequest é uma aplicação web construída com React (Vite), Java Spring (ba
 ## Começando
 
 ### Pré-requisitos
-
-Certifique-se de ter o [Node.js](https://nodejs.org/) instalado na sua máquina.
+> [!IMPORTANT]
+> Certifique-se de ter o [Node.js](https://nodejs.org/) instalado na sua máquina.
 
 ### Instalação
-
-1. Clone o repositório:
-
-```bash
-git clone https://github.com/RyanGustavoGoncalves/EaseRequest.git
-```
-
-2. Navegue até o diretório do projeto:
-
-```bash
-cd frontend
-```
-
-3. Instale as dependências:
-
-```bash
-npm install
-```
-
-4. Inicie o servidor de desenvolvimento:
-
-```bash
-npm run dev
-```
-
-5. Abra seu navegador e vá para [http://localhost:5173].
-
-6. Explore o EaseRequest e gerencie suas solicitações facilmente!
+> [!TIP]
+>
+> 1. Clone o repositório:
+>  ```bash
+>  git clone https://github.com/RyanGustavoGoncalves/EaseRequest.git
+>  ```
+>
+> 2. Navegue até o diretório do projeto:
+>
+> ```bash
+> cd frontend
+> ```
+>
+> 3. Instale as dependências:
+>
+> ```bash
+> npm install
+> ```
+>
+> 4. Inicie o servidor de desenvolvimento:
+>
+> ```bash
+> npm run dev
+> ```
+>
+> 5. Abra seu navegador e vá para [http://localhost:5173].
+>
+> 6. Explore o EaseRequest e gerencie suas solicitações facilmente!
 
 ## Configuração do Backend
 
@@ -79,8 +79,8 @@ Certifique-se de ter o ambiente Java e MongoDB configurados para executar o back
 ![Captura de Tela 3](frontend/src/assets/Request.png)
 
 ## Contribuições
-
-Contribuições são bem-vindas! Sinta-se à vontade para abrir problemas e solicitações de pull.
+> [!NOTE]
+> Contribuições são bem-vindas! Sinta-se à vontade para abrir problemas e solicitações de pull.
 
 ## Agradecimentos
 
